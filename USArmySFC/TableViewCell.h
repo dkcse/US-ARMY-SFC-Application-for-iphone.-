@@ -7,8 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CardDescription.h"
+
+
+
+@protocol customDelegate <NSObject>
+
+- (UINavigationController *) sendNavigationControllerInstance;
+
+@end
 
 @interface TableViewCell : UITableViewCell <UITableViewDelegate,UITableViewDataSource>
+
 
 @property (strong,nonatomic) IBOutlet UITableView *insideTableView;
 @property (strong,nonatomic) IBOutlet UILabel *cellDataLabel;
@@ -16,5 +26,7 @@
 @property (strong,nonatomic) NSArray *languageArray;
 
 @property (strong,nonatomic) IBOutlet UIImageView *divider;
+
+@property (retain,nonatomic) id <customDelegate> celldelegate;
 
 @end

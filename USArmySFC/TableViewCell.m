@@ -7,6 +7,7 @@
 //
 
 #import "TableViewCell.h"
+#import "SFCAppDelegate.h"
 
 @implementation TableViewCell
 
@@ -15,6 +16,7 @@
 @synthesize plusButton = _plusButton;
 @synthesize languageArray = _languageArray;
 @synthesize divider = _divider;
+@synthesize celldelegate = _celldelegate;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -91,7 +93,9 @@
     [accessoryButton setImage:imageView forState:UIControlStateNormal];
     [accessoryButton addTarget:self action:@selector(accessoryButtonDisclosureTapped:) forControlEvents:UIControlEventTouchUpInside];
     [cell setAccessoryView:accessoryButton];
+    accessoryButton.tag = indexPath.row;
 
+    
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
@@ -103,6 +107,24 @@
 -(void) accessoryButtonDisclosureTapped:(UIButton *)sender
 {
     NSLog(@"tapped");
+        
+    
+    //CardDescription *pushForDescriptionFromCustom = [UIStoryboard instantiateViewControllerWithIdentifier:@"cardDescriptor"];
+    //NSLog(@"row selected = %d",sender.tag);
+    //NSLog(@"at index selected = %@",[_listOfCards objectAtIndex:sender.tag]);
+        
+    //[self.navigationController pushViewController:pushForDescriptionCustom animated:YES];
+    UIStoryboard *story = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    CardDescription *pushForDescriptionCustom = [story instantiateViewControllerWithIdentifier:@"cardDescriptor"];
+    UINavigationController *referenceToNavController = [[UINavigationController alloc]init];
+    pushForDescriptionCustom.cardName = [_languageArray objectAtIndex:sender.tag];
+
+    
+    referenceToNavController = [_celldelegate sendNavigationControllerInstance];
+    NSLog(@"reference = %@",referenceToNavController);
+    
+    [referenceToNavController pushViewController:pushForDescriptionCustom animated:YES];
+    
 }
 
 

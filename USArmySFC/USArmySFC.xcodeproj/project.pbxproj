@@ -13,7 +13,6 @@
 		6ADE5E91160052F600D76A53 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5E8F160052F600D76A53 /* InfoPlist.strings */; };
 		6ADE5E93160052F600D76A53 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ADE5E92160052F600D76A53 /* main.m */; };
 		6ADE5E97160052F600D76A53 /* SFCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ADE5E96160052F600D76A53 /* SFCAppDelegate.m */; };
-		6ADE5E9A160052F600D76A53 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5E98160052F600D76A53 /* MainStoryboard.storyboard */; };
 		6ADE5E9D160052F600D76A53 /* SFCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ADE5E9C160052F600D76A53 /* SFCViewController.m */; };
 		6ADE5F261600530800D76A53 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5EA61600530800D76A53 /* arrow.png */; };
 		6ADE5F271600530800D76A53 /* Bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5EA71600530800D76A53 /* Bg.png */; };
@@ -136,6 +135,8 @@
 		6ADE5F9C1600530800D76A53 /* 2.9 Add Custom Entry.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F231600530800D76A53 /* 2.9 Add Custom Entry.jpg */; };
 		6ADE5F9D1600530800D76A53 /* Splash Screen 0.2.mov in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F251600530800D76A53 /* Splash Screen 0.2.mov */; };
 		6AE94C4A1601BE1F007D5BA5 /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AE94C491601BE1F007D5BA5 /* TableViewCell.m */; };
+		6AF471CC1602F54800007CAE /* CardDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AF471CB1602F54800007CAE /* CardDescription.m */; };
+		6AF471D916030AE100007CAE /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AF471D716030AE100007CAE /* MainStoryboard.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -149,7 +150,6 @@
 		6ADE5E94160052F600D76A53 /* USArmySFC-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "USArmySFC-Prefix.pch"; sourceTree = "<group>"; };
 		6ADE5E95160052F600D76A53 /* SFCAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SFCAppDelegate.h; sourceTree = "<group>"; };
 		6ADE5E96160052F600D76A53 /* SFCAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SFCAppDelegate.m; sourceTree = "<group>"; };
-		6ADE5E99160052F600D76A53 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		6ADE5E9B160052F600D76A53 /* SFCViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SFCViewController.h; sourceTree = "<group>"; };
 		6ADE5E9C160052F600D76A53 /* SFCViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SFCViewController.m; sourceTree = "<group>"; };
 		6ADE5EA61600530800D76A53 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
@@ -274,6 +274,9 @@
 		6ADE5F251600530800D76A53 /* Splash Screen 0.2.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "Splash Screen 0.2.mov"; sourceTree = "<group>"; };
 		6AE94C481601BE1F007D5BA5 /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TableViewCell.h; path = ../TableViewCell.h; sourceTree = "<group>"; };
 		6AE94C491601BE1F007D5BA5 /* TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TableViewCell.m; path = ../TableViewCell.m; sourceTree = "<group>"; };
+		6AF471CA1602F54800007CAE /* CardDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardDescription.h; sourceTree = "<group>"; };
+		6AF471CB1602F54800007CAE /* CardDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardDescription.m; sourceTree = "<group>"; };
+		6AF471D816030AE100007CAE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -320,13 +323,12 @@
 		6ADE5E8C160052F600D76A53 /* USArmySFC */ = {
 			isa = PBXGroup;
 			children = (
+				6AF471C91602F2D600007CAE /* CardsViewGroup */,
 				6ADE5E95160052F600D76A53 /* SFCAppDelegate.h */,
 				6ADE5E96160052F600D76A53 /* SFCAppDelegate.m */,
-				6ADE5E98160052F600D76A53 /* MainStoryboard.storyboard */,
-				6ADE5E9B160052F600D76A53 /* SFCViewController.h */,
-				6ADE5E9C160052F600D76A53 /* SFCViewController.m */,
-				6AE94C481601BE1F007D5BA5 /* TableViewCell.h */,
-				6AE94C491601BE1F007D5BA5 /* TableViewCell.m */,
+				6AF471D716030AE100007CAE /* MainStoryboard.storyboard */,
+				6AF471CA1602F54800007CAE /* CardDescription.h */,
+				6AF471CB1602F54800007CAE /* CardDescription.m */,
 				6ADE5E8D160052F600D76A53 /* Supporting Files */,
 			);
 			path = USArmySFC;
@@ -551,6 +553,17 @@
 			path = "11.09.26 - splash video";
 			sourceTree = "<group>";
 		};
+		6AF471C91602F2D600007CAE /* CardsViewGroup */ = {
+			isa = PBXGroup;
+			children = (
+				6ADE5E9B160052F600D76A53 /* SFCViewController.h */,
+				6ADE5E9C160052F600D76A53 /* SFCViewController.m */,
+				6AE94C481601BE1F007D5BA5 /* TableViewCell.h */,
+				6AE94C491601BE1F007D5BA5 /* TableViewCell.m */,
+			);
+			name = CardsViewGroup;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -603,7 +616,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6ADE5E91160052F600D76A53 /* InfoPlist.strings in Resources */,
-				6ADE5E9A160052F600D76A53 /* MainStoryboard.storyboard in Resources */,
 				6ADE5F261600530800D76A53 /* arrow.png in Resources */,
 				6ADE5F271600530800D76A53 /* Bg.png in Resources */,
 				6ADE5F281600530800D76A53 /* Bg2.png in Resources */,
@@ -724,6 +736,7 @@
 				6ADE5F9B1600530800D76A53 /* 2.8 Edit Notes.jpg in Resources */,
 				6ADE5F9C1600530800D76A53 /* 2.9 Add Custom Entry.jpg in Resources */,
 				6ADE5F9D1600530800D76A53 /* Splash Screen 0.2.mov in Resources */,
+				6AF471D916030AE100007CAE /* MainStoryboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -738,6 +751,7 @@
 				6ADE5E97160052F600D76A53 /* SFCAppDelegate.m in Sources */,
 				6ADE5E9D160052F600D76A53 /* SFCViewController.m in Sources */,
 				6AE94C4A1601BE1F007D5BA5 /* TableViewCell.m in Sources */,
+				6AF471CC1602F54800007CAE /* CardDescription.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -752,10 +766,10 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		6ADE5E98160052F600D76A53 /* MainStoryboard.storyboard */ = {
+		6AF471D716030AE100007CAE /* MainStoryboard.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				6ADE5E99160052F600D76A53 /* en */,
+				6AF471D816030AE100007CAE /* en */,
 			);
 			name = MainStoryboard.storyboard;
 			sourceTree = "<group>";

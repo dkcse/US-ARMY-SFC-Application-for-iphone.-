@@ -16,6 +16,8 @@
 @property (nonatomic) NSInteger numberOfRows;
 @property (nonatomic) BOOL checkForTableViewHidden;
 @property (strong,nonatomic) TableViewCell *tableCell;
+@property (strong,nonatomic) UIButton *accessoryButton;
+
 @end
 
 @implementation SFCViewController
@@ -25,28 +27,67 @@
 @synthesize cardsView = _cardsView;
 @synthesize moreView = _moreView;
 @synthesize cardsTableView = _cardsTableView;
+@synthesize moreTextView = _moreTextView;
+@synthesize moreScrollView = _moreScrollView;
+@synthesize moreViewButton = _moreViewButton;
 @synthesize cardWithLanguage = _cardWithLanguage;
 @synthesize indexRow = _indexRow;
 @synthesize numberOfRows = _numberOfRows;
 @synthesize checkForTableViewHidden = _checkForTableViewHidden;
 @synthesize tableCell = _tableCell;
+@synthesize accessoryButton = _accessoryButton;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     _cardsTableView.delegate = self;
     _cardsTableView.dataSource = self;
+
+# pragma mark
+#pragma more view setting 
+    
+    _moreTextView.text = @"\nContact the USAREUR SRP ITAM office for product support.\n\ne-mail:\nusareur.srp.contact@us.army.mil\nDSN : 314 475 8675\nCiv : +89 8876 88 5544\nFor additional products and services visit our websites:\nhttps://srp.usareur.army.mil\n\nMailing Address:\nHQ, 7th US Army JMTC\nAttn: AETT-TS(Bldg 3007)\nUnit 28130, Camp Normandy\nAPO AE 09554-8790\n   ";
+    
+    [self.moreScrollView setContentSize:CGSizeMake(_moreScrollView.frame.size.width, _moreScrollView.frame.size.height + 40)];
+    self.moreScrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Bg2.png"]];
+    self.moreTextView.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+    //[UIColor colorWithRed:141.0/255.0 green:255.0/255.0 blue:224.0/255.0 alpha:1.0];
+    self.moreTextView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Bg2.png"]];
+    self.moreViewButton.backgroundColor = [UIColor clearColor];
+    self.moreViewButton.titleLabel.textColor = [UIColor colorWithRed:141.0/255.0 green:255.0/255.0 blue:224.0/255.0 alpha:1.0];
+
+   // _moreView.hidden = YES;
+    
+# pragma mark
+#pragma CardsView setting
+    
+    
     self.cardsTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"Bg.png"] forBarMetrics:UIBarMetricsDefault];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+    label.backgroundColor = [UIColor clearColor];
+    label.font = [UIFont boldSystemFontOfSize:20.0];
+    label.textAlignment = UITextAlignmentCenter;
+    label.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+
+    self.navigationItem.titleView = label;
+    label.text = @"All Field Cards";
+    [label sizeToFit];
+    _checkForTableViewHidden = YES;
+    
     //self.cardsTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     //self.cardsTableView.separatorColor =[UIColor colorWithPatternImage:[UIImage imageNamed:@"note_divider.png"]];
+    //self.title = @"All Field Cards";
+    //label.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed: @"Bg.png"]];
+    // [self.navigationController setTitle: @"All Field Cards"];
     
-    _checkForTableViewHidden = YES;
     _listOfCards = [NSMutableArray arrayWithObjects:@"Grafenwoehr Training Area",@"JMRC Hohenfels",@"TSC Ansbach",@"TSC Bamberg",@"TSC Baumholder",@"TSC Heidelberg",@"TSC Kaiserslautern",@"TSC Kosovo",@"TSC Mannheim",@"TSC Romania",@"TSC Schweinfurt",@"TSC Stuttgart",@"TSC Wiesbaden",@"Slunj TA (Croatia)",nil];
     
     _numberOfRows = 14;
     _cardsTableView.backgroundColor = [UIColor blackColor];
     _cardsTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     [self.cardsView addSubview:_cardsTableView];
+    
     
     [self.cardsTableView reloadData];
 	
@@ -58,6 +99,7 @@
     if (indexPath.row == 1 || indexPath.row == 3 || indexPath.row == 6)
     {
         NSInteger heightForRow = 120;
+        
         if( _checkForTableViewHidden == YES)
         {
             heightForRow = 50;
@@ -83,43 +125,49 @@
     static NSString *cellIdCustom = @"customCell";
     static NSString *cellIdNormal = @"normalCell";
     UITableViewCell *cell = nil;
+    
     if (indexPath.row == 1 || indexPath.row == 3 || indexPath.row == 6)
     {
         cell = [self.cardsTableView dequeueReusableCellWithIdentifier:cellIdCustom];
+        
 		if (cell == nil)
 		{
 			cell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdCustom];
 		}
-        _tableCell = (TableViewCell *)cell;
-        NSLog(@"cellval = %@",_tableCell.cellDataLabel.text);
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-		_tableCell.cellDataLabel.text = [_listOfCards objectAtIndex:indexPath.row];
-        NSLog(@"label = %@",[_listOfCards objectAtIndex:indexPath.row]);
-       // tableCell.plusButton.frame = 
         
+        _tableCell = (TableViewCell *)cell;
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        _tableCell.celldelegate = self;
+		_tableCell.cellDataLabel.text = [_listOfCards objectAtIndex:indexPath.row];
+        [_tableCell.insideTableView setTag:indexPath.row];
         if(_checkForTableViewHidden == YES)
         {
         UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
         [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-        [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonPlusTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonExpandTapped:) forControlEvents:UIControlEventTouchUpInside];
+            [_tableCell.plusButton setTag:indexPath.row];
         //[cell setAccessoryView:tableCell.plusButton];
         }
-        else {
+        else 
+        {
             UIImage *imageView = [UIImage imageNamed:@"icon_collapse.png"];
             [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
+            [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonCollapseTapped:) forControlEvents:UIControlEventTouchUpInside];
+
 
         }
 		_tableCell.cellDataLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
         
         
-        //tableCell.insideTableView.hidden = YES;
         if(_checkForTableViewHidden == YES)
+
            {
                _tableCell.insideTableView.hidden = YES;
            }
-        else {
+        else
+           {
             _tableCell.insideTableView.hidden = NO;
-        }
+           }
         return _tableCell;
     }
     else
@@ -131,31 +179,16 @@
 		}
     }
     
-    
-    
-    
     cell.textLabel.text = [_listOfCards objectAtIndex:indexPath.row];
-    
-    UIButton *accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)]; 
+    _accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)]; 
+    _accessoryButton.tag = indexPath.row;
     UIImage *imageView = [UIImage imageNamed:@"arrow.png"];
-    [accessoryButton setImage:imageView forState:UIControlStateNormal];
-    [accessoryButton addTarget:self action:@selector(accessoryButtonDisclosureTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [cell setAccessoryView:accessoryButton];
+    [_accessoryButton setImage:imageView forState:UIControlStateNormal];
+    [_accessoryButton addTarget:self action:@selector(accessoryButtonDisclosureTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [cell setAccessoryView:_accessoryButton];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
- /*   if(cell.textLabel.text == @"JMRC Hohenfels" || cell.textLabel.text == @"TSC Bamberg" || cell.textLabel.text == @"TSC Kaiserslautern")
-    {
-        UIButton *accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 38, 40)];
-        UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
-        [accessoryButton setImage:imageView forState:UIControlStateNormal];
-        [accessoryButton addTarget:self action:@selector(accessoryButtonPlusTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [cell setAccessoryView:accessoryButton];
-    }
-    
-   */ 
     cell.textLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
-    //cell.detailTextLabel.text = [self.descriptionOfItems objectAtIndex:indexPath.row];
-    
     
     return cell;
 }
@@ -196,61 +229,39 @@
 -(void) accessoryButtonDisclosureTapped:(UIButton *)sender
 {
     NSLog(@"tapped");
+    UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    
+    
+    CardDescription *pushForDescription = [storyboard instantiateViewControllerWithIdentifier:@"cardDescriptor"];
+    NSLog(@"row selected = %d",sender.tag);
+    NSLog(@"at index selected = %@",[_listOfCards objectAtIndex:sender.tag]);
+    pushForDescription.cardName = [_listOfCards objectAtIndex:sender.tag];
+
+    [self.navigationController pushViewController:pushForDescription animated:YES];
+    
 }
 
-- (void) accessoryButtonPlusTapped:(UIButton *)sender
+- (void) accessoryButtonCollapseTapped : (UIButton *) sender
+{
+    NSLog(@"getting");
+    _checkForTableViewHidden = YES;
+    [_cardsTableView reloadData];
+}
+
+- (UINavigationController *) sendNavigationControllerInstance
+{
+    NSLog(@"reference222 = %@",self.navigationController);
+    return self.navigationController;
+}
+
+- (void) accessoryButtonExpandTapped:(UIButton *)sender
 {
     NSLog(@"hello");
     NSLog(@"array11 = %@",_listOfCards);
     _checkForTableViewHidden = NO;
-    
+    NSLog(@"row selected = %d",sender.tag);
     [_cardsTableView reloadData];
     
-   
-    
-    
-        
-//        NSMutableArray *languageArray = [[NSMutableArray alloc]initWithObjects:@"English",@"German",nil];
-//        if(_cardWithLanguage == @"JMRC Hohenfels")
-//        {
-//            NSMutableIndexSet *indexes = [NSMutableIndexSet indexSetWithIndex:2];
-//            [indexes addIndex:3];
-//            [_listOfCards insertObjects:languageArray atIndexes:indexes];
-//            NSLog(@"array = %@",_listOfCards);
-//
-//            NSMutableArray *tempArray = [[NSMutableArray alloc] initWithObjects:[NSIndexPath indexPathForRow:1 inSection:0],[NSIndexPath indexPathForRow:2 inSection:0],nil];
-//            [_cardsTableView insertRowsAtIndexPaths:(NSMutableArray *)tempArray withRowAnimation:UITableViewRowAnimationFade];
-//
-//        }
-//        else if (_cardWithLanguage == @"TSC Bamberg") 
-//        {
-//             NSMutableIndexSet *indexes = [NSMutableIndexSet indexSetWithIndex:4];
-//             [indexes addIndex:3];
-//             [_listOfCards insertObjects:languageArray atIndexes:indexes];
-//            NSMutableArray *tempArray = [[NSMutableArray alloc] initWithObjects:[NSIndexPath indexPathForRow:3 inSection:0],[NSIndexPath indexPathForRow:2 inSection:0],nil];
-//            [_cardsTableView insertRowsAtIndexPaths:(NSMutableArray *)tempArray withRowAnimation:UITableViewRowAnimationFade];
-//
-//        }
-//        else 
-//        {
-//            NSMutableIndexSet *indexes = [NSMutableIndexSet indexSetWithIndex:2];
-//            [indexes addIndex:3];
-//            [_listOfCards insertObjects:languageArray atIndexes:indexes];
-//            NSMutableArray *tempArray = [[NSMutableArray alloc] initWithObjects:[NSIndexPath indexPathForRow:1 inSection:0],[NSIndexPath indexPathForRow:2 inSection:0],nil];
-//            [_cardsTableView insertRowsAtIndexPaths:(NSMutableArray *)tempArray withRowAnimation:UITableViewRowAnimationFade];
-       // }
-           // }
-    
-   // _listOfCards = [NSArray arrayWithObjects:@"Grafenwoehr Training Area",@"JMRC Hohenfels",@"English",@"TSC Ansbach",@"TSC Bamberg",@"German",@"TSC Baumholder",@"TSC Heidelberg",@"TSC Kaiserslautern",@"English",@"TSC Kosovo",@"TSC Mannheim",@"TSC Romania",@"TSC Schweinfurt",@"TSC Stuttgart",@"TSC Wiesbaden",@"Slunj TA (Croatia)",nil];
-
-        [_cardsTableView reloadData];
-     //NSMutableArray *tempArray = [[NSMutableArray alloc] init];
-    //[tempArray addObject:@"New Item"];
-    //NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:[tempArray count] inSection:0];
-    // [[self cardsTableView] beginUpdates];
-   // [[self cardsTableView] insertRowsAtIndexPaths:(NSArray*) tempArray withRowAnimation:UITableViewRowAnimationNone];
-   // [[self cardsTableView] endUpdates];
-
 }
 
 
@@ -260,10 +271,11 @@
     [self setFavoritesView:nil];
     [self setCardsView:nil];
     [self setMoreView:nil];
-    [self setCardsTableView:nil];
- 
+    [self setCardsTableView:nil]; 
+    [self setMoreTextView:nil];
+    [self setMoreScrollView:nil];
+    [self setMoreViewButton:nil];
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -271,4 +283,69 @@
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
+- (IBAction)showFavoriteView:(id)sender
+{
+    self.cardsView.hidden =YES;
+    self.moreView.hidden = YES;
+}
+
+- (IBAction)showMoreOption:(id)sender 
+{
+    self.cardsView.hidden = YES;
+    self.favoritesView.hidden = YES;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+}
+
+- (IBAction)showAvailableCards:(id)sender 
+{
+    self.favoritesView.hidden = YES;
+    self.moreView.hidden = YES;
+}
 @end
