@@ -12,11 +12,13 @@
 
 @property (nonatomic,strong) NSMutableArray *listOfCards;
 @property (nonatomic,strong) NSString *cardWithLanguage;
+@property (strong,nonatomic) TableViewCell *tableCell;
+@property (strong,nonatomic) UIButton *accessoryButton;
+@property (strong,nonatomic) NSMutableArray *storeFetchedName;
+
 @property (nonatomic) NSInteger indexRow;
 @property (nonatomic) NSInteger numberOfRows;
 @property (nonatomic) BOOL checkForTableViewHidden;
-@property (strong,nonatomic) TableViewCell *tableCell;
-@property (strong,nonatomic) UIButton *accessoryButton;
 
 @end
 
@@ -36,33 +38,47 @@
 @synthesize checkForTableViewHidden = _checkForTableViewHidden;
 @synthesize tableCell = _tableCell;
 @synthesize accessoryButton = _accessoryButton;
+@synthesize moreNavigationButton = _moreNavigationButton;
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize storeFetchedName = _storeFetchedName;
+@synthesize favoriteTableView = _favoriteTableView;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     _cardsTableView.delegate = self;
     _cardsTableView.dataSource = self;
+    _favoriteTableView.delegate = self;
+    _favoriteTableView.dataSource = self;
+    id appDelegate = (id)[[UIApplication sharedApplication] delegate];
+    self.managedObjectContext = [appDelegate managedObjectContext];
+
 
 # pragma mark
 #pragma more view setting 
     
     _moreTextView.text = @"\nContact the USAREUR SRP ITAM office for product support.\n\ne-mail:\nusareur.srp.contact@us.army.mil\nDSN : 314 475 8675\nCiv : +89 8876 88 5544\nFor additional products and services visit our websites:\nhttps://srp.usareur.army.mil\n\nMailing Address:\nHQ, 7th US Army JMTC\nAttn: AETT-TS(Bldg 3007)\nUnit 28130, Camp Normandy\nAPO AE 09554-8790\n   ";
     
-    [self.moreScrollView setContentSize:CGSizeMake(_moreScrollView.frame.size.width, _moreScrollView.frame.size.height + 40)];
+    [self.moreScrollView setContentSize:CGSizeMake(_moreScrollView.frame.size.width, _moreScrollView.frame.size.height + 0)];
     self.moreScrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Bg2.png"]];
     self.moreTextView.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     //[UIColor colorWithRed:141.0/255.0 green:255.0/255.0 blue:224.0/255.0 alpha:1.0];
     self.moreTextView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Bg2.png"]];
-    self.moreViewButton.backgroundColor = [UIColor clearColor];
-    self.moreViewButton.titleLabel.textColor = [UIColor colorWithRed:141.0/255.0 green:255.0/255.0 blue:224.0/255.0 alpha:1.0];
+   // self.moreViewButton.backgroundColor = [UIColor blackColor];
+    //self.moreViewButton.titleLabel.textColor = [UIColor colorWithRed:141.0/255.0 green:255.0/255.0 blue:224.0/255.0 alpha:1.0];
+    //self.moreViewButton.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Bg2.png"]];
 
+    UIImage *imageView = [UIImage imageNamed:@"btn_request_normal.png"];
+    [self.moreViewButton setImage:imageView forState:UIControlStateNormal];
+    [_tableCell.plusButton addTarget:self action:@selector(requestProductButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+
+    
    // _moreView.hidden = YES;
     
 # pragma mark
 #pragma CardsView setting
     
-    
-    self.cardsTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+    [self.cardsView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"Bg2.png"]]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"Bg.png"] forBarMetrics:UIBarMetricsDefault];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
     label.backgroundColor = [UIColor clearColor];
@@ -75,30 +91,39 @@
     [label sizeToFit];
     _checkForTableViewHidden = YES;
     
-    //self.cardsTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    //self.cardsTableView.separatorColor =[UIColor colorWithPatternImage:[UIImage imageNamed:@"note_divider.png"]];
-    //self.title = @"All Field Cards";
-    //label.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed: @"Bg.png"]];
-    // [self.navigationController setTitle: @"All Field Cards"];
-    
+    self.moreNavigationButton.hidden = YES;
     _listOfCards = [NSMutableArray arrayWithObjects:@"Grafenwoehr Training Area",@"JMRC Hohenfels",@"TSC Ansbach",@"TSC Bamberg",@"TSC Baumholder",@"TSC Heidelberg",@"TSC Kaiserslautern",@"TSC Kosovo",@"TSC Mannheim",@"TSC Romania",@"TSC Schweinfurt",@"TSC Stuttgart",@"TSC Wiesbaden",@"Slunj TA (Croatia)",nil];
     
     _numberOfRows = 14;
     _cardsTableView.backgroundColor = [UIColor blackColor];
-    _cardsTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    [self.cardsView addSubview:_cardsTableView];
-    
-    
+   
+   _cardsTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];   // self.cardsView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Bg.png"]];
+    //self.cardsView.hidden = YES;
+    self.moreView.hidden = YES;
+    self.favoritesView.hidden = YES;
+    self.cardsTableView.backgroundColor = [UIColor clearColor];
     [self.cardsTableView reloadData];
+    
+    
+# pragma favoriteView setting
+    
+    _favoritesView.backgroundColor = [UIColor clearColor];
+   // _favoriteTableView.backgroundColor = [UIColor clearColor];
+    _favoriteTableView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Bg2.png"]];
+    _favoriteTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
 	
 }
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath: (NSIndexPath *)indexPath;
 {
-    if (indexPath.row == 1 || indexPath.row == 3 || indexPath.row == 6)
+    if(tableView == _favoriteTableView)
     {
-        NSInteger heightForRow = 120;
+        return 50;
+    }
+    else if (indexPath.row == 1 || indexPath.row == 3 || indexPath.row == 6)
+    {
+        NSInteger heightForRow = 125;
         
         if( _checkForTableViewHidden == YES)
         {
@@ -111,7 +136,15 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.listOfCards count];
+    if(tableView == _favoriteTableView)
+    {
+       return [_storeFetchedName count];
+    }
+    else
+    {
+       return [self.listOfCards count]; 
+    }
+    
 }
 //- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 //{    
@@ -121,10 +154,55 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
+    if(tableView == _favoriteTableView)
+    {
+        
+            static NSString *cellId = @"actionCell";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: cellId];
+            if (cell == nil)
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
+            }
+        NSLog(@"data= %@",_storeFetchedName);
+        Favorites *favourite = [self.storeFetchedName objectAtIndex:indexPath.row]; 
+        cell.textLabel.text = [favourite name];
+        
+        _accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)];
+        _accessoryButton.tag = indexPath.row;
+        UIImage *imageView = [UIImage imageNamed:@"arrow.png"];
+        [_accessoryButton setImage:imageView forState:UIControlStateNormal];
+        [cell setAccessoryView:_accessoryButton];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0]; 
+        [cell.textLabel setBackgroundColor:[UIColor clearColor]];
+
+        return cell;
+    }
+
     
+    else
+    {
     static NSString *cellIdCustom = @"customCell";
     static NSString *cellIdNormal = @"normalCell";
     UITableViewCell *cell = nil;
+    
+    if(indexPath.row == 0)
+    {
+        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_top.png"]];
+    }
+    else if (indexPath.row == [_listOfCards count]) 
+    {
+        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_bottom.png"]];
+    }
+    else
+    {
+        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_middle.png"]];
+    }
+    
+    
+    
+    
+    
     
     if (indexPath.row == 1 || indexPath.row == 3 || indexPath.row == 6)
     {
@@ -140,13 +218,16 @@
         _tableCell.celldelegate = self;
 		_tableCell.cellDataLabel.text = [_listOfCards objectAtIndex:indexPath.row];
         [_tableCell.insideTableView setTag:indexPath.row];
+        _tableCell.index = indexPath.row;
+        _tableCell.cardArrayForTableView = _listOfCards;
+        
         if(_checkForTableViewHidden == YES)
         {
         UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
         [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
         [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonExpandTapped:) forControlEvents:UIControlEventTouchUpInside];
             [_tableCell.plusButton setTag:indexPath.row];
-        //[cell setAccessoryView:tableCell.plusButton];
+     
         }
         else 
         {
@@ -189,42 +270,24 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     cell.textLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
-    
     return cell;
 }
-
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(tableView == _favoriteTableView)
+    {
+        UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+        CardDescription *pushForDescription1 = [storyboard instantiateViewControllerWithIdentifier:@"cardDescriptor"];
+        Favorites *favourite = [self.storeFetchedName objectAtIndex:indexPath.row]; 
+        
+        NSLog(@"sent data are = %@",[favourite name]);
+        pushForDescription1.cardName = [favourite name];
+        [self.navigationController pushViewController:pushForDescription1 animated:YES];
+    }
     NSLog(@"index path = %d",indexPath.row);
 }
-
-/*- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    // create the parent view that will hold header Label
-    UIView* customView = [[UIView alloc] initWithFrame:CGRectMake(10.0, 0.0, 300.0, 44.0)];
-    
-    // create the button object
-    UIButton * headerBtn = [[UIButton alloc] initWithFrame:CGRectZero];
-    headerBtn.backgroundColor = [UIColor whiteColor];
-    headerBtn.opaque = YES;
-    headerBtn.frame = CGRectMake(0.0, 0.0, 320.0, 30.0);
-    headerBtn.tag = section;
-    [headerBtn setTitle:@"hellodk" forState:UIControlStateNormal];
-    [headerBtn setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-    [headerBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-    [headerBtn setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"top_bg.png"]]];
-    [customView addSubview:headerBtn];
-    
-    UIButton *button = [[UIButton alloc]initWithFrame:CGRectZero];
-    button.frame = CGRectMake(180.0, 0.0, 240, 30.0);
-    [button setImage:[UIImage imageNamed:@"icon_expand.png"] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(collapse:) forControlEvents:UIControlEventTouchUpInside];
-    [customView addSubview:button];
-    return customView;
-}
-
-*/
 
 -(void) accessoryButtonDisclosureTapped:(UIButton *)sender
 {
@@ -258,10 +321,21 @@
 {
     NSLog(@"hello");
     NSLog(@"array11 = %@",_listOfCards);
+    UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    CardDescription *pushForDescription = [storyboard instantiateViewControllerWithIdentifier:@"cardDescriptor"];
+    pushForDescription.cardName = [_listOfCards objectAtIndex:sender.tag];
     _checkForTableViewHidden = NO;
     NSLog(@"row selected = %d",sender.tag);
     [_cardsTableView reloadData];
     
+//   // TableViewCell *dataToTableCell = [[TableViewCell alloc]init];
+//    dataToTableCell.index = sender.tag;
+//    dataToTableCell.cardArrayForTableView = _listOfCards;
+}
+
+- (void) requestProductButtonTapped:(UIButton *)sender
+{
+    NSLog(@"requesting product");
 }
 
 
@@ -287,65 +361,73 @@
 {
     self.cardsView.hidden =YES;
     self.moreView.hidden = YES;
+    [self fetchFromCoreData];
+    [_favoriteTableView reloadData];
+    self.favoritesView.hidden = NO;
+
 }
+
+- (void) fetchFromCoreData
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription
+                                   entityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    
+    NSError *error;
+    
+    NSArray *fetchedResults;
+    
+    if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
+    {
+        NSArray *fetchedName = [[NSArray alloc]init];
+        
+        fetchedName = fetchedResults;
+        _storeFetchedName = [[NSMutableArray alloc]init];
+        _storeFetchedName = [fetchedName mutableCopy];
+        
+        
+        if([_storeFetchedName count])
+        {
+            NSLog(@"name of favorites are : %@",_storeFetchedName);
+        }
+        
+    }
+    else
+    {
+        NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+    }
+    
+}
+
 
 - (IBAction)showMoreOption:(id)sender 
 {
+    self.moreView.backgroundColor = [UIColor clearColor];
     self.cardsView.hidden = YES;
     self.favoritesView.hidden = YES;
+    self.moreView.hidden = NO;
+    self.moreNavigationButton.hidden = NO;
+    //self.moreNavigationButton.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"nav_btn_feedback_normal.png"]];
     
+    self.moreNavigationButton.titleLabel.textColor = [UIColor grayColor];
+        
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+    label.backgroundColor = [UIColor clearColor];
+    label.font = [UIFont boldSystemFontOfSize:20.0];
+    label.textAlignment = UITextAlignmentCenter;
+    label.textColor = [UIColor blackColor];
     
 }
 
 - (IBAction)showAvailableCards:(id)sender 
 {
+    NSLog(@"hello");
+    self.moreNavigationButton.hidden = YES;
     self.favoritesView.hidden = YES;
     self.moreView.hidden = YES;
+    self.cardsView.hidden = NO;
 }
 @end

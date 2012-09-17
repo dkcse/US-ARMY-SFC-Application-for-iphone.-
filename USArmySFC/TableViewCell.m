@@ -17,6 +17,9 @@
 @synthesize languageArray = _languageArray;
 @synthesize divider = _divider;
 @synthesize celldelegate = _celldelegate;
+@synthesize index = _index;
+@synthesize cardArrayForTableView = _cardArrayForTableView;
+
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -48,14 +51,16 @@
 }
 
 -(void)layoutSubviews
-{   _insideTableView.delegate = self;
+{ 
+    _cellDataLabel.backgroundColor = [UIColor clearColor];
+    _insideTableView.delegate = self;
     _insideTableView.dataSource =self;
     _insideTableView.backgroundColor = [UIColor clearColor];
 
     // _insideTableView.hidden = YES;
     _languageArray = [[NSArray alloc] initWithObjects:@"English",@"German",nil];
     [_insideTableView reloadData];
-    
+    _insideTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     
 }
 
@@ -95,6 +100,19 @@
     [cell setAccessoryView:accessoryButton];
     accessoryButton.tag = indexPath.row;
 
+//    if(indexPath.row == 0)
+//    {
+//        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_top.png"]];
+//    }
+//    else if (indexPath.row == [_languageArray count]) 
+//    {
+//        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_bottom.png"]];
+//    }
+//    else
+//    {
+//        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_middle.png"]];
+//    }
+
     
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -107,17 +125,14 @@
 -(void) accessoryButtonDisclosureTapped:(UIButton *)sender
 {
     NSLog(@"tapped");
-        
-    
-    //CardDescription *pushForDescriptionFromCustom = [UIStoryboard instantiateViewControllerWithIdentifier:@"cardDescriptor"];
-    //NSLog(@"row selected = %d",sender.tag);
-    //NSLog(@"at index selected = %@",[_listOfCards objectAtIndex:sender.tag]);
-        
-    //[self.navigationController pushViewController:pushForDescriptionCustom animated:YES];
+    NSString *nameForCardLabel = [[NSString alloc]init];
+    NSLog(@"array = %@",_cardArrayForTableView);
+    nameForCardLabel = [_cardArrayForTableView objectAtIndex:_index];
+    NSLog(@"card name = %@",nameForCardLabel);
     UIStoryboard *story = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     CardDescription *pushForDescriptionCustom = [story instantiateViewControllerWithIdentifier:@"cardDescriptor"];
     UINavigationController *referenceToNavController = [[UINavigationController alloc]init];
-    pushForDescriptionCustom.cardName = [_languageArray objectAtIndex:sender.tag];
+    pushForDescriptionCustom.cardName = [_cardArrayForTableView objectAtIndex:_index];    
 
     
     referenceToNavController = [_celldelegate sendNavigationControllerInstance];
@@ -127,12 +142,6 @@
     
 }
 
-
-
-
-
-#pragma mark -
-#pragma mark Dealloc
 
 
 @end
