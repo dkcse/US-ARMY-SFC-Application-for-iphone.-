@@ -42,6 +42,7 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize storeFetchedName = _storeFetchedName;
 @synthesize favoriteTableView = _favoriteTableView;
+@synthesize test = _test;
 
 - (void)viewDidLoad
 {
@@ -53,6 +54,24 @@
     id appDelegate = (id)[[UIApplication sharedApplication] delegate];
     self.managedObjectContext = [appDelegate managedObjectContext];
 
+   // NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"SFC_content_formatted" ofType:@"xml"];
+    NSURL *url = [NSURL fileURLWithPath:path];
+    NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:url];
+    
+    
+    xmlParser.delegate = self;
+    BOOL successInParsingTheXMLDocument = [xmlParser parse];
+
+    if(successInParsingTheXMLDocument)
+    {
+        NSLog(@"No Errors In Parsing ");
+    }
+    else
+    {
+        UIAlertView *noInternetConnectionAlert = [[UIAlertView alloc]initWithTitle:@"No Connection" message:@"Unable to retrieve data.An Internet Connection is required." delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:@"Learn More", nil];
+        [noInternetConnectionAlert show];
+    }
 
 # pragma mark
 #pragma more view setting 
@@ -71,7 +90,6 @@
     UIImage *imageView = [UIImage imageNamed:@"btn_request_normal.png"];
     [self.moreViewButton setImage:imageView forState:UIControlStateNormal];
     [_tableCell.plusButton addTarget:self action:@selector(requestProductButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-
     
    // _moreView.hidden = YES;
     
@@ -111,6 +129,32 @@
    // _favoriteTableView.backgroundColor = [UIColor clearColor];
     _favoriteTableView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Bg2.png"]];
     _favoriteTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+    
+    
+    
+# pragma csv parsing
+    
+    //NSString *dataStr = [NSString stringWithContentsOfFile:@"Contacts-Table.csv" encoding:NSUTF8StringEncoding error:nil];
+    //NSArray *array = [dataStr componentsSeparatedByString: @","];
+    
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSError *err = nil;
+    NSArray *fileList = [manager contentsOfDirectoryAtPath:documentsDirectory error:&err];
+    NSString *fileName = [fileList objectAtIndex:1];
+    NSURL *inputFileURL = [NSURL fileURLWithPath: [documentsDirectory stringByAppendingPathComponent:fileName]];
+    
+    
+    NSStringEncoding encoding = 0;
+    CHCSVParser *pa = [[CHCSVParser alloc]initWithContentsOfCSVFile:@"Contacts-Table.csv" encoding:NSUTF8StringEncoding error:nil];
+
+    //CHCSVParser *p = [[CHCSVParser alloc] initWithContentsOfCSVFile:[inputFileURL path] usedEncoding:&encoding error:nil];
+
+    [pa setParserDelegate:(id)self];
+    [pa parse];
+
 	
 }
 
@@ -146,10 +190,6 @@
     }
     
 }
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-//{    
-//    return [self.listOfCards count];
-//}
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -430,4 +470,97 @@
     self.moreView.hidden = YES;
     self.cardsView.hidden = NO;
 }
+
+
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict 
+{
+	
+    if ([elementName isEqualToString:@"Data"])
+    {
+        self.test = YES;
+    //    user = [[User alloc] init];
+        //We do not have any attributes in the user elements, but if
+        // you do, you can extract them here: 
+        // user.att = [[attributeDict objectForKey:@"<att name>"] ...];
+    }
+}
+
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string 
+{
+    
+    if(self.test)
+    {
+        NSLog(@"%@",string);
+        NSLog(@"be here");
+    }
+//    if (!currentElementValue) {
+//        // init the ad hoc string with the value     
+//        currentElementValue = [[NSMutableString alloc] initWithString:string];
+//    } else {
+//        // append value to the ad hoc string    
+//        [currentElementValue appendString:string];
+//    }
+ //   NSLog(@"Processing value for : %@", string);
+}  
+
+
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName 
+{    
+    if ([elementName isEqualToString:@"users"]) 
+    {
+        // We reached the end of the XML document
+        return;
+    }
+    
+    if ([elementName isEqualToString:@"user"]) 
+    {
+        // We are done with user entry – add the parsed user 
+        // object to our user array
+    //    [users addObject:user];
+        // release user object
+           //  user = nil;
+    }
+    else
+    {
+        // The parser hit one of the element values. 
+        // This syntax is possible because User object 
+        // property names match the XML user element names   
+    //    [user setValue:currentElementValue forKey:elementName];
+    }
+    
+    //[currentElementValue release];
+    //currentElementValue = nil;
+}
+
+
+
+
+
+#pragma mark -
+#pragma mark CHCSVParserDelegate methods
+
+- (void) parser:(CHCSVParser *)parser didStartDocument:(NSString *)csvFile {
+    NSLog(@"Parser started!");
+}
+
+- (void) parser:(CHCSVParser *)parser didStartLine:(NSUInteger)lineNumber {
+    //NSLog(@"Parser started line: %i", lineNumber);
+}
+
+- (void) parser:(CHCSVParser *)parser didEndLine:(NSUInteger)lineNumber {
+    NSLog(@"Parser ended line: %i", lineNumber);
+}
+
+- (void) parser:(CHCSVParser *)parser didReadField:(NSString *)field {
+    //NSLog(@"Parser didReadField: %@", field);
+}
+
+- (void) parser:(CHCSVParser *)parser didEndDocument:(NSString *)csvFile {
+    NSLog(@"Parser ended document: %@", csvFile);
+}
+
+- (void) parser:(CHCSVParser *)parser didFailWithError:(NSError *)error {
+    NSLog(@"Parser failed with error: %@ %@", [error localizedDescription], [error userInfo]);
+}
+
 @end

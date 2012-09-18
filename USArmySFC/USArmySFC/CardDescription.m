@@ -16,6 +16,11 @@
 @property (nonatomic) NSInteger pressCount;
 @property (nonatomic) BOOL favoriteImageStatus;
 
+//for next controller
+
+@property (nonatomic,strong) NSMutableArray *arrayDescribingCardsInformation1;
+@property (nonatomic,strong) NSMutableArray *nestedArrayDescribingCardsInformation;
+
 @end
 
 @implementation CardDescription
@@ -33,12 +38,18 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize favoriteImageStatus = _favoriteImageStatus;
 
+//next controller
+
+@synthesize arrayDescribingCardsInformation1 = _arrayDescribingCardsInformation1;
+@synthesize nestedArrayDescribingCardsInformation = _nestedArrayDescribingCardsInformation;
+
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
-        
+           
     }
 
     return self;
@@ -244,7 +255,7 @@
 
 
 
-- (BOOL) fetchFromCoreData
+- (void) fetchFromCoreData
 {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription

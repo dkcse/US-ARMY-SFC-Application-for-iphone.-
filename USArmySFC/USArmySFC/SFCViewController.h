@@ -10,8 +10,9 @@
 #import "TableViewCell.h"
 #import "CardDescription.h"
 #import "Favorites.h"
+#import "CHCSV.h"
 
-@interface SFCViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,customDelegate>
+@interface SFCViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,customDelegate,NSXMLParserDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *favoritesView;
 @property (strong, nonatomic) IBOutlet UIView *moreView;
@@ -21,8 +22,10 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *moreScrollView;
 @property (strong, nonatomic) IBOutlet UIButton *moreViewButton;
 @property (strong, nonatomic) IBOutlet UIButton *moreNavigationButton;
-@property (strong,nonatomic) IBOutlet UITableView *favoriteTableView;
+@property (strong, nonatomic) IBOutlet UITableView *favoriteTableView;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
+@property (nonatomic) BOOL *test;
 
 - (IBAction)showFavoriteView:(id)sender;
 - (IBAction)showMoreOption:(id)sender;
