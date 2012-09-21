@@ -20,6 +20,12 @@
 @property (nonatomic) NSInteger numberOfRows;
 @property (nonatomic) BOOL checkForTableViewHidden;
 
+//variable declared for storing fetched value from .csv
+
+@property (nonatomic,strong) NSMutableArray *cardName;
+@property (nonatomic,strong) NSDictionary *cardNameWithLanguage;
+
+
 @end
 
 @implementation SFCViewController
@@ -44,6 +50,10 @@
 @synthesize favoriteTableView = _favoriteTableView;
 @synthesize test = _test;
 
+//for csv file
+@synthesize cardName = _cardName;
+@synthesize cardNameWithLanguage = _cardNameWithLanguage;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -51,6 +61,11 @@
     _cardsTableView.dataSource = self;
     _favoriteTableView.delegate = self;
     _favoriteTableView.dataSource = self;
+    
+    // for csv file
+    _cardName = [[NSMutableArray alloc]init];
+    
+    
     id appDelegate = (id)[[UIApplication sharedApplication] delegate];
     self.managedObjectContext = [appDelegate managedObjectContext];
 
@@ -110,8 +125,8 @@
     _checkForTableViewHidden = YES;
     
     self.moreNavigationButton.hidden = YES;
-    _listOfCards = [NSMutableArray arrayWithObjects:@"Grafenwoehr Training Area",@"JMRC Hohenfels",@"TSC Ansbach",@"TSC Bamberg",@"TSC Baumholder",@"TSC Heidelberg",@"TSC Kaiserslautern",@"TSC Kosovo",@"TSC Mannheim",@"TSC Romania",@"TSC Schweinfurt",@"TSC Stuttgart",@"TSC Wiesbaden",@"Slunj TA (Croatia)",nil];
-    
+    //_listOfCards = [NSMutableArray arrayWithObjects:@"Grafenwoehr Training Area",@"JMRC Hohenfels",@"TSC Ansbach",@"TSC Bamberg",@"TSC Baumholder",@"TSC Heidelberg",@"TSC Kaiserslautern",@"TSC Kosovo",@"TSC Mannheim",@"TSC Romania",@"TSC Schweinfurt",@"TSC Stuttgart",@"TSC Wiesbaden",@"Slunj TA (Croatia)",nil];
+    _listOfCards = [[NSMutableArray alloc]init]; 
     _numberOfRows = 14;
     _cardsTableView.backgroundColor = [UIColor blackColor];
    
@@ -134,29 +149,150 @@
     
 # pragma csv parsing
     
+
     //NSString *dataStr = [NSString stringWithContentsOfFile:@"Contacts-Table.csv" encoding:NSUTF8StringEncoding error:nil];
     //NSArray *array = [dataStr componentsSeparatedByString: @","];
     
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSFileManager *manager = [NSFileManager defaultManager];
-    NSError *err = nil;
-    NSArray *fileList = [manager contentsOfDirectoryAtPath:documentsDirectory error:&err];
-    NSString *fileName = [fileList objectAtIndex:1];
-    NSURL *inputFileURL = [NSURL fileURLWithPath: [documentsDirectory stringByAppendingPathComponent:fileName]];
+    // CHCSVParser *p = [[CHCSVParser alloc]initWithContentsOfCSVFile:@"Guidelines-Table.csv" encoding:NSUTF8StringEncoding error:nil];
+
+   
+
+//    [p setParserDelegate:self];
+//    [p parse];
+//    
+//    NSString * path1 = @"/Users/deepakkumar/US SFC/Guidelines-Table.csv";
+//    NSFileHandle * fileHandle = [NSFileHandle fileHandleForReadingAtPath:path1];
+//    NSData * buffer = nil;
+//    while ((buffer = [fileHandle readDataOfLength:10]))
+//    {
+//        //do something with the buffer
+//        NSLog(@"buffer = %@",buffer);
+//        
+//    }
+
+
+    FileReaderLineByLine * reader1 = [[FileReaderLineByLine alloc] initWithFilePath:@"/Users/deepakkumar/US SFC/Guidelines_Table.csv"];
+
+    NSString * line1 = nil;
+    
+    while ((line1 = [reader1 readLine]))
+    {
+        //NSLog(@"line 1 = %@",line1);
+        NSArray* allLinedStrings = [line1 componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
+        NSLog(@"All lined Strings - %@",[allLinedStrings objectAtIndex:27]);
+        
+        for (int i = 27; i<=612; i = i+27)
+        {
+            [_listOfCards addObject:[allLinedStrings objectAtIndex:i]];
+        }
+        
+
+        NSLog(@"array = %@",_listOfCards);
+
+        
+        for (int j=0; j<18; j++)
+        {
+            if([[_listOfCards objectAtIndex:j] isEqualToString:[_listOfCards objectAtIndex:j+1]])
+            {
+                NSInteger count = 1;
+                count++;
+                
+                [_listOfCards removeObjectAtIndex:j+1];
+                NSLog(@"position = %d",j);
+
+                NSLog(@"language = %@",[allLinedStrings objectAtIndex:((27*(j+1))+5)]);
+                NSLog(@"language = %@",[allLinedStrings objectAtIndex:((27*(j+2))+5)]);
+            }
+        }
+        NSInteger countArrayObject = [_listOfCards count];
+        for (int i=0; i<countArrayObject; i++)
+        {
+            Product *productObject = (Product *)[NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:_managedObjectContext];
+            
+            [productObject setName:[_listOfCards objectAtIndex:i]]; 
+        }
+        [self fetchProductNameFromCoreData];
+        [self.cardsTableView reloadData];
+        
+        NSLog(@"array = %@",_listOfCards);
+
+        //        NSArray *data1 = [[allLinedStrings objectAtIndex:0] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
+//        NSArray *data2 = [[allLinedStrings objectAtIndex:1] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
+//        NSLog(@"%@",[data2 objectAtIndex:1]);
+//        NSLog(@"count = %d-",[data1 count]);
+    }
+
+    FileReaderLineByLine *reader2 = [[FileReaderLineByLine alloc] initWithFilePath:@"/Users/deepakkumar/US SFC/Contacts-Table.csv"];
+     
+    NSString * line2 = nil;
+    
+    while ((line2 = [reader2 readLine]))
+    {
+        //NSArray* allLinedStrings = [line componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+        //NSLog(@"All lined Strings - %@",[allLinedStrings objectAtIndex:0]);
+       // NSLog(@"sent data are = %@",line2);
+     //   NSArray *data1 = [[allLinedStrings objectAtIndex:0] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
+      //  NSArray *data2 = [[allLinedStrings objectAtIndex:1] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
+      //  NSLog(@"%@",[data2 objectAtIndex:1]);
+       // NSLog(@"count = %d-",[data1 count]);
+    }
+
+        
+
+  
+
+//	NSString* fileRoot = [[NSBundle mainBundle] pathForResource:@"Guidelines-Table" ofType:@"csv"];
+//    NSString* fileContents = 
+//    [NSString stringWithContentsOfFile:fileRoot
+//                              encoding:NSUTF16StringEncoding error:nil];
+//    NSArray* allLinedStrings = 
+//    [fileContents componentsSeparatedByCharactersInSet:
+//    [NSCharacterSet characterSetWithCharactersInString:@";"]];
+//    
+//    
+//
+//    NSLog(@"All lined Strings - %@",allLinedStrings);
     
     
-    NSStringEncoding encoding = 0;
-    CHCSVParser *pa = [[CHCSVParser alloc]initWithContentsOfCSVFile:@"Contacts-Table.csv" encoding:NSUTF8StringEncoding error:nil];
-
-    //CHCSVParser *p = [[CHCSVParser alloc] initWithContentsOfCSVFile:[inputFileURL path] usedEncoding:&encoding error:nil];
-
-    [pa setParserDelegate:(id)self];
-    [pa parse];
-
-	
 }
+
+- (void) fetchProductNameFromCoreData
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription
+                                   entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    
+    NSError *error;
+    
+    NSArray *fetchedResults;
+    
+    if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
+    {
+        NSArray *fetchedName = [[NSArray alloc]init];
+        
+        fetchedName = fetchedResults;
+        NSMutableArray *copyOfFetchedName = [[NSMutableArray alloc]init];
+        copyOfFetchedName = [fetchedName mutableCopy];
+        
+        
+        if([copyOfFetchedName count])
+        {
+            NSLog(@"name of product are : %@",copyOfFetchedName);
+        }
+        
+    }
+    else
+    {
+        NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+    }
+    
+}
+
+
+
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath: (NSIndexPath *)indexPath;
@@ -165,7 +301,7 @@
     {
         return 50;
     }
-    else if (indexPath.row == 1 || indexPath.row == 3 || indexPath.row == 6)
+    else if (indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 16)
     {
         NSInteger heightForRow = 125;
         
@@ -186,6 +322,7 @@
     }
     else
     {
+        NSLog(@"count = %d",[self.listOfCards count]);
        return [self.listOfCards count]; 
     }
     
@@ -204,7 +341,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
             }
         NSLog(@"data= %@",_storeFetchedName);
-        Favorites *favourite = [self.storeFetchedName objectAtIndex:indexPath.row]; 
+        Favorites *favourite = [self.storeFetchedName objectAtIndex:indexPath.row];
         cell.textLabel.text = [favourite name];
         
         _accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)];
@@ -226,25 +363,25 @@
     static NSString *cellIdNormal = @"normalCell";
     UITableViewCell *cell = nil;
     
-    if(indexPath.row == 0)
-    {
-        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_top.png"]];
-    }
-    else if (indexPath.row == [_listOfCards count]) 
-    {
-        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_bottom.png"]];
-    }
-    else
-    {
-        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_middle.png"]];
-    }
+//    if(indexPath.row == 0)
+//    {
+//        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_top.png"]];
+//    }
+//    else if (indexPath.row == [_listOfCards count]) 
+//    {
+//        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_bottom.png"]];
+//    }
+//    else
+//    {
+//        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_middle.png"]];
+//    }
     
     
     
     
     
     
-    if (indexPath.row == 1 || indexPath.row == 3 || indexPath.row == 6)
+    if (indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 16)
     {
         cell = [self.cardsTableView dequeueReusableCellWithIdentifier:cellIdCustom];
         
@@ -367,10 +504,6 @@
     _checkForTableViewHidden = NO;
     NSLog(@"row selected = %d",sender.tag);
     [_cardsTableView reloadData];
-    
-//   // TableViewCell *dataToTableCell = [[TableViewCell alloc]init];
-//    dataToTableCell.index = sender.tag;
-//    dataToTableCell.cardArrayForTableView = _listOfCards;
 }
 
 - (void) requestProductButtonTapped:(UIButton *)sender
@@ -478,7 +611,7 @@
     if ([elementName isEqualToString:@"Data"])
     {
         self.test = YES;
-    //    user = [[User alloc] init];
+        //    user = [[User alloc] init];
         //We do not have any attributes in the user elements, but if
         // you do, you can extract them here: 
         // user.att = [[attributeDict objectForKey:@"<att name>"] ...];
@@ -490,8 +623,8 @@
     
     if(self.test)
     {
-        NSLog(@"%@",string);
-        NSLog(@"be here");
+//        NSLog(@"%@",string);
+//        NSLog(@"be here");
     }
 //    if (!currentElementValue) {
 //        // init the ad hoc string with the value     
@@ -539,28 +672,5 @@
 #pragma mark -
 #pragma mark CHCSVParserDelegate methods
 
-- (void) parser:(CHCSVParser *)parser didStartDocument:(NSString *)csvFile {
-    NSLog(@"Parser started!");
-}
-
-- (void) parser:(CHCSVParser *)parser didStartLine:(NSUInteger)lineNumber {
-    //NSLog(@"Parser started line: %i", lineNumber);
-}
-
-- (void) parser:(CHCSVParser *)parser didEndLine:(NSUInteger)lineNumber {
-    NSLog(@"Parser ended line: %i", lineNumber);
-}
-
-- (void) parser:(CHCSVParser *)parser didReadField:(NSString *)field {
-    //NSLog(@"Parser didReadField: %@", field);
-}
-
-- (void) parser:(CHCSVParser *)parser didEndDocument:(NSString *)csvFile {
-    NSLog(@"Parser ended document: %@", csvFile);
-}
-
-- (void) parser:(CHCSVParser *)parser didFailWithError:(NSError *)error {
-    NSLog(@"Parser failed with error: %@ %@", [error localizedDescription], [error userInfo]);
-}
 
 @end

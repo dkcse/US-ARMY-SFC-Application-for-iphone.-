@@ -7,19 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A176E911609A70E00926E07 /* FileReaderLineByLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A176E901609A70E00926E07 /* FileReaderLineByLine.m */; };
+		6A857859160C9E4500F7D484 /* Guidelines_Table.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6A857858160C9E4500F7D484 /* Guidelines_Table.csv */; };
+		6A857865160CAFB100F7D484 /* Favorites.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A857864160CAFB100F7D484 /* Favorites.m */; };
+		6A857868160CAFB100F7D484 /* Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A857867160CAFB100F7D484 /* Description.m */; };
+		6A85786B160CAFB100F7D484 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A85786A160CAFB100F7D484 /* Product.m */; };
 		6A9709D516047E1E00A41F3C /* Bg2.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A9709D416047E1E00A41F3C /* Bg2.png */; };
 		6AD6D390160889620072BB85 /* SFC_content_formatted.xml in Resources */ = {isa = PBXBuildFile; fileRef = 6AD6D38F160889620072BB85 /* SFC_content_formatted.xml */; };
-		6AD6D39F16088C160072BB85 /* Favorites.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD6D39E16088C160072BB85 /* Favorites.m */; };
-		6AD6D3A216088C160072BB85 /* DetailDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD6D3A116088C160072BB85 /* DetailDescription.m */; };
-		6AD6D3A516088C160072BB85 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD6D3A416088C160072BB85 /* Product.m */; };
-		6AD6D3A816088C160072BB85 /* Description.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD6D3A716088C160072BB85 /* Description.m */; };
 		6AD6D3BF1608ADBB0072BB85 /* CHCSVParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD6D3B51608ADBB0072BB85 /* CHCSVParser.m */; };
 		6AD6D3C01608ADBB0072BB85 /* CHCSVWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD6D3B71608ADBB0072BB85 /* CHCSVWriter.m */; };
 		6AD6D3C11608ADBB0072BB85 /* NSArray+CHCSVAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD6D3B91608ADBB0072BB85 /* NSArray+CHCSVAdditions.m */; };
 		6AD6D3C21608ADBB0072BB85 /* NSString+CHCSVAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD6D3BB1608ADBB0072BB85 /* NSString+CHCSVAdditions.m */; };
-		6AD6D3C31608ADBB0072BB85 /* UnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD6D3BD1608ADBB0072BB85 /* UnitTests.m */; };
 		6AD6D3C61608AE210072BB85 /* Contacts-Table.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6AD6D3C41608AE210072BB85 /* Contacts-Table.csv */; };
-		6AD6D3C71608AE210072BB85 /* Guidelines-Table.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6AD6D3C51608AE210072BB85 /* Guidelines-Table.csv */; };
 		6ADE5E87160052F600D76A53 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ADE5E86160052F600D76A53 /* UIKit.framework */; };
 		6ADE5E89160052F600D76A53 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ADE5E88160052F600D76A53 /* Foundation.framework */; };
 		6ADE5E8B160052F600D76A53 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ADE5E8A160052F600D76A53 /* CoreGraphics.framework */; };
@@ -29,9 +28,6 @@
 		6ADE5E9D160052F600D76A53 /* SFCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ADE5E9C160052F600D76A53 /* SFCViewController.m */; };
 		6ADE5F261600530800D76A53 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5EA61600530800D76A53 /* arrow.png */; };
 		6ADE5F271600530800D76A53 /* Bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5EA71600530800D76A53 /* Bg.png */; };
-		6ADE5F291600530800D76A53 /* cell_bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5EA91600530800D76A53 /* cell_bottom.png */; };
-		6ADE5F2A1600530800D76A53 /* cell_middle.png in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5EAA1600530800D76A53 /* cell_middle.png */; };
-		6ADE5F2B1600530800D76A53 /* cell_top.png in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5EAB1600530800D76A53 /* cell_top.png */; };
 		6ADE5F2C1600530800D76A53 /* Details.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5EAC1600530800D76A53 /* Details.rtf */; };
 		6ADE5F2D1600530800D76A53 /* icon_collapse.png in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5EAD1600530800D76A53 /* icon_collapse.png */; };
 		6ADE5F2E1600530800D76A53 /* icon_expand.png in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5EAE1600530800D76A53 /* icon_expand.png */; };
@@ -124,23 +120,12 @@
 		6ADE5F851600530800D76A53 /* 1.2 All SFC Products.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F0B1600530800D76A53 /* 1.2 All SFC Products.jpg */; };
 		6ADE5F861600530800D76A53 /* 1.3 Favorites.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F0C1600530800D76A53 /* 1.3 Favorites.jpg */; };
 		6ADE5F871600530800D76A53 /* 1.4 Add to Favorites.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F0D1600530800D76A53 /* 1.4 Add to Favorites.jpg */; };
-		6ADE5F881600530800D76A53 /* 1.5 About.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F0E1600530800D76A53 /* 1.5 About.jpg */; };
 		6ADE5F891600530800D76A53 /* 2.1 SFC Product (Guidelines).jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F0F1600530800D76A53 /* 2.1 SFC Product (Guidelines).jpg */; };
 		6ADE5F8A1600530800D76A53 /* 2.3 SFC Product (POC).jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F101600530800D76A53 /* 2.3 SFC Product (POC).jpg */; };
-		6ADE5F8B1600530800D76A53 /* 2.5 Contact Details.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F111600530800D76A53 /* 2.5 Contact Details.jpg */; };
 		6ADE5F8C1600530800D76A53 /* 2.6 Edit Contact Details.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F121600530800D76A53 /* 2.6 Edit Contact Details.jpg */; };
-		6ADE5F8D1600530800D76A53 /* 2.8 Edit Notes.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F131600530800D76A53 /* 2.8 Edit Notes.jpg */; };
-		6ADE5F8E1600530800D76A53 /* 1.2 All SFC Products.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F151600530800D76A53 /* 1.2 All SFC Products.jpg */; };
-		6ADE5F8F1600530800D76A53 /* 1.3 Favorites.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F161600530800D76A53 /* 1.3 Favorites.jpg */; };
-		6ADE5F901600530800D76A53 /* 1.4 Add to Favorites.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F171600530800D76A53 /* 1.4 Add to Favorites.jpg */; };
-		6ADE5F911600530800D76A53 /* 1.5 About.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F181600530800D76A53 /* 1.5 About.jpg */; };
-		6ADE5F921600530800D76A53 /* 2.1 SFC Product (Guidelines).jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F191600530800D76A53 /* 2.1 SFC Product (Guidelines).jpg */; };
 		6ADE5F931600530800D76A53 /* 2.2 Medical Evacuation Request 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F1A1600530800D76A53 /* 2.2 Medical Evacuation Request 1.jpg */; };
 		6ADE5F941600530800D76A53 /* 2.2 Medical Evacuation Request 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F1B1600530800D76A53 /* 2.2 Medical Evacuation Request 2.jpg */; };
-		6ADE5F951600530800D76A53 /* 2.3 SFC Product (POC).jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F1C1600530800D76A53 /* 2.3 SFC Product (POC).jpg */; };
 		6ADE5F961600530800D76A53 /* 2.4 SFC Product (Maps).jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F1D1600530800D76A53 /* 2.4 SFC Product (Maps).jpg */; };
-		6ADE5F971600530800D76A53 /* 2.5 Contact Details.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F1E1600530800D76A53 /* 2.5 Contact Details.jpg */; };
-		6ADE5F981600530800D76A53 /* 2.6 Edit Contact Details.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F1F1600530800D76A53 /* 2.6 Edit Contact Details.jpg */; };
 		6ADE5F991600530800D76A53 /* 2.7.1 Edit Points of Contact.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F201600530800D76A53 /* 2.7.1 Edit Points of Contact.jpg */; };
 		6ADE5F9A1600530800D76A53 /* 2.7.2 Edit Points of Contact.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F211600530800D76A53 /* 2.7.2 Edit Points of Contact.jpg */; };
 		6ADE5F9B1600530800D76A53 /* 2.8 Edit Notes.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F221600530800D76A53 /* 2.8 Edit Notes.jpg */; };
@@ -154,16 +139,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6A176E8F1609A70E00926E07 /* FileReaderLineByLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileReaderLineByLine.h; path = ../FileReaderLineByLine.h; sourceTree = "<group>"; };
+		6A176E901609A70E00926E07 /* FileReaderLineByLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileReaderLineByLine.m; path = ../FileReaderLineByLine.m; sourceTree = "<group>"; };
+		6A857858160C9E4500F7D484 /* Guidelines_Table.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Guidelines_Table.csv; sourceTree = "<group>"; };
+		6A857863160CAFB000F7D484 /* Favorites.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Favorites.h; path = ../Favorites.h; sourceTree = "<group>"; };
+		6A857864160CAFB100F7D484 /* Favorites.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Favorites.m; path = ../Favorites.m; sourceTree = "<group>"; };
+		6A857866160CAFB100F7D484 /* Description.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Description.h; path = ../Description.h; sourceTree = "<group>"; };
+		6A857867160CAFB100F7D484 /* Description.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Description.m; path = ../Description.m; sourceTree = "<group>"; };
+		6A857869160CAFB100F7D484 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Product.h; path = ../Product.h; sourceTree = "<group>"; };
+		6A85786A160CAFB100F7D484 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = ../Product.m; sourceTree = "<group>"; };
 		6A9709D416047E1E00A41F3C /* Bg2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bg2.png; sourceTree = "<group>"; };
 		6AD6D38F160889620072BB85 /* SFC_content_formatted.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SFC_content_formatted.xml; sourceTree = "<group>"; };
-		6AD6D39D16088C160072BB85 /* Favorites.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Favorites.h; path = ../Favorites.h; sourceTree = "<group>"; };
-		6AD6D39E16088C160072BB85 /* Favorites.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Favorites.m; path = ../Favorites.m; sourceTree = "<group>"; };
-		6AD6D3A016088C160072BB85 /* DetailDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DetailDescription.h; path = ../DetailDescription.h; sourceTree = "<group>"; };
-		6AD6D3A116088C160072BB85 /* DetailDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DetailDescription.m; path = ../DetailDescription.m; sourceTree = "<group>"; };
-		6AD6D3A316088C160072BB85 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Product.h; path = ../Product.h; sourceTree = "<group>"; };
-		6AD6D3A416088C160072BB85 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = ../Product.m; sourceTree = "<group>"; };
-		6AD6D3A616088C160072BB85 /* Description.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Description.h; path = ../Description.h; sourceTree = "<group>"; };
-		6AD6D3A716088C160072BB85 /* Description.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Description.m; path = ../Description.m; sourceTree = "<group>"; };
 		6AD6D3B21608ADBB0072BB85 /* CHCSV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHCSV.h; sourceTree = "<group>"; };
 		6AD6D3B41608ADBB0072BB85 /* CHCSVParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHCSVParser.h; sourceTree = "<group>"; };
 		6AD6D3B51608ADBB0072BB85 /* CHCSVParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHCSVParser.m; sourceTree = "<group>"; };
@@ -173,10 +159,7 @@
 		6AD6D3B91608ADBB0072BB85 /* NSArray+CHCSVAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+CHCSVAdditions.m"; sourceTree = "<group>"; };
 		6AD6D3BA1608ADBB0072BB85 /* NSString+CHCSVAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+CHCSVAdditions.h"; sourceTree = "<group>"; };
 		6AD6D3BB1608ADBB0072BB85 /* NSString+CHCSVAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+CHCSVAdditions.m"; sourceTree = "<group>"; };
-		6AD6D3BC1608ADBB0072BB85 /* UnitTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitTests.h; sourceTree = "<group>"; };
-		6AD6D3BD1608ADBB0072BB85 /* UnitTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnitTests.m; sourceTree = "<group>"; };
-		6AD6D3C41608AE210072BB85 /* Contacts-Table.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Contacts-Table.csv"; sourceTree = "<group>"; };
-		6AD6D3C51608AE210072BB85 /* Guidelines-Table.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Guidelines-Table.csv"; sourceTree = "<group>"; };
+		6AD6D3C41608AE210072BB85 /* Contacts-Table.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Contacts-Table.csv"; path = "CSVParser/Contacts-Table.csv"; sourceTree = "<group>"; };
 		6ADE5E82160052F600D76A53 /* USArmySFC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = USArmySFC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6ADE5E86160052F600D76A53 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6ADE5E88160052F600D76A53 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -332,6 +315,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A85786D160CAFFF00F7D484 /* DataModel */ = {
+			isa = PBXGroup;
+			children = (
+				6A857869160CAFB100F7D484 /* Product.h */,
+				6A85786A160CAFB100F7D484 /* Product.m */,
+				6A857866160CAFB100F7D484 /* Description.h */,
+				6A857867160CAFB100F7D484 /* Description.m */,
+				6A857863160CAFB000F7D484 /* Favorites.h */,
+				6A857864160CAFB100F7D484 /* Favorites.m */,
+			);
+			name = DataModel;
+			sourceTree = "<group>";
+		};
 		6AD6D3B11608ADBB0072BB85 /* CSVParser */ = {
 			isa = PBXGroup;
 			children = (
@@ -344,10 +340,6 @@
 				6AD6D3B91608ADBB0072BB85 /* NSArray+CHCSVAdditions.m */,
 				6AD6D3BA1608ADBB0072BB85 /* NSString+CHCSVAdditions.h */,
 				6AD6D3BB1608ADBB0072BB85 /* NSString+CHCSVAdditions.m */,
-				6AD6D3BC1608ADBB0072BB85 /* UnitTests.h */,
-				6AD6D3BD1608ADBB0072BB85 /* UnitTests.m */,
-				6AD6D3C41608AE210072BB85 /* Contacts-Table.csv */,
-				6AD6D3C51608AE210072BB85 /* Guidelines-Table.csv */,
 			);
 			path = CSVParser;
 			sourceTree = "<group>";
@@ -383,6 +375,7 @@
 		6ADE5E8C160052F600D76A53 /* USArmySFC */ = {
 			isa = PBXGroup;
 			children = (
+				6A85786D160CAFFF00F7D484 /* DataModel */,
 				6AF471C91602F2D600007CAE /* CardsViewGroup */,
 				6ADE5E95160052F600D76A53 /* SFCAppDelegate.h */,
 				6ADE5E96160052F600D76A53 /* SFCAppDelegate.m */,
@@ -390,14 +383,6 @@
 				6AF471CA1602F54800007CAE /* CardDescription.h */,
 				6AF471CB1602F54800007CAE /* CardDescription.m */,
 				6ADEA8D51607060F00A14E45 /* Favorites.xcdatamodeld */,
-				6AD6D3A616088C160072BB85 /* Description.h */,
-				6AD6D3A716088C160072BB85 /* Description.m */,
-				6AD6D3A316088C160072BB85 /* Product.h */,
-				6AD6D3A416088C160072BB85 /* Product.m */,
-				6AD6D3A016088C160072BB85 /* DetailDescription.h */,
-				6AD6D3A116088C160072BB85 /* DetailDescription.m */,
-				6AD6D39D16088C160072BB85 /* Favorites.h */,
-				6AD6D39E16088C160072BB85 /* Favorites.m */,
 				6ADE5E8D160052F600D76A53 /* Supporting Files */,
 			);
 			path = USArmySFC;
@@ -406,8 +391,10 @@
 		6ADE5E8D160052F600D76A53 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				6AD6D3B11608ADBB0072BB85 /* CSVParser */,
+				6AD6D3C41608AE210072BB85 /* Contacts-Table.csv */,
+				6A857858160C9E4500F7D484 /* Guidelines_Table.csv */,
 				6AD6D38F160889620072BB85 /* SFC_content_formatted.xml */,
+				6AD6D3B11608ADBB0072BB85 /* CSVParser */,
 				6ADE5EA31600530800D76A53 /* SFC */,
 				6ADE5E8E160052F600D76A53 /* USArmySFC-Info.plist */,
 				6ADE5E8F160052F600D76A53 /* InfoPlist.strings */,
@@ -629,6 +616,8 @@
 			children = (
 				6ADE5E9B160052F600D76A53 /* SFCViewController.h */,
 				6ADE5E9C160052F600D76A53 /* SFCViewController.m */,
+				6A176E8F1609A70E00926E07 /* FileReaderLineByLine.h */,
+				6A176E901609A70E00926E07 /* FileReaderLineByLine.m */,
 				6AE94C481601BE1F007D5BA5 /* TableViewCell.h */,
 				6AE94C491601BE1F007D5BA5 /* TableViewCell.m */,
 			);
@@ -689,9 +678,6 @@
 				6ADE5E91160052F600D76A53 /* InfoPlist.strings in Resources */,
 				6ADE5F261600530800D76A53 /* arrow.png in Resources */,
 				6ADE5F271600530800D76A53 /* Bg.png in Resources */,
-				6ADE5F291600530800D76A53 /* cell_bottom.png in Resources */,
-				6ADE5F2A1600530800D76A53 /* cell_middle.png in Resources */,
-				6ADE5F2B1600530800D76A53 /* cell_top.png in Resources */,
 				6ADE5F2C1600530800D76A53 /* Details.rtf in Resources */,
 				6ADE5F2D1600530800D76A53 /* icon_collapse.png in Resources */,
 				6ADE5F2E1600530800D76A53 /* icon_expand.png in Resources */,
@@ -784,23 +770,12 @@
 				6ADE5F851600530800D76A53 /* 1.2 All SFC Products.jpg in Resources */,
 				6ADE5F861600530800D76A53 /* 1.3 Favorites.jpg in Resources */,
 				6ADE5F871600530800D76A53 /* 1.4 Add to Favorites.jpg in Resources */,
-				6ADE5F881600530800D76A53 /* 1.5 About.jpg in Resources */,
 				6ADE5F891600530800D76A53 /* 2.1 SFC Product (Guidelines).jpg in Resources */,
 				6ADE5F8A1600530800D76A53 /* 2.3 SFC Product (POC).jpg in Resources */,
-				6ADE5F8B1600530800D76A53 /* 2.5 Contact Details.jpg in Resources */,
 				6ADE5F8C1600530800D76A53 /* 2.6 Edit Contact Details.jpg in Resources */,
-				6ADE5F8D1600530800D76A53 /* 2.8 Edit Notes.jpg in Resources */,
-				6ADE5F8E1600530800D76A53 /* 1.2 All SFC Products.jpg in Resources */,
-				6ADE5F8F1600530800D76A53 /* 1.3 Favorites.jpg in Resources */,
-				6ADE5F901600530800D76A53 /* 1.4 Add to Favorites.jpg in Resources */,
-				6ADE5F911600530800D76A53 /* 1.5 About.jpg in Resources */,
-				6ADE5F921600530800D76A53 /* 2.1 SFC Product (Guidelines).jpg in Resources */,
 				6ADE5F931600530800D76A53 /* 2.2 Medical Evacuation Request 1.jpg in Resources */,
 				6ADE5F941600530800D76A53 /* 2.2 Medical Evacuation Request 2.jpg in Resources */,
-				6ADE5F951600530800D76A53 /* 2.3 SFC Product (POC).jpg in Resources */,
 				6ADE5F961600530800D76A53 /* 2.4 SFC Product (Maps).jpg in Resources */,
-				6ADE5F971600530800D76A53 /* 2.5 Contact Details.jpg in Resources */,
-				6ADE5F981600530800D76A53 /* 2.6 Edit Contact Details.jpg in Resources */,
 				6ADE5F991600530800D76A53 /* 2.7.1 Edit Points of Contact.jpg in Resources */,
 				6ADE5F9A1600530800D76A53 /* 2.7.2 Edit Points of Contact.jpg in Resources */,
 				6ADE5F9B1600530800D76A53 /* 2.8 Edit Notes.jpg in Resources */,
@@ -810,7 +785,7 @@
 				6A9709D516047E1E00A41F3C /* Bg2.png in Resources */,
 				6AD6D390160889620072BB85 /* SFC_content_formatted.xml in Resources */,
 				6AD6D3C61608AE210072BB85 /* Contacts-Table.csv in Resources */,
-				6AD6D3C71608AE210072BB85 /* Guidelines-Table.csv in Resources */,
+				6A857859160C9E4500F7D484 /* Guidelines_Table.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -827,15 +802,14 @@
 				6AE94C4A1601BE1F007D5BA5 /* TableViewCell.m in Sources */,
 				6AF471CC1602F54800007CAE /* CardDescription.m in Sources */,
 				6ADEA8D71607060F00A14E45 /* Favorites.xcdatamodeld in Sources */,
-				6AD6D39F16088C160072BB85 /* Favorites.m in Sources */,
-				6AD6D3A216088C160072BB85 /* DetailDescription.m in Sources */,
-				6AD6D3A516088C160072BB85 /* Product.m in Sources */,
-				6AD6D3A816088C160072BB85 /* Description.m in Sources */,
 				6AD6D3BF1608ADBB0072BB85 /* CHCSVParser.m in Sources */,
 				6AD6D3C01608ADBB0072BB85 /* CHCSVWriter.m in Sources */,
 				6AD6D3C11608ADBB0072BB85 /* NSArray+CHCSVAdditions.m in Sources */,
 				6AD6D3C21608ADBB0072BB85 /* NSString+CHCSVAdditions.m in Sources */,
-				6AD6D3C31608ADBB0072BB85 /* UnitTests.m in Sources */,
+				6A176E911609A70E00926E07 /* FileReaderLineByLine.m in Sources */,
+				6A857865160CAFB100F7D484 /* Favorites.m in Sources */,
+				6A857868160CAFB100F7D484 /* Description.m in Sources */,
+				6A85786B160CAFB100F7D484 /* Product.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

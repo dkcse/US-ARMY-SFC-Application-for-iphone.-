@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11D50" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Description" representedClassName="Description" syncable="YES">
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="detailDescriptionOfCard" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DetailDescription" inverseName="detailForEachDescription" inverseEntity="DetailDescription" syncable="YES"/>
+        <attribute name="about" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="accidents_damages" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="camouflage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="driving_directions" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="environmental_services" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fire_prevention" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="general_info" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hazardous_material_and_pol" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ied_uxo_report" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="jmrc_hohenhels_sfc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="language" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="legal" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="medevac" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="medvac_to_hospital_instruction" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="policing_training_areas" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="product_title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="serial" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sfc_main_title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sfc_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sfc_subtitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="slogan" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="training_area_dos_and_donts" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="vehicle_movement" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="wassrack_procedures" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="weather" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="wildlife" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="productDescription" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Product" inverseName="productDetail" inverseEntity="Product" syncable="YES"/>
-    </entity>
-    <entity name="DetailDescription" representedClassName="DetailDescription" syncable="YES">
-        <attribute name="detail" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="detailForEachDescription" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Description" inverseName="detailDescriptionOfCard" inverseEntity="Description" syncable="YES"/>
     </entity>
     <entity name="Favorite" representedClassName="Favorites" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -17,9 +37,8 @@
         <relationship name="productDetail" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Description" inverseName="productDescription" inverseEntity="Description" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Favorite" positionX="-963" positionY="-171" width="128" height="60"/>
+        <element name="Description" positionX="-3944" positionY="-738" width="128" height="450"/>
+        <element name="Favorite" positionX="-4340" positionY="-549" width="128" height="60"/>
         <element name="Product" positionX="-4221" positionY="-849" width="128" height="75"/>
-        <element name="Description" positionX="-3944" positionY="-738" width="128" height="90"/>
-        <element name="DetailDescription" positionX="-3690" positionY="-459" width="128" height="75"/>
     </elements>
 </model>

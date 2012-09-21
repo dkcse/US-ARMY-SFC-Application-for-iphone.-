@@ -99,6 +99,8 @@
     [accessoryButton addTarget:self action:@selector(accessoryButtonDisclosureTapped:) forControlEvents:UIControlEventTouchUpInside];
     [cell setAccessoryView:accessoryButton];
     accessoryButton.tag = indexPath.row;
+    [cell.textLabel sizeToFit];
+    //cell.textLabel.font = [UIFont systemFontOfSize:24];
 
 //    if(indexPath.row == 0)
 //    {

@@ -10,7 +10,8 @@
 #import "TableViewCell.h"
 #import "CardDescription.h"
 #import "Favorites.h"
-#import "CHCSV.h"
+#import "Product.h"
+#import "FileReaderLineByLine.h"
 
 @interface SFCViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,customDelegate,NSXMLParserDelegate>
 
