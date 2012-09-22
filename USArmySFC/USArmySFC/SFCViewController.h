@@ -12,6 +12,7 @@
 #import "Favorites.h"
 #import "Product.h"
 #import "FileReaderLineByLine.h"
+#import "Description.h"
 
 @interface SFCViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,customDelegate,NSXMLParserDelegate>
 
@@ -26,6 +27,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *favoriteTableView;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
+@property (nonatomic,strong) NSMutableArray *cardNameFromCoreData;
 @property (nonatomic) BOOL *test;
 
 - (IBAction)showFavoriteView:(id)sender;
