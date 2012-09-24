@@ -18,6 +18,7 @@
 @property (nonatomic) NSInteger indexRow;
 @property (nonatomic) NSInteger numberOfRows;
 @property (nonatomic) BOOL checkForTableViewHidden;
+@property (nonatomic,strong) NSMutableArray *productNameUnique;
 
 //variable declared for storing fetched value from .csv
 
@@ -26,6 +27,16 @@
 @property (nonatomic,strong) NSMutableArray *cardName;
 @property (nonatomic,strong) NSDictionary *cardNameWithLanguage;
 @property (nonatomic,strong) NSMutableArray *cardNoWithDiffLang;
+
+//variable for detail view
+@property (nonatomic,strong) NSString *selectedCardName;
+@property (nonatomic,strong) NSString *selectedCardSubtitle;
+@property (nonatomic,strong) NSMutableArray *attributeArray;
+@property (nonatomic,strong) NSMutableArray *descriptionArray;
+@property (nonatomic,strong) Product *selectedProduct;
+@property (nonatomic) NSInteger selectedCellToExpand;
+
+
 @end
 
 @implementation SFCViewController
@@ -48,6 +59,7 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize storeFetchedName = _storeFetchedName;
 @synthesize favoriteTableView = _favoriteTableView;
+@synthesize productNameUnique = _productNameUnique;
 @synthesize test = _test;
 
 //for csv file
@@ -59,6 +71,16 @@
 @synthesize cardNameFromCoreData = _cardNameFromCoreData;
 @synthesize cardNoWithDiffLang = _cardNoWithDiffLang;
 
+//detail view
+@synthesize selectedCardName = _selectedCardName;
+@synthesize selectedCardSubtitle = _selectedCardSubtitle;
+@synthesize attributeArray = _attributeArray;
+@synthesize descriptionArray = _descriptionArray;
+@synthesize selectedProduct = _selectedProduct;
+@synthesize selectedCellToExpand = _selectedCellToExpand;
+
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -67,6 +89,8 @@
     _favoriteTableView.delegate = self;
     _favoriteTableView.dataSource = self;
     
+    _attributeArray = [[NSMutableArray alloc]init];
+    _descriptionArray = [[NSMutableArray alloc]init];
     // for csv file
     _cardName = [[NSMutableArray alloc]init];
     _cardNoWithDiffLang = [[NSMutableArray alloc]init] ;
@@ -147,7 +171,6 @@
     while ((_lineOfGuidelineCSV = [readerForGuidelinesCSV readLine]))
     {
         NSArray* allLinedStrings = [_lineOfGuidelineCSV componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
-        //NSLog(@"object at 0th index are = %@",[allLinedStrings objectAtIndex:0]);
         for (int i = 27; i<=612; i = i+27)
         {
             [_listOfCards addObject:[allLinedStrings objectAtIndex:i]];
@@ -183,6 +206,8 @@
         //  NSLog(@"%@",[data2 objectAtIndex:1]);
         // NSLog(@"count = %d-",[data1 count]);
     }
+    
+    
     
 }
 
@@ -280,10 +305,9 @@
         NSMutableArray *productName = [[NSMutableArray alloc]init];
 
         for(Product *obj in fetchedResults)
-        {
+         {
             [productName addObject:obj.name];
-            NSLog(@"details are = %@",obj.productDetail.about);
-        }
+         }
         NSMutableArray *cardNoToDelete = [[NSMutableArray alloc]init];
         NSInteger index1,index2;
         for (index1 = 0; index1 < [productName count]; index1++)
@@ -292,20 +316,35 @@
             {
                 if ([[productName objectAtIndex:index1] isEqual:[productName objectAtIndex:index2]])
                 {
-                    [_cardNoWithDiffLang addObject:[NSNumber numberWithInteger:index2]];
-                    [cardNoToDelete addObject:[NSNumber numberWithInteger:index1]];
+                    [_cardNoWithDiffLang addObject:[NSNumber numberWithInteger:index1]];
+                    [cardNoToDelete addObject:[NSNumber numberWithInteger:index2]];
                 }
             }
         }
-        NSLog(@"cont = %d",[productName count]);
+        _productNameUnique=[[NSMutableArray alloc]init];
+        NSMutableArray *repeatedProductArray=[[NSMutableArray alloc]init];
+        for( NSString *name in productName)
+        {
+            if(![_productNameUnique containsObject:name])
+               {
+                   [_productNameUnique addObject:name];
+                   NSLog(@"new product array : %@",_productNameUnique);
+               }
+            else 
+            {
+                [repeatedProductArray addObject:name];
+                NSLog(@"repeated product array : %@",repeatedProductArray);
+            }
+        }
+        
+        
 
         for (int count = 0; count < [cardNoToDelete count]; count++)
         {
             NSLog(@"position to delete = %d",[[cardNoToDelete objectAtIndex:count]integerValue]);
-            [productName removeObjectAtIndex:[[cardNoToDelete objectAtIndex:count]integerValue]];
         }
-    NSLog(@"name of card are : %@",productName);
-    NSLog(@"name of card are : %@",_cardNoWithDiffLang);
+   // NSLog(@"name of card are : %@",productName);
+    //NSLog(@"name of card are : %@",_cardNoWithDiffLang);
     }
     else
     {
@@ -321,14 +360,17 @@
         return 50;
     }
     
-    else if (indexPath.row == [[_cardNoWithDiffLang objectAtIndex:0]integerValue] || indexPath.row == [[_cardNoWithDiffLang objectAtIndex:1]integerValue] || indexPath.row == [[_cardNoWithDiffLang objectAtIndex:2]integerValue])
+    else /*if (indexPath.row == [[_cardNoWithDiffLang objectAtIndex:0]integerValue] || indexPath.row == [[_cardNoWithDiffLang objectAtIndex:1]integerValue] || indexPath.row == [[_cardNoWithDiffLang objectAtIndex:2]integerValue])*/
     {
+        if(indexPath.row==_selectedCellToExpand)
+        {
         NSInteger heightForRow = 125;
         if( _checkForTableViewHidden == YES)
         {
             heightForRow = 50;
         }
         return heightForRow;
+        }
     }
     return 50;
 }
@@ -343,7 +385,7 @@
     else
     {
         NSLog(@"count = %d",[self.listOfCards count]);
-        return [self.listOfCards count]; 
+        return [_productNameUnique count]; 
     }
     
 }
@@ -390,8 +432,8 @@
             _tableCell = (TableViewCell *)cell;
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             _tableCell.celldelegate = self;
-            Product *fetched = [_cardNameFromCoreData objectAtIndex:indexPath.row];
-            _tableCell.cellDataLabel.text = [fetched name];
+            //Product *fetched = [_cardNameFromCoreData objectAtIndex:indexPath.row];
+            _tableCell.cellDataLabel.text = [_productNameUnique objectAtIndex:indexPath.row];
             [_tableCell.insideTableView setTag:indexPath.row];
             _tableCell.index = indexPath.row;
             _tableCell.cardArrayForTableView = _listOfCards;
@@ -405,19 +447,22 @@
             }
             else 
             {
+                if(indexPath.row==_selectedCellToExpand)
+                {
                 UIImage *imageView = [UIImage imageNamed:@"icon_collapse.png"];
                 [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
                 [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonCollapseTapped:) forControlEvents:UIControlEventTouchUpInside];
+                }
             }
             _tableCell.cellDataLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
             
-            if(_checkForTableViewHidden == YES)
+            if(_checkForTableViewHidden == NO &&indexPath.row==_selectedCellToExpand)
             {
-                _tableCell.insideTableView.hidden = YES;
+                _tableCell.insideTableView.hidden = NO;
             }
             else
             {
-                _tableCell.insideTableView.hidden = NO;
+                _tableCell.insideTableView.hidden = YES;
             }
             return _tableCell;
         }
@@ -429,8 +474,8 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdNormal];
             }
         }
-        Product *fetchedProduct = [self.cardNameFromCoreData objectAtIndex:indexPath.row];
-        cell.textLabel.text = [fetchedProduct name];
+        //Product *fetchedProduct = [self.cardNameFromCoreData objectAtIndex:indexPath.row];
+        cell.textLabel.text = [_productNameUnique objectAtIndex:indexPath.row];
         _accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)]; 
         _accessoryButton.tag = indexPath.row;
         UIImage *imageView = [UIImage imageNamed:@"arrow.png"];
@@ -450,9 +495,30 @@
         UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
         CardDescription *pushForDescription1 = [storyboard instantiateViewControllerWithIdentifier:@"cardDescriptor"];
         Favorites *favourite = [self.storeFetchedName objectAtIndex:indexPath.row]; 
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
+        [fetchRequest setEntity:entity];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@",[favourite name]];
+        [fetchRequest setPredicate:predicate];
+        NSError *error;    
+        NSArray *fetchedResults;
         
+        if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
+        {
+            NSLog(@"favorite details are :%@",fetchedResults);
+            _selectedProduct = [fetchedResults objectAtIndex:0];
+            
+            [self availableDescription];
+            NSLog(@"about = %@",_attributeArray);
+        }
+        else
+        {
+            NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+        }
+
         NSLog(@"sent data are = %@",[favourite name]);
         pushForDescription1.cardName = [favourite name];
+        pushForDescription1.cardDetails = _attributeArray;
         [self.navigationController pushViewController:pushForDescription1 animated:YES];
     }
     NSLog(@"index path = %d",indexPath.row);
@@ -460,13 +526,161 @@
 
 -(void) accessoryButtonDisclosureTapped:(UIButton *)sender
 {
-    NSLog(@"tapped");
-    UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    CardDescription *pushForDescription = [storyboard instantiateViewControllerWithIdentifier:@"cardDescriptor"];
-    NSLog(@"row selected = %d",sender.tag);
-    NSLog(@"at index selected = %@",[_listOfCards objectAtIndex:sender.tag]);
-    pushForDescription.cardName = [_listOfCards objectAtIndex:sender.tag];
-    [self.navigationController pushViewController:pushForDescription animated:YES];
+    //language remaining
+    _selectedProduct = [_cardNameFromCoreData objectAtIndex:sender.tag];
+    _selectedCardName = [_selectedProduct name];
+    _selectedCardSubtitle = _selectedProduct.productDetail.sfc_subtitle;
+    NSLog(@"at disclosure:%@",_selectedProduct.productDetail.about);
+    
+    NSLog(@"array of detail are before: %@",_attributeArray);
+
+    [self availableDescription];
+    [self performSegueWithIdentifier:@"Show Card Description Segue" sender:self];
+}
+
+-(void) availableDescription
+{
+    [_attributeArray removeAllObjects];
+    if([_selectedProduct.productDetail.product_title length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.product_title];
+        [_attributeArray addObject:@"Product Title"];
+    }
+    
+    
+    if([_selectedProduct.productDetail.slogan length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.slogan];
+        [_attributeArray addObject:@"Slogan"];
+    }
+    
+    if([_selectedProduct.productDetail.about length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.about];
+        [_attributeArray addObject:@"About"];
+    }
+    
+    if([_selectedProduct.productDetail.medevac length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.medevac];
+        [_attributeArray addObject:@"Medevac"];
+    }
+    
+    if([_selectedProduct.productDetail.hazardous_material_and_pol length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.hazardous_material_and_pol];
+        [_attributeArray addObject:@"Hazardous Materials And POL"];
+    }
+    
+    if([_selectedProduct.productDetail.vehicle_movement length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.vehicle_movement];
+        [_attributeArray addObject:@"Vehicle Movement"];
+    }
+    
+    if([_selectedProduct.productDetail.wassrack_procedures length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.wassrack_procedures];
+        [_attributeArray addObject:@"Wassrack Procedures"];
+    }
+    
+    if([_selectedProduct.productDetail.training_area_dos_and_donts length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.training_area_dos_and_donts];
+        [_attributeArray addObject:@"Training Area DO's And DON'Ts"];
+    }
+    
+    if([_selectedProduct.productDetail.fire_prevention length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.fire_prevention];
+        [_attributeArray addObject:@"Fire Prevention"];
+    }
+    
+    if([_selectedProduct.productDetail.wildlife length] > 0)
+    {
+        [_descriptionArray addObject: _selectedProduct.productDetail.wildlife];
+        [_attributeArray addObject:@"Wildlife"];
+    }
+    
+    if([_selectedProduct.productDetail.policing_training_areas length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.policing_training_areas];
+        [_attributeArray addObject:@"Policing Training Areas"];
+    }
+    
+    if([_selectedProduct.productDetail.ied_uxo_report length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.ied_uxo_report];
+        [_attributeArray addObject:@"IED/UXO Report"];
+    }
+    
+    if([_selectedProduct.productDetail.camouflage length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.camouflage];
+        [_attributeArray addObject:@"Camouflage"];
+    }
+    
+    if([_selectedProduct.productDetail.weather length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.weather];
+        [_attributeArray addObject:@"Weather"];
+    }
+    
+    if([_selectedProduct.productDetail.legal length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.legal];
+        [_attributeArray addObject:@"Legal"];
+    }
+    
+    if([_selectedProduct.productDetail.medvac_to_hospital_instruction length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.medvac_to_hospital_instruction];
+        [_attributeArray addObject:@"Medevac To Hospital Instructions"];
+    }
+    
+    if([_selectedProduct.productDetail.driving_directions length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.driving_directions];
+        [_attributeArray addObject:@"Driving Directions"];
+    }
+    if([_selectedProduct.productDetail.environmental_services length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.environmental_services];
+        [_attributeArray addObject:@"Environmental Services"];
+    }
+    
+    if([_selectedProduct.productDetail.accidents_damages length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.accidents_damages];
+        [_attributeArray addObject:@"Accidents Damages"];
+    }
+    
+    if([_selectedProduct.productDetail.jmrc_hohenhels_sfc length] > 0)
+    {
+        [_descriptionArray addObject:_selectedProduct.productDetail.jmrc_hohenhels_sfc];
+        [_attributeArray addObject:@"JMRC Hohenfels SFC"];
+    }
+    
+    if([_selectedProduct.productDetail.general_info length] > 0)
+    {
+        [_descriptionArray addObject: _selectedProduct.productDetail.general_info];
+        [_attributeArray addObject:@"General Info"];
+    }
+    
+   // _selectedProduct = Nil;
+
+}
+
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if([segue.identifier isEqualToString:@"Show Card Description Segue"])
+    {
+        CardDescription *next = (CardDescription *)[segue destinationViewController];
+        next.cardName = _selectedCardName;
+        next.cardSubTitle = _selectedCardSubtitle;
+        next.cardDetails = _attributeArray;
+        next.detailDescription = _descriptionArray;
+    }
 }
 
 - (void) accessoryButtonCollapseTapped : (UIButton *) sender
@@ -491,6 +705,7 @@
     pushForDescription.cardName = [_listOfCards objectAtIndex:sender.tag];
     _checkForTableViewHidden = NO;
     NSLog(@"row selected = %d",sender.tag);
+    _selectedCellToExpand = sender.tag;
     [_cardsTableView reloadData];
 }
 

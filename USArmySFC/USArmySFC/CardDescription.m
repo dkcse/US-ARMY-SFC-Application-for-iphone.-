@@ -10,16 +10,8 @@
 
 @interface CardDescription()
 
-@property (nonatomic,strong) NSArray *descriptionArray1;
-@property (nonatomic,strong) NSArray *descriptionArray2;
-@property (nonatomic,strong) NSArray *description;
 @property (nonatomic) NSInteger pressCount;
 @property (nonatomic) BOOL favoriteImageStatus;
-
-//for next controller
-
-@property (nonatomic,strong) NSMutableArray *arrayDescribingCardsInformation1;
-@property (nonatomic,strong) NSMutableArray *nestedArrayDescribingCardsInformation;
 
 @end
 
@@ -30,30 +22,21 @@
 @synthesize cardNameLabel = _cardNameLabel;
 @synthesize favoriteSelectionImage = _favoriteSelectionImage;
 @synthesize cardDescriptionTableView = _cardDescriptionTableView;
-@synthesize description = _description;
-@synthesize descriptionArray1 = _descriptionArray1;
-@synthesize descriptionArray2 = _descriptionArray2;
 @synthesize cardName = _cardName;
+@synthesize cardSubtitleLabel = _cardSubtitleLabel;
 @synthesize tapToAddIntoFavorites = _tapToAddIntoFavorites;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize favoriteImageStatus = _favoriteImageStatus;
+@synthesize cardDetails = _cardDetails;
+@synthesize cardSubTitle = _cardSubTitle;
+@synthesize detailDescription = _detailDescription;
 
-//next controller
+//setting views
+@synthesize commonView = _commonView;
+@synthesize guidelineView = _guidelineView;
+@synthesize POCView = _POCView;
+@synthesize mapView = _mapView;
 
-@synthesize arrayDescribingCardsInformation1 = _arrayDescribingCardsInformation1;
-@synthesize nestedArrayDescribingCardsInformation = _nestedArrayDescribingCardsInformation;
-
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self)
-    {
-           
-    }
-
-    return self;
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -64,12 +47,12 @@
 -(void) viewDidAppear:(BOOL)animated
 {
     NSLog(@"hello");
+    _guidelineView.hidden = NO;
+    NSLog(@"sent description are = %@",_detailDescription);
     self.cardDescriptionTableView.delegate = self;
     self.cardDescriptionTableView.dataSource = self;
     _cardDescriptionTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
-
     _cardLogoImage.image = [UIImage imageNamed:@"icon.png"]; 
-    
     
     if([self searchForNameInCoreData : _cardName])
     {
@@ -81,37 +64,56 @@
         NSLog(@"not present in coredata");
         _favoriteSelectionImage.image = [UIImage imageNamed:@"star_normal.png"];
     }
-    
-    
-    
     _cardNameLabel.text = _cardName;
+    NSLog(@"sub title = %@",_cardSubTitle);
+    _cardSubtitleLabel.text = _cardSubTitle;
+    _cardSubtitleLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     _cardNameLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
-
-    
-    _descriptionArray1 = [[NSArray alloc]initWithObjects:@"About",@"Enter Services",@"Fire Prevention",@"Hazardous Materials and POL",@"Training Areas DOs And DON'Ts",@"Vehicle Movement",@"Washrack Procedure", nil];
-    _descriptionArray2 = [[NSArray alloc] initWithObjects:@"Risk Assessment Model", nil];
-    
-    _description = [[NSArray alloc]initWithObjects:_descriptionArray1,_descriptionArray2,nil];
-     _cardDescriptionTableView.backgroundColor = [UIColor clearColor];
+    _cardDescriptionTableView.backgroundColor = [UIColor clearColor];
     [self.cardDescriptionTableView reloadData];
-    
 }
 
-                                         
-                                         
-                                         
+- (IBAction)goBack:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)guidelineDescription:(id)sender
+{
+    _guidelineView.hidden = NO;
+    _POCView.hidden = YES;
+    _mapView.hidden = YES;
+    NSLog(@"guideline description");
+}
+
+- (IBAction)POCDescription:(id)sender
+{
+    NSLog(@"POC description");
+    _POCView.hidden = NO;
+    _mapView.hidden = YES;
+    _guidelineView.hidden = YES;
+    _POCView.backgroundColor = [UIColor clearColor];
+
+}
+
+- (IBAction)mapDescription:(id)sender
+{
+    NSLog(@"maps description");
+    _mapView.hidden = NO;
+    _guidelineView.hidden = YES;
+    _POCView.hidden = NO;
+    _mapView.backgroundColor = [UIColor clearColor];
+}
+
 - (BOOL) searchForNameInCoreData:(NSString *)name
 {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription
-                                   entityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
-    [fetchRequest setEntity:entity];
-    
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
+    [fetchRequest setEntity:entity];    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name==%@",name];
     [fetchRequest setPredicate:predicate];
     
     NSError *error;
-    
     NSArray *fetchedResults;
     
     if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
@@ -128,16 +130,12 @@
 //                return NO;
 //            }
 //        }
-
-       
-        
         NSLog(@"%@",fetchedResults);
         
         if(![_managedObjectContext save:&error])
         {
             NSLog(@"Could NOt Save changes : %@ , %@",[error description],[error userInfo]);
         }
-        
     }
     else
     {
@@ -145,77 +143,68 @@
     }
     if([fetchedResults count]>0)
         return YES;
-    else {
+    else 
+    {
         return NO;
     }
 }
                                          
-                                         
-                                         
-                                         
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"hello");
+    
+    //setting default view that is guideline view
+    
+    _commonView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
+
+    _POCView.hidden = YES;
+    _mapView.hidden = YES;
+    _guidelineView.hidden = NO;
+    _commonView.layer.cornerRadius = 10;
+    _guidelineView.backgroundColor = [UIColor clearColor]; 
+    _commonView.layer.masksToBounds = YES;
+    
+    
+    // delegate and managed object setting
     
     id appDelegate = (id)[[UIApplication sharedApplication] delegate];
     self.managedObjectContext = [appDelegate managedObjectContext];
-
-    
-    
     _pressCount = 0;
     self.cardDescriptionTableView.delegate = self;
     self.cardDescriptionTableView.dataSource = self;
-   
+    _cardDescriptionTableView.userInteractionEnabled = YES;
     _favoriteSelectionImage.userInteractionEnabled = YES;
     _tapToAddIntoFavorites.delegate = self;
     _tapToAddIntoFavorites = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTapToAddIntoFavorites:)];
     [self.favoriteSelectionImage addGestureRecognizer:_tapToAddIntoFavorites];
-    
-
-    _descriptionArray1 = [[NSArray alloc]initWithObjects:@"About",@"Enter Services",@"Fire Prevention",@"Hazardous Materials and POL",@"Training Areas DOs And DON'Ts",@"Vehicle Movement",@"Washrack Procedure", nil];
-    _descriptionArray2 = [[NSArray alloc] initWithObjects:@"Risk Assessment Model", nil];
-    
-    _description = [[NSArray alloc]initWithObjects:_descriptionArray1,_descriptionArray2,nil];
     [self.cardDescriptionTableView reloadData];
-    
 }
-
 
 -(void) handleTapToAddIntoFavorites:(UITapGestureRecognizer*)tapGesture
 {
-    NSLog(@"tapped");
-    
+    NSLog(@"tapped");    
     if(_pressCount % 2 == 0 && _favoriteSelectionImage.image == [UIImage imageNamed:@"star_normal.png"])
     {
-    
         _pressCount++;
         NSLog(@"count = %d",_pressCount);
         _favoriteSelectionImage.image = [UIImage imageNamed:@"star.png"];
-        
         [self addToCoreData];
     }
-    
-    else {
+    else
+    {
         _pressCount++;
         _favoriteSelectionImage.image = [UIImage imageNamed:@"star_normal.png"];
         [self deleteFromCoreData];
     }
-    
 }
-
 
 - (void) deleteFromCoreData
 {
     NSLog(@"delete called");
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription
-                                   entityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
     [fetchRequest setEntity:entity];
-    
-    
     NSError *error;
-    
     NSArray *fetchedResults;
     
     if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
@@ -234,15 +223,12 @@
         {
             NSLog(@"Could NOt Save changes : %@ , %@",[error description],[error userInfo]);
         }
-        
     }
     else
     {
         NSLog(@"error : %@  and %@",[error description],[error userInfo]); 
     }
-
 }
-
 
 - (void) addToCoreData
 {
@@ -252,44 +238,31 @@
     [self fetchFromCoreData];
 }
 
-
-
-
 - (void) fetchFromCoreData
 {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription
-                                   entityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
     [fetchRequest setEntity:entity];
-    
-    
-    NSError *error;
-    
+
+    NSError *error;    
     NSArray *fetchedResults;
-    
     if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
     {
         NSArray *fetchedName = [[NSArray alloc]init];
-        
         fetchedName = fetchedResults;
         NSMutableArray *copyOfFetchedName = [[NSMutableArray alloc]init];
         copyOfFetchedName = [fetchedName mutableCopy];
-        
-        
+    
         if([copyOfFetchedName count])
         {
             NSLog(@"name of favorites are : %@",copyOfFetchedName);
         }
-        
     }
     else
     {
         NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
     }
-    
 }
-
-
 - (void)viewDidUnload
 {
     [self setCardLogoImage:nil];
@@ -305,65 +278,57 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 50;
 }
 
-
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    
-    NSArray *sectionNo = [self.description objectAtIndex:section];
-    NSInteger rows = [sectionNo count];
-    
-    return rows;
-}
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{    
-    return [self.description count];
+    NSLog(@"card details count = %d",[_cardDetails count]);
+    return [_cardDetails count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellData = @"actionData";
-    
+    static NSString *cellData = @"actionData";    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellData];
-    
-    if (cell == nil) {
+    if (cell == nil) 
+    {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellData];
     }
-    
-    NSArray *menu= [self.description objectAtIndex : indexPath.section];
-    
-    cell.textLabel.text = [menu objectAtIndex:indexPath.row];
+
+    cell.textLabel.text = [_cardDetails objectAtIndex:indexPath.row];
     UIButton *accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)]; 
     accessoryButton.tag = indexPath.row;
     UIImage *imageView = [UIImage imageNamed:@"arrow.png"];
     [accessoryButton setImage:imageView forState:UIControlStateNormal];
     [accessoryButton addTarget:self action:@selector(accessoryButtonDisclosureTapped:) forControlEvents:UIControlEventTouchUpInside];
     [cell setAccessoryView:accessoryButton];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;    
     accessoryButton.tag = indexPath.row;
     
     cell.textLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     cell.backgroundColor = [UIColor clearColor]; 
-    
-    
-    return cell;
-    
+    return cell;    
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"row selected are %@",indexPath.row);
+}
 
 - (void) accessoryButtonDisclosureTapped : (UIButton *)sender
 {
     NSLog(@"hello disclosure pressed");
-    
-    
-}
+    UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+  
+    DetailDescriptionViewController *pushForDetail = [storyboard instantiateViewControllerWithIdentifier:@"detailDescriptor"]; 
+    pushForDetail.detailViewHeading = _cardName;
+    pushForDetail.detailHeading = [_cardDetails objectAtIndex:sender.tag];
+    pushForDetail.detailDescription = [_detailDescription objectAtIndex:sender.tag];
+    [self.navigationController pushViewController:pushForDetail animated:YES];
 
+}
 
 @end

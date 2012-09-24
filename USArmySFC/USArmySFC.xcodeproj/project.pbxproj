@@ -133,6 +133,8 @@
 		6ADE5F9D1600530800D76A53 /* Splash Screen 0.2.mov in Resources */ = {isa = PBXBuildFile; fileRef = 6ADE5F251600530800D76A53 /* Splash Screen 0.2.mov */; };
 		6ADEA8D71607060F00A14E45 /* Favorites.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6ADEA8D51607060F00A14E45 /* Favorites.xcdatamodeld */; };
 		6ADEA8E0160707BA00A14E45 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ADEA8DE160707A100A14E45 /* CoreData.framework */; };
+		6AE58D1E16102B4A004434F9 /* DetailDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AE58D1D16102B4A004434F9 /* DetailDescriptionViewController.m */; };
+		6AE58D2016105506004434F9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AE58D1F16105505004434F9 /* QuartzCore.framework */; };
 		6AE94C4A1601BE1F007D5BA5 /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AE94C491601BE1F007D5BA5 /* TableViewCell.m */; };
 		6AF471CC1602F54800007CAE /* CardDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AF471CB1602F54800007CAE /* CardDescription.m */; };
 		6AF471D916030AE100007CAE /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AF471D716030AE100007CAE /* MainStoryboard.storyboard */; };
@@ -293,6 +295,9 @@
 		6ADE5F251600530800D76A53 /* Splash Screen 0.2.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "Splash Screen 0.2.mov"; sourceTree = "<group>"; };
 		6ADEA8D61607060F00A14E45 /* Favorites.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Favorites.xcdatamodel; sourceTree = "<group>"; };
 		6ADEA8DE160707A100A14E45 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		6AE58D1C16102B4A004434F9 /* DetailDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailDescriptionViewController.h; sourceTree = "<group>"; };
+		6AE58D1D16102B4A004434F9 /* DetailDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailDescriptionViewController.m; sourceTree = "<group>"; };
+		6AE58D1F16105505004434F9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		6AE94C481601BE1F007D5BA5 /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TableViewCell.h; path = ../TableViewCell.h; sourceTree = "<group>"; };
 		6AE94C491601BE1F007D5BA5 /* TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TableViewCell.m; path = ../TableViewCell.m; sourceTree = "<group>"; };
 		6AF471CA1602F54800007CAE /* CardDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardDescription.h; sourceTree = "<group>"; };
@@ -305,6 +310,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6AE58D2016105506004434F9 /* QuartzCore.framework in Frameworks */,
 				6ADE5E87160052F600D76A53 /* UIKit.framework in Frameworks */,
 				6ADEA8E0160707BA00A14E45 /* CoreData.framework in Frameworks */,
 				6ADE5E89160052F600D76A53 /* Foundation.framework in Frameworks */,
@@ -351,6 +357,7 @@
 		6ADE5E85160052F600D76A53 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6AE58D1F16105505004434F9 /* QuartzCore.framework */,
 				6ADEA8DE160707A100A14E45 /* CoreData.framework */,
 				6ADE5E86160052F600D76A53 /* UIKit.framework */,
 				6ADE5E88160052F600D76A53 /* Foundation.framework */,
@@ -363,11 +370,7 @@
 			isa = PBXGroup;
 			children = (
 				6AF471C91602F2D600007CAE /* CardsViewGroup */,
-				6ADE5E95160052F600D76A53 /* SFCAppDelegate.h */,
-				6ADE5E96160052F600D76A53 /* SFCAppDelegate.m */,
 				6AF471D716030AE100007CAE /* MainStoryboard.storyboard */,
-				6AF471CA1602F54800007CAE /* CardDescription.h */,
-				6AF471CB1602F54800007CAE /* CardDescription.m */,
 				6ADEA8D51607060F00A14E45 /* Favorites.xcdatamodeld */,
 				6ABA0E94160DDDBF0077C3A1 /* Product.h */,
 				6ABA0E95160DDDBF0077C3A1 /* Product.m */,
@@ -606,12 +609,18 @@
 		6AF471C91602F2D600007CAE /* CardsViewGroup */ = {
 			isa = PBXGroup;
 			children = (
+				6ADE5E95160052F600D76A53 /* SFCAppDelegate.h */,
+				6ADE5E96160052F600D76A53 /* SFCAppDelegate.m */,
 				6ADE5E9B160052F600D76A53 /* SFCViewController.h */,
 				6ADE5E9C160052F600D76A53 /* SFCViewController.m */,
 				6A176E8F1609A70E00926E07 /* FileReaderLineByLine.h */,
 				6A176E901609A70E00926E07 /* FileReaderLineByLine.m */,
 				6AE94C481601BE1F007D5BA5 /* TableViewCell.h */,
 				6AE94C491601BE1F007D5BA5 /* TableViewCell.m */,
+				6AF471CA1602F54800007CAE /* CardDescription.h */,
+				6AF471CB1602F54800007CAE /* CardDescription.m */,
+				6AE58D1C16102B4A004434F9 /* DetailDescriptionViewController.h */,
+				6AE58D1D16102B4A004434F9 /* DetailDescriptionViewController.m */,
 			);
 			name = CardsViewGroup;
 			sourceTree = "<group>";
@@ -802,6 +811,7 @@
 				6ABA0E96160DDDBF0077C3A1 /* Product.m in Sources */,
 				6ABA0E99160DDDBF0077C3A1 /* Description.m in Sources */,
 				6ABA0E9C160DDDBF0077C3A1 /* Favorites.m in Sources */,
+				6AE58D1E16102B4A004434F9 /* DetailDescriptionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
