@@ -199,44 +199,44 @@
             NSArray *iterateLine = [[allLinedStrings objectAtIndex:lineCount] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
             NSLog(@"count no for iteration = %d",[iterateLine count]);
          
-//            NSArray *halfArray;
-//            NSRange theRange;
-//            NSMutableArray *subArray  = [[NSMutableArray alloc] initWithCapacity:23];
-//            
-//            for(int i=1;i<=23;i++)
-//            {   if(i==1)
+            NSArray *halfArray;
+            NSRange theRange;
+            NSMutableArray *subArray  = [[NSMutableArray alloc] initWithCapacity:23];
+            
+            for(int i=1;i<=23;i++)
+            {   if(i==1)
+                {
+                   theRange.location = 0;  
+                }
+                theRange.length = 5;
+                halfArray = [iterateLine subarrayWithRange:theRange];
+                
+                theRange.location += 5;
+                [subArray addObject:halfArray];
+            }
+            NSLog(@"subarray : %@",subArray);
+            
+            for (int iterateLineCount = 1;iterateLineCount < [iterateLine count]; iterateLineCount++)
+            {
+//                ContactType *contactType = (ContactType *)[NSEntityDescription insertNewObjectForEntityForName:@"contactType" inManagedObjectContext:_managedObjectContext];
+//                if(count<5)
 //                {
-//                   theRange.location = 0;  
+//                    //old product
+//                    count++;
 //                }
-//                theRange.length = 5;
-//                halfArray = [iterateLine subarrayWithRange:theRange];
+//                else 
+//                {
+//                    count = 0;
+//                    //new one
+//                }
+//                NSLog(@"data after semi: %@",[iterateLine objectAtIndex:iterateLineCount]);
 //                
-//                theRange.location += 5;
-//                [subArray addObject:halfArray];
+//                contactType.contactName = [iterateLine objectAtIndex:<#(NSUInteger)#>
+//                
 //            }
-//            NSLog(@"subarray : %@",subArray);
+        
 //            
-//            for (int iterateLineCount = 1;iterateLineCount < [iterateLine count]; iterateLineCount++)
-//            {
-////                ContactType *contactType = (ContactType *)[NSEntityDescription insertNewObjectForEntityForName:@"contactType" inManagedObjectContext:_managedObjectContext];
-////                if(count<5)
-////                {
-////                    //old product
-////                    count++;
-////                }
-////                else 
-////                {
-////                    count = 0;
-////                    //new one
-////                }
-////                NSLog(@"data after semi: %@",[iterateLine objectAtIndex:iterateLineCount]);
-////                
-////                contactType.contactName = [iterateLine objectAtIndex:<#(NSUInteger)#>
-////                
-////            }
-//        
-//            
-//            }
+            }
         
         
                 
