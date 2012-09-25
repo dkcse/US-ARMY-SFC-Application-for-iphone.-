@@ -19,7 +19,6 @@
 
 @property (strong, nonatomic) UINavigationController *navigationController;
 
-
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 

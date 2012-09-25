@@ -23,7 +23,6 @@
 //variable declared for storing fetched value from .csv
 
 @property (nonatomic,strong) NSString *lineOfGuidelineCSV;
-@property (nonatomic,strong) NSString *lineOfContactCSV;
 @property (nonatomic,strong) NSMutableArray *cardName;
 @property (nonatomic,strong) NSDictionary *cardNameWithLanguage;
 @property (nonatomic,strong) NSMutableArray *cardNoWithDiffLang;
@@ -64,7 +63,7 @@
 
 //for csv file
 
-@synthesize lineOfContactCSV = _lineOfContactCSV;
+
 @synthesize lineOfGuidelineCSV = _lineOfGuidelineCSV;
 @synthesize cardName = _cardName;
 @synthesize cardNameWithLanguage = _cardNameWithLanguage;
@@ -117,13 +116,16 @@
 # pragma mark
 #pragma more view setting 
     
-    _moreTextView.text = @"\nContact the USAREUR";
+    _moreTextView.text = @"\nContact the USAREUR SRP ITAM office for product support.\n\ne-mail:\nusareur.srp.contact@us.army.mil\nDSN : 314 475 8675\nCiv : +89 8876 88 5544\nFor additional products and services visit our websites:\nhttps://srp.usareur.army.mil\n\nMailing Address:\nHQ, 7th US Army JMTC\nAttn: AETT-TS(Bldg 3007)\nUnit 28130, Camp Normandy\nAPO AE 09554-8790\n   ";
     
     [self.moreScrollView setContentSize:CGSizeMake(_moreScrollView.frame.size.width, _moreScrollView.frame.size.height + 0)];
-    self.moreScrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Bg2.png"]];
+    self.moreScrollView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
+    
+    _moreScrollView.layer.cornerRadius = 8;
+    _moreScrollView.layer.masksToBounds = YES;
     
     self.moreTextView.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
-    self.moreTextView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Bg2.png"]];
+    self.moreTextView.backgroundColor = [UIColor clearColor];
     UIImage *imageView = [UIImage imageNamed:@"btn_request_normal.png"];
     [self.moreViewButton setImage:imageView forState:UIControlStateNormal];
     [_tableCell.plusButton addTarget:self action:@selector(requestProductButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -140,7 +142,9 @@
     label.textAlignment = UITextAlignmentCenter;
     label.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     
-    self.navigationItem.titleView = label;
+    //self.navigationItem.titleView = label;
+    self.navigationItem.title = @"All Field Cards";
+    [self.navigationController.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:48.0/255.0 green:49.0/255.0 blue:37.0/255.0 alpha:1.0],UITextAttributeTextColor, nil]];
     label.text = @"All Field Cards";
     [label sizeToFit];
     _checkForTableViewHidden = YES;
@@ -159,9 +163,21 @@
     
 # pragma favoriteView setting
     
+//    UILabel *labelFavorite = [[UILabel alloc] initWithFrame:CGRectZero];
+//    labelFavorite.backgroundColor = [UIColor clearColor];
+//    labelFavorite.font = [UIFont boldSystemFontOfSize:20.0];
+//    labelFavorite.textAlignment = UITextAlignmentCenter;
+//    labelFavorite.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+//    
+//    self.navigationItem.titleView = labelFavorite;
+//    label.text = @"Favorites";
+//    [label sizeToFit];
+
     _favoritesView.backgroundColor = [UIColor clearColor];
-    _favoriteTableView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Bg2.png"]];
+    _favoriteTableView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
     _favoriteTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+    _favoriteTableView.layer.cornerRadius = 8;
+    _favoriteTableView.layer.masksToBounds = YES;
     
 # pragma csv parsing
     
@@ -186,28 +202,41 @@
                 NSLog(@"language = %@",[allLinedStrings objectAtIndex:((27*(j+2))+5)]);
             }
         }
-        
+       
         [self deleteAllEntities];
         [self storeGuidelineCSVDataToCoreData];
         [self fetchProductNameFromCoreData];
         [self.cardsTableView reloadData];
     }
     
-    FileReaderLineByLine *readerForContractsCSV = [[FileReaderLineByLine alloc] initWithFilePath:@"/Users/deepakkumar/US SFC/Contacts-Table.csv"];
-    _lineOfContactCSV = nil;
-    
-    while ((_lineOfContactCSV = [readerForContractsCSV readLine]))
-    {
-        //NSArray* allLinedStrings = [_lineOfContactCSV componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-        //NSLog(@"All lined Strings - %@",[allLinedStrings objectAtIndex:0]);
+//    FileReaderLineByLine *readerForContractsCSV = [[FileReaderLineByLine alloc] initWithFilePath:@"/Users/deepakkumar/US SFC/Contacts-Table.csv"];
+//    _lineOfContactCSV = nil;
+//    
+//    while ((_lineOfContactCSV = [readerForContractsCSV readLine]))
+//    {
+//        NSArray* allLinedStrings = [_lineOfContactCSV componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+//        NSLog(@"All lined Strings for contacts - %@",[allLinedStrings objectAtIndex:19]);
+//        [self storeContactsCSVDataToCoreData];
+//        [self fetchContactsDetailFromCoreData];
+        
         // NSLog(@"sent data are = %@",line2);
         //   NSArray *data1 = [[allLinedStrings objectAtIndex:0] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
         //  NSArray *data2 = [[allLinedStrings objectAtIndex:1] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
         //  NSLog(@"%@",[data2 objectAtIndex:1]);
         // NSLog(@"count = %d-",[data1 count]);
-    }
+//    }
     
     
+    
+}
+
+- (void) storeContactsCSVDataToCoreData
+{
+    
+}
+
+-(void) fetchContactsDetailFromCoreData
+{
     
 }
 
@@ -308,6 +337,7 @@
          {
             [productName addObject:obj.name];
          }
+        NSLog(@"before array are : %@",productName);
         NSMutableArray *cardNoToDelete = [[NSMutableArray alloc]init];
         NSInteger index1,index2;
         for (index1 = 0; index1 < [productName count]; index1++)
@@ -344,7 +374,7 @@
             NSLog(@"position to delete = %d",[[cardNoToDelete objectAtIndex:count]integerValue]);
         }
    // NSLog(@"name of card are : %@",productName);
-    //NSLog(@"name of card are : %@",_cardNoWithDiffLang);
+    NSLog(@"name of card with diffrent lang are : %@",_cardNoWithDiffLang);
     }
     else
     {
@@ -733,6 +763,8 @@
 
 - (IBAction)showFavoriteView:(id)sender
 {
+    self.navigationItem.title = @"Favorites";
+    [self.navigationController.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:48.0/255.0 green:49.0/255.0 blue:37.0/255.0 alpha:1.0],UITextAttributeTextColor, nil]];
     self.cardsView.hidden =YES;
     self.moreView.hidden = YES;
     [self fetchFromCoreData];
@@ -771,6 +803,10 @@
 
 - (IBAction)showMoreOption:(id)sender 
 {
+    
+    self.navigationItem.title = @"About";
+    [self.navigationController.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:48.0/255.0 green:49.0/255.0 blue:37.0/255.0 alpha:1.0],UITextAttributeTextColor, nil]];
+
     self.moreView.backgroundColor = [UIColor clearColor];
     self.cardsView.hidden = YES;
     self.favoritesView.hidden = YES;
@@ -789,6 +825,10 @@
 - (IBAction)showAvailableCards:(id)sender 
 {
     NSLog(@"hello");
+    
+    self.navigationItem.title = @"All Field Cards";
+    [self.navigationController.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:48.0/255.0 green:49.0/255.0 blue:37.0/255.0 alpha:1.0],UITextAttributeTextColor, nil]];
+
     self.moreNavigationButton.hidden = YES;
     self.favoritesView.hidden = YES;
     self.moreView.hidden = YES;

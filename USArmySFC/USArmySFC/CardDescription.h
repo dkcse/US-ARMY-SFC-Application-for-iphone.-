@@ -10,6 +10,10 @@
 #import "Favorites.h"
 #import "DetailDescriptionViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "FileReaderLineByLine.h"
+#import "ContactType.h"
+#import "Contact_details.h"
+#import "Product.h"
 
 @interface CardDescription : UIViewController<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate>
 

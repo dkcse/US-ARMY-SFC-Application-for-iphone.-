@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 #import "TableViewCell.h"
 #import "CardDescription.h"
 #import "Favorites.h"

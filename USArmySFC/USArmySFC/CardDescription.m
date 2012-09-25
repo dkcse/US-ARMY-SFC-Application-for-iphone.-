@@ -12,6 +12,8 @@
 
 @property (nonatomic) NSInteger pressCount;
 @property (nonatomic) BOOL favoriteImageStatus;
+@property (nonatomic,strong) NSString *lineOfContactCSV;
+
 
 @end
 
@@ -30,6 +32,7 @@
 @synthesize cardDetails = _cardDetails;
 @synthesize cardSubTitle = _cardSubTitle;
 @synthesize detailDescription = _detailDescription;
+@synthesize lineOfContactCSV = _lineOfContactCSV;
 
 //setting views
 @synthesize commonView = _commonView;
@@ -48,7 +51,6 @@
 {
     NSLog(@"hello");
     _guidelineView.hidden = NO;
-    NSLog(@"sent description are = %@",_detailDescription);
     self.cardDescriptionTableView.delegate = self;
     self.cardDescriptionTableView.dataSource = self;
     _cardDescriptionTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
@@ -178,7 +180,82 @@
     _tapToAddIntoFavorites = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTapToAddIntoFavorites:)];
     [self.favoriteSelectionImage addGestureRecognizer:_tapToAddIntoFavorites];
     [self.cardDescriptionTableView reloadData];
+    [self storeContactCSVDataToCoreData];
 }
+
+-(void) storeContactCSVDataToCoreData
+{
+    FileReaderLineByLine *readerForContractsCSV = [[FileReaderLineByLine alloc] initWithFilePath:@"/Users/deepakkumar/US SFC/Contacts-Table.csv"];
+    _lineOfContactCSV = nil;
+    
+    while ((_lineOfContactCSV = [readerForContractsCSV readLine]))
+    {
+        NSArray* allLinedStrings = [_lineOfContactCSV componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+       
+        
+        for (int lineCount = 18; lineCount < [allLinedStrings count]; lineCount++)
+        {
+            NSLog(@"All lined Strings for contacts - %@",[allLinedStrings objectAtIndex:lineCount]);
+            NSArray *iterateLine = [[allLinedStrings objectAtIndex:lineCount] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
+            NSLog(@"count no for iteration = %d",[iterateLine count]);
+         
+//            NSArray *halfArray;
+//            NSRange theRange;
+//            NSMutableArray *subArray  = [[NSMutableArray alloc] initWithCapacity:23];
+//            
+//            for(int i=1;i<=23;i++)
+//            {   if(i==1)
+//                {
+//                   theRange.location = 0;  
+//                }
+//                theRange.length = 5;
+//                halfArray = [iterateLine subarrayWithRange:theRange];
+//                
+//                theRange.location += 5;
+//                [subArray addObject:halfArray];
+//            }
+//            NSLog(@"subarray : %@",subArray);
+//            
+//            for (int iterateLineCount = 1;iterateLineCount < [iterateLine count]; iterateLineCount++)
+//            {
+////                ContactType *contactType = (ContactType *)[NSEntityDescription insertNewObjectForEntityForName:@"contactType" inManagedObjectContext:_managedObjectContext];
+////                if(count<5)
+////                {
+////                    //old product
+////                    count++;
+////                }
+////                else 
+////                {
+////                    count = 0;
+////                    //new one
+////                }
+////                NSLog(@"data after semi: %@",[iterateLine objectAtIndex:iterateLineCount]);
+////                
+////                contactType.contactName = [iterateLine objectAtIndex:<#(NSUInteger)#>
+////                
+////            }
+//        
+//            
+//            }
+        
+        
+                
+//        ContactType *contactType = (ContactType *)[NSEntityDescription insertNewObjectForEntityForName:@"contactType" inManagedObjectContext:_managedObjectContext];
+//        contactType.productName = 
+//        contactType.contactName = 
+        
+        
+        //   NSArray *data1 = [[allLinedStrings objectAtIndex:0] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
+        //  NSArray *data2 = [[allLinedStrings objectAtIndex:1] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
+        //  NSLog(@"%@",[data2 objectAtIndex:1]);
+        // NSLog(@"count = %d-",[data1 count]);
+
+    
+        }
+    }
+}
+
+
 
 -(void) handleTapToAddIntoFavorites:(UITapGestureRecognizer*)tapGesture
 {
@@ -330,5 +407,7 @@
     [self.navigationController pushViewController:pushForDetail animated:YES];
 
 }
+
+
 
 @end
