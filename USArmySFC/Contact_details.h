@@ -13,7 +13,7 @@
 
 @interface Contact_details : NSManagedObject
 
-@property (nonatomic, retain) NSString * address;
+@property (nonatomic, retain) NSString * contact;
 @property (nonatomic, retain) NSString * civilion;
 @property (nonatomic, retain) NSString * dsn;
 @property (nonatomic, retain) NSString * frequency;

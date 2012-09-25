@@ -12,7 +12,7 @@
 
 @implementation Contact_details
 
-@dynamic address;
+@dynamic contact;
 @dynamic civilion;
 @dynamic dsn;
 @dynamic frequency;

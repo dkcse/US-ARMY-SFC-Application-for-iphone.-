@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11D50" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Contact_details" representedClassName="Contact_details" syncable="YES">
-        <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="civilion" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="contact" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="dsn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="frequency" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="forContact" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ContactType" inverseName="contactDetail" inverseEntity="ContactType" syncable="YES"/>

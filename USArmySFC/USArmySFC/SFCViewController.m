@@ -162,16 +162,6 @@
     
     
 # pragma favoriteView setting
-    
-//    UILabel *labelFavorite = [[UILabel alloc] initWithFrame:CGRectZero];
-//    labelFavorite.backgroundColor = [UIColor clearColor];
-//    labelFavorite.font = [UIFont boldSystemFontOfSize:20.0];
-//    labelFavorite.textAlignment = UITextAlignmentCenter;
-//    labelFavorite.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
-//    
-//    self.navigationItem.titleView = labelFavorite;
-//    label.text = @"Favorites";
-//    [label sizeToFit];
 
     _favoritesView.backgroundColor = [UIColor clearColor];
     _favoriteTableView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
@@ -208,35 +198,6 @@
         [self fetchProductNameFromCoreData];
         [self.cardsTableView reloadData];
     }
-    
-//    FileReaderLineByLine *readerForContractsCSV = [[FileReaderLineByLine alloc] initWithFilePath:@"/Users/deepakkumar/US SFC/Contacts-Table.csv"];
-//    _lineOfContactCSV = nil;
-//    
-//    while ((_lineOfContactCSV = [readerForContractsCSV readLine]))
-//    {
-//        NSArray* allLinedStrings = [_lineOfContactCSV componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-//        NSLog(@"All lined Strings for contacts - %@",[allLinedStrings objectAtIndex:19]);
-//        [self storeContactsCSVDataToCoreData];
-//        [self fetchContactsDetailFromCoreData];
-        
-        // NSLog(@"sent data are = %@",line2);
-        //   NSArray *data1 = [[allLinedStrings objectAtIndex:0] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
-        //  NSArray *data2 = [[allLinedStrings objectAtIndex:1] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
-        //  NSLog(@"%@",[data2 objectAtIndex:1]);
-        // NSLog(@"count = %d-",[data1 count]);
-//    }
-    
-    
-    
-}
-
-- (void) storeContactsCSVDataToCoreData
-{
-    
-}
-
--(void) fetchContactsDetailFromCoreData
-{
     
 }
 

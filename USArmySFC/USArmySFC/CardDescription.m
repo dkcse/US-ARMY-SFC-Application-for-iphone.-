@@ -13,7 +13,30 @@
 @property (nonatomic) NSInteger pressCount;
 @property (nonatomic) BOOL favoriteImageStatus;
 @property (nonatomic,strong) NSString *lineOfContactCSV;
-
+@property (nonatomic,strong) NSMutableArray *contactDetails1;
+@property (nonatomic,strong) NSMutableArray *contactDetails2;
+@property (nonatomic,strong) NSMutableArray *contactDetails3;
+@property (nonatomic,strong) NSMutableArray *contactDetails4;
+@property (nonatomic,strong) NSMutableArray *contactDetails5;
+@property (nonatomic,strong) NSMutableArray *contactDetails6;
+@property (nonatomic,strong) NSMutableArray *contactDetails7;
+@property (nonatomic,strong) NSMutableArray *contactDetails8;
+@property (nonatomic,strong) NSMutableArray *contactDetails9;
+@property (nonatomic,strong) NSMutableArray *contactDetails10;
+@property (nonatomic,strong) NSMutableArray *contactDetails11;
+@property (nonatomic,strong) NSMutableArray *contactDetails12;
+@property (nonatomic,strong) NSMutableArray *contactDetails13;
+@property (nonatomic,strong) NSMutableArray *contactDetails14;
+@property (nonatomic,strong) NSMutableArray *contactDetails15;
+@property (nonatomic,strong) NSMutableArray *contactDetails16;
+@property (nonatomic,strong) NSMutableArray *contactDetails17;
+@property (nonatomic,strong) NSMutableArray *contactDetails18;
+@property (nonatomic,strong) NSMutableArray *contactDetails19;
+@property (nonatomic,strong) NSMutableArray *contactDetails20;
+@property (nonatomic,strong) NSMutableArray *contactDetails21;
+@property (nonatomic,strong) NSMutableArray *contactDetails22;
+@property (nonatomic,strong) NSMutableArray *contactDetails23;
+@property (nonatomic,strong) NSArray *productNameFromContactCSV;
 
 @end
 
@@ -40,6 +63,9 @@
 @synthesize POCView = _POCView;
 @synthesize mapView = _mapView;
 
+//for contact detail
+@synthesize contactDetails1,contactDetails2,contactDetails3,contactDetails4,contactDetails5,contactDetails6,contactDetails7,contactDetails8,contactDetails9,contactDetails10,contactDetails11,contactDetails12,contactDetails13,contactDetails14,contactDetails15,contactDetails16,contactDetails17,contactDetails18,contactDetails19,contactDetails20,contactDetails21,contactDetails22,contactDetails23;
+@synthesize productNameFromContactCSV = _productNameFromContactCSV;
 
 - (void)didReceiveMemoryWarning
 {
@@ -155,6 +181,31 @@
 {
     [super viewDidLoad];
     
+    // contact detail
+    _productNameFromContactCSV = [[NSArray alloc]init];
+    contactDetails1 = [[NSMutableArray alloc]init];
+    contactDetails2 = [[NSMutableArray alloc]init];
+    contactDetails3 = [[NSMutableArray alloc]init];
+    contactDetails4 = [[NSMutableArray alloc]init];
+    contactDetails5 = [[NSMutableArray alloc]init];
+    contactDetails6 = [[NSMutableArray alloc]init];
+    contactDetails7 = [[NSMutableArray alloc]init];
+    contactDetails8 = [[NSMutableArray alloc]init];
+    contactDetails9 = [[NSMutableArray alloc]init];
+    contactDetails10 = [[NSMutableArray alloc]init];
+    contactDetails11 = [[NSMutableArray alloc]init];
+    contactDetails12 = [[NSMutableArray alloc]init];
+    contactDetails13 = [[NSMutableArray alloc]init];
+    contactDetails14 = [[NSMutableArray alloc]init];
+    contactDetails15 = [[NSMutableArray alloc]init];
+    contactDetails16 = [[NSMutableArray alloc]init];
+    contactDetails17 = [[NSMutableArray alloc]init];
+    contactDetails18 = [[NSMutableArray alloc]init];
+    contactDetails19 = [[NSMutableArray alloc]init];
+    contactDetails20 = [[NSMutableArray alloc]init];
+    contactDetails21 = [[NSMutableArray alloc]init];
+    contactDetails22 = [[NSMutableArray alloc]init];
+    contactDetails23 = [[NSMutableArray alloc]init];
     //setting default view that is guideline view
     
     _commonView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
@@ -191,10 +242,12 @@
     while ((_lineOfContactCSV = [readerForContractsCSV readLine]))
     {
         NSArray* allLinedStrings = [_lineOfContactCSV componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-       
         
-        for (int lineCount = 18; lineCount < [allLinedStrings count]; lineCount++)
+        
+        for (int lineCount = 18; lineCount < [allLinedStrings count]-1; lineCount++)
         {
+            _productNameFromContactCSV = [[allLinedStrings objectAtIndex:0] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
+            NSLog(@"product name :%@",_productNameFromContactCSV);
             NSLog(@"All lined Strings for contacts - %@",[allLinedStrings objectAtIndex:lineCount]);
             NSArray *iterateLine = [[allLinedStrings objectAtIndex:lineCount] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
             NSLog(@"count no for iteration = %d",[iterateLine count]);
@@ -203,47 +256,63 @@
             NSRange theRange;
             NSMutableArray *subArray  = [[NSMutableArray alloc] initWithCapacity:23];
             
-            for(int i=1;i<=23;i++)
-            {   if(i==1)
+            for(int i=0;i<23;i++)
+            {   if(i == 0)
                 {
-                   theRange.location = 0;  
+                   theRange.location = 0; 
                 }
                 theRange.length = 5;
                 halfArray = [iterateLine subarrayWithRange:theRange];
-                
                 theRange.location += 5;
                 [subArray addObject:halfArray];
-            }
-            NSLog(@"subarray : %@",subArray);
+                NSLog(@"sub array : %@",[subArray objectAtIndex:0]);
+            } 
             
-            for (int iterateLineCount = 1;iterateLineCount < [iterateLine count]; iterateLineCount++)
-            {
-//                ContactType *contactType = (ContactType *)[NSEntityDescription insertNewObjectForEntityForName:@"contactType" inManagedObjectContext:_managedObjectContext];
-//                if(count<5)
-//                {
-//                    //old product
-//                    count++;
-//                }
-//                else 
-//                {
-//                    count = 0;
-//                    //new one
-//                }
-//                NSLog(@"data after semi: %@",[iterateLine objectAtIndex:iterateLineCount]);
-//                
-//                contactType.contactName = [iterateLine objectAtIndex:<#(NSUInteger)#>
-//                
-//            }
+            [contactDetails1 addObject:[subArray objectAtIndex:0]];
+            [contactDetails2 addObject:[subArray objectAtIndex:1]];
+            [contactDetails3 addObject:[subArray objectAtIndex:2]];
+            [contactDetails4 addObject:[subArray objectAtIndex:3]];
+            [contactDetails5 addObject:[subArray objectAtIndex:4]];
+            [contactDetails6 addObject:[subArray objectAtIndex:5]];
+            [contactDetails7 addObject:[subArray objectAtIndex:6]];
+            [contactDetails8 addObject:[subArray objectAtIndex:7]];
+            [contactDetails9 addObject:[subArray objectAtIndex:8]];
+            [contactDetails10 addObject:[subArray objectAtIndex:9]];
+            [contactDetails11 addObject:[subArray objectAtIndex:10]];
+            [contactDetails12 addObject:[subArray objectAtIndex:11]];
+            [contactDetails13 addObject:[subArray objectAtIndex:12]];
+            [contactDetails14 addObject:[subArray objectAtIndex:13]];
+            [contactDetails15 addObject:[subArray objectAtIndex:14]];
+            [contactDetails16 addObject:[subArray objectAtIndex:15]];
+            [contactDetails17 addObject:[subArray objectAtIndex:16]];
+            [contactDetails18 addObject:[subArray objectAtIndex:17]];
+            [contactDetails19 addObject:[subArray objectAtIndex:18]];
+            [contactDetails20 addObject:[subArray objectAtIndex:19]];
+            [contactDetails21 addObject:[subArray objectAtIndex:20]];
+            [contactDetails22 addObject:[subArray objectAtIndex:21]];
+            [contactDetails23 addObject:[subArray objectAtIndex:22]];
+        }
         
-//            
-            }
+            NSLog(@"contact 1 = %@",contactDetails1);
+            
+        for (int i = 0; i<20; i++)
+        {
+        ContactType *contactType = (ContactType *)[NSEntityDescription insertNewObjectForEntityForName:@"ContactType" inManagedObjectContext:_managedObjectContext];
         
-        
-                
-//        ContactType *contactType = (ContactType *)[NSEntityDescription insertNewObjectForEntityForName:@"contactType" inManagedObjectContext:_managedObjectContext];
-//        contactType.productName = 
-//        contactType.contactName = 
-        
+        NSLog(@"name :%@",[[contactDetails1 objectAtIndex:i]objectAtIndex:1]);
+        contactType.contactName = [[contactDetails1 objectAtIndex:i]objectAtIndex:1];
+        Contact_details *contactDetails = (Contact_details *)[NSEntityDescription insertNewObjectForEntityForName:@"Contact_details" inManagedObjectContext:_managedObjectContext];
+        contactDetails.contact = [[contactDetails1 objectAtIndex:i]objectAtIndex:1];
+        contactDetails.dsn = [[contactDetails1 objectAtIndex:i]objectAtIndex:2];
+        contactDetails.civilion = [[contactDetails1 objectAtIndex:i]objectAtIndex:3];
+        contactDetails.frequency = [[contactDetails1 objectAtIndex:i]objectAtIndex:4];
+        contactDetails.forContact = contactType;
+            
+//         contactType.productRelation=   
+            
+        }    
+        NSError *error;
+        [self.managedObjectContext save:&error];
         
         //   NSArray *data1 = [[allLinedStrings objectAtIndex:0] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
         //  NSArray *data2 = [[allLinedStrings objectAtIndex:1] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
@@ -253,7 +322,7 @@
     
         }
     }
-}
+
 
 
 
