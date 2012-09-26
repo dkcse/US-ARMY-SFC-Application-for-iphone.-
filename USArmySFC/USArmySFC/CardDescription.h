@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Favorites.h"
 #import "DetailDescriptionViewController.h"
+#import "ContactDetailDescription.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FileReaderLineByLine.h"
 #import "ContactType.h"
@@ -18,14 +19,13 @@
 @interface CardDescription : UIViewController<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate>
 
 @property (nonatomic,strong) IBOutlet UIView *commonView;
-@property (strong,nonatomic) IBOutlet UIView *guidelineView;
-@property (strong,nonatomic) IBOutlet UIView *POCView;
 @property (strong,nonatomic) IBOutlet UIView *mapView;
 @property (strong, nonatomic) IBOutlet UIImageView *cardLogoImage;
 @property (strong, nonatomic) IBOutlet UILabel *cardNameLabel;
 @property (strong,nonatomic) IBOutlet UILabel *cardSubtitleLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *favoriteSelectionImage;
 @property (strong, nonatomic) IBOutlet UITableView *cardDescriptionTableView;
+@property (strong,nonatomic) IBOutlet UITableView *POCTableView;
 @property (nonatomic,strong) NSString *cardName;
 @property (nonatomic,strong) NSString *cardSubTitle;
 @property (nonatomic,strong) NSMutableArray *cardDetails;

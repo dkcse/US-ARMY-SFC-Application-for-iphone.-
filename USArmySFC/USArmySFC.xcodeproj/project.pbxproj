@@ -16,6 +16,7 @@
 		6AC00E231612248300E96390 /* ContactType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AC00E221612248300E96390 /* ContactType.m */; };
 		6AC00E261612248300E96390 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AC00E251612248300E96390 /* Product.m */; };
 		6AD3E3791612D41700393E2F /* Contacts-Table.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6AD3E3781612D41700393E2F /* Contacts-Table.csv */; };
+		6AD3E37F1613176000393E2F /* ContactDetailDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD3E37E1613176000393E2F /* ContactDetailDescription.m */; };
 		6AD6D390160889620072BB85 /* SFC_content_formatted.xml in Resources */ = {isa = PBXBuildFile; fileRef = 6AD6D38F160889620072BB85 /* SFC_content_formatted.xml */; };
 		6ADE5E87160052F600D76A53 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ADE5E86160052F600D76A53 /* UIKit.framework */; };
 		6ADE5E89160052F600D76A53 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ADE5E88160052F600D76A53 /* Foundation.framework */; };
@@ -154,6 +155,8 @@
 		6AC00E241612248300E96390 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
 		6AC00E251612248300E96390 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Product.m; sourceTree = "<group>"; };
 		6AD3E3781612D41700393E2F /* Contacts-Table.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Contacts-Table.csv"; path = "../../../US SFC/Contacts-Table.csv"; sourceTree = "<group>"; };
+		6AD3E37D1613176000393E2F /* ContactDetailDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactDetailDescription.h; sourceTree = "<group>"; };
+		6AD3E37E1613176000393E2F /* ContactDetailDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactDetailDescription.m; sourceTree = "<group>"; };
 		6AD6D38F160889620072BB85 /* SFC_content_formatted.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SFC_content_formatted.xml; sourceTree = "<group>"; };
 		6ADE5E82160052F600D76A53 /* USArmySFC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = USArmySFC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6ADE5E86160052F600D76A53 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -601,6 +604,8 @@
 				6AF471CB1602F54800007CAE /* CardDescription.m */,
 				6AE58D1C16102B4A004434F9 /* DetailDescriptionViewController.h */,
 				6AE58D1D16102B4A004434F9 /* DetailDescriptionViewController.m */,
+				6AD3E37D1613176000393E2F /* ContactDetailDescription.h */,
+				6AD3E37E1613176000393E2F /* ContactDetailDescription.m */,
 			);
 			name = CardsViewGroup;
 			sourceTree = "<group>";
@@ -790,6 +795,7 @@
 				6AC00E201612248300E96390 /* Contact_details.m in Sources */,
 				6AC00E231612248300E96390 /* ContactType.m in Sources */,
 				6AC00E261612248300E96390 /* Product.m in Sources */,
+				6AD3E37F1613176000393E2F /* ContactDetailDescription.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

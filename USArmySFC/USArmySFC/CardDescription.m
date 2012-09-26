@@ -37,6 +37,11 @@
 @property (nonatomic,strong) NSMutableArray *contactDetails22;
 @property (nonatomic,strong) NSMutableArray *contactDetails23;
 @property (nonatomic) NSMutableArray *productNameFromContactCSV;
+@property (nonatomic,strong) NSMutableArray *contactTypeArray;
+@property (nonatomic,strong) NSMutableArray *contactDetailDSNArray;
+@property (nonatomic,strong) NSMutableArray *contactDetailContactArray;
+@property (nonatomic,strong) NSMutableArray *contactDetailCivilionArray;
+@property (nonatomic,strong) NSMutableArray *contactDetailFrequencyArray;
 
 @end
 
@@ -47,6 +52,7 @@
 @synthesize cardNameLabel = _cardNameLabel;
 @synthesize favoriteSelectionImage = _favoriteSelectionImage;
 @synthesize cardDescriptionTableView = _cardDescriptionTableView;
+@synthesize POCTableView = _POCTableView;
 @synthesize cardName = _cardName;
 @synthesize cardSubtitleLabel = _cardSubtitleLabel;
 @synthesize tapToAddIntoFavorites = _tapToAddIntoFavorites;
@@ -59,27 +65,123 @@
 
 //setting views
 @synthesize commonView = _commonView;
-@synthesize guidelineView = _guidelineView;
-@synthesize POCView = _POCView;
 @synthesize mapView = _mapView;
 
 //for contact detail
 @synthesize contactDetails1,contactDetails2,contactDetails3,contactDetails4,contactDetails5,contactDetails6,contactDetails7,contactDetails8,contactDetails9,contactDetails10,contactDetails11,contactDetails12,contactDetails13,contactDetails14,contactDetails15,contactDetails16,contactDetails17,contactDetails18,contactDetails19,contactDetails20,contactDetails21,contactDetails22,contactDetails23;
 @synthesize productNameFromContactCSV = _productNameFromContactCSV;
+@synthesize contactTypeArray = _contactTypeArray;
+@synthesize contactDetailDSNArray = _contactDetailDSNArray;
+@synthesize contactDetailCivilionArray = _contactDetailCivilionArray;
+@synthesize contactDetailContactArray = _contactDetailContactArray;
+@synthesize contactDetailFrequencyArray = _contactDetailFrequencyArray;
 
-- (void)didReceiveMemoryWarning
+
+- (void)viewDidLoad
 {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
+    [super viewDidLoad];
+    
+    // contact detail array allocation
+    _productNameFromContactCSV = [[NSMutableArray alloc]init];
+    _contactTypeArray = [[NSMutableArray alloc]init];
+    _contactDetailDSNArray = [[NSMutableArray alloc]init];
+    _contactDetailFrequencyArray = [[NSMutableArray alloc]init];
+    _contactDetailContactArray = [[NSMutableArray alloc]init];
+    _contactDetailCivilionArray = [[NSMutableArray alloc]init];
+    contactDetails1 = [[NSMutableArray alloc]init];
+    contactDetails2 = [[NSMutableArray alloc]init];
+    contactDetails3 = [[NSMutableArray alloc]init];
+    contactDetails4 = [[NSMutableArray alloc]init];
+    contactDetails5 = [[NSMutableArray alloc]init];
+    contactDetails6 = [[NSMutableArray alloc]init];
+    contactDetails7 = [[NSMutableArray alloc]init];
+    contactDetails8 = [[NSMutableArray alloc]init];
+    contactDetails9 = [[NSMutableArray alloc]init];
+    contactDetails10 = [[NSMutableArray alloc]init];
+    contactDetails11 = [[NSMutableArray alloc]init];
+    contactDetails12 = [[NSMutableArray alloc]init];
+    contactDetails13 = [[NSMutableArray alloc]init];
+    contactDetails14 = [[NSMutableArray alloc]init];
+    contactDetails15 = [[NSMutableArray alloc]init];
+    contactDetails16 = [[NSMutableArray alloc]init];
+    contactDetails17 = [[NSMutableArray alloc]init];
+    contactDetails18 = [[NSMutableArray alloc]init];
+    contactDetails19 = [[NSMutableArray alloc]init];
+    contactDetails20 = [[NSMutableArray alloc]init];
+    contactDetails21 = [[NSMutableArray alloc]init];
+    contactDetails22 = [[NSMutableArray alloc]init];
+    contactDetails23 = [[NSMutableArray alloc]init];
+    //setting default view that is guideline view
+    
+    _commonView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
+   
+    _mapView.hidden = YES;
+    _commonView.layer.cornerRadius = 10;
+    _commonView.layer.masksToBounds = YES;
+    [self.commonView bringSubviewToFront:_cardDescriptionTableView];
+    
+    // delegate and managed object setting
+    
+    id appDelegate = (id)[[UIApplication sharedApplication] delegate];
+    self.managedObjectContext = [appDelegate managedObjectContext];
+    _pressCount = 0;
+    self.cardDescriptionTableView.delegate = self;
+    self.cardDescriptionTableView.dataSource = self;
+    self.cardDescriptionTableView.userInteractionEnabled = YES;
+    self.cardDescriptionTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+    
+    _POCTableView.hidden = YES;
+    self.POCTableView.delegate = self;
+    self.POCTableView.dataSource = self;
+    self.POCTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+    self.POCTableView.userInteractionEnabled = YES;
+    
+    _favoriteSelectionImage.userInteractionEnabled = YES;
+    _tapToAddIntoFavorites.delegate = self;
+    _tapToAddIntoFavorites = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTapToAddIntoFavorites:)];
+    [self.favoriteSelectionImage addGestureRecognizer:_tapToAddIntoFavorites];
+    
+    _cardNameLabel.text = _cardName;
+    _cardSubtitleLabel.text = _cardSubTitle;
+    _cardSubtitleLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+    _cardNameLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+    _cardDescriptionTableView.backgroundColor = [UIColor clearColor];
+    _POCTableView.backgroundColor = [UIColor clearColor];
+
+    [self deleteAllEntities];
+    [self storeContactCSVDataToCoreData];
+    [self fetchContactInformationFromCoreData];
+    [self.cardDescriptionTableView reloadData];
+    [self.POCTableView reloadData];
+    
 }
+
+- (void) deleteAllEntities
+{
+//    NSError *error;
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entityContactType = [NSEntityDescription entityForName:@"ContactType" inManagedObjectContext:_managedObjectContext];
+//    NSEntityDescription *entityContactDetails = [NSEntityDescription entityForName:@"Contact_details" inManagedObjectContext:_managedObjectContext];
+//    [fetchRequest setEntity:entityContactType];
+//    
+//    NSArray *fetchedObjects = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
+//    for (NSManagedObject *contactType in entityContactDetails)
+//    {
+//        [_managedObjectContext deleteObject:contactType];
+//    }
+//    [fetchRequest setEntity:entityContactDetails];
+//    fetchedObjects = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
+//    for (NSManagedObject *contactDetails in fetchedObjects) 
+//    {
+//        [_managedObjectContext deleteObject:contactDetails];
+//    }
+}
+
+
 
 -(void) viewDidAppear:(BOOL)animated
 {
     NSLog(@"hello");
-    _guidelineView.hidden = NO;
-    self.cardDescriptionTableView.delegate = self;
-    self.cardDescriptionTableView.dataSource = self;
-    _cardDescriptionTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     _cardLogoImage.image = [UIImage imageNamed:@"icon.png"]; 
     
     if([self searchForNameInCoreData : _cardName])
@@ -92,13 +194,7 @@
         NSLog(@"not present in coredata");
         _favoriteSelectionImage.image = [UIImage imageNamed:@"star_normal.png"];
     }
-    _cardNameLabel.text = _cardName;
-    NSLog(@"sub title = %@",_cardSubTitle);
-    _cardSubtitleLabel.text = _cardSubTitle;
-    _cardSubtitleLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
-    _cardNameLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
-    _cardDescriptionTableView.backgroundColor = [UIColor clearColor];
-    [self.cardDescriptionTableView reloadData];
+        //[self.cardDescriptionTableView reloadData];
 }
 
 - (IBAction)goBack:(id)sender
@@ -108,28 +204,28 @@
 
 - (IBAction)guidelineDescription:(id)sender
 {
-    _guidelineView.hidden = NO;
-    _POCView.hidden = YES;
     _mapView.hidden = YES;
+    _POCTableView.hidden = YES;
+    _cardDescriptionTableView.hidden = NO;
     NSLog(@"guideline description");
 }
 
 - (IBAction)POCDescription:(id)sender
 {
     NSLog(@"POC description");
-    _POCView.hidden = NO;
+    _POCTableView.hidden = NO;
+    _cardDescriptionTableView.hidden = YES;
     _mapView.hidden = YES;
-    _guidelineView.hidden = YES;
-    _POCView.backgroundColor = [UIColor clearColor];
-    
+    _cardDescriptionTableView.hidden = YES;
+    [_POCTableView reloadData];
 }
 
 - (IBAction)mapDescription:(id)sender
 {
     NSLog(@"maps description");
+    _cardDescriptionTableView.hidden = YES;
+    _POCTableView.hidden = YES;
     _mapView.hidden = NO;
-    _guidelineView.hidden = YES;
-    _POCView.hidden = NO;
     _mapView.backgroundColor = [UIColor clearColor];
 }
 
@@ -177,63 +273,6 @@
     }
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    // contact detail
-    _productNameFromContactCSV = [[NSMutableArray alloc]init];
-    contactDetails1 = [[NSMutableArray alloc]init];
-    contactDetails2 = [[NSMutableArray alloc]init];
-    contactDetails3 = [[NSMutableArray alloc]init];
-    contactDetails4 = [[NSMutableArray alloc]init];
-    contactDetails5 = [[NSMutableArray alloc]init];
-    contactDetails6 = [[NSMutableArray alloc]init];
-    contactDetails7 = [[NSMutableArray alloc]init];
-    contactDetails8 = [[NSMutableArray alloc]init];
-    contactDetails9 = [[NSMutableArray alloc]init];
-    contactDetails10 = [[NSMutableArray alloc]init];
-    contactDetails11 = [[NSMutableArray alloc]init];
-    contactDetails12 = [[NSMutableArray alloc]init];
-    contactDetails13 = [[NSMutableArray alloc]init];
-    contactDetails14 = [[NSMutableArray alloc]init];
-    contactDetails15 = [[NSMutableArray alloc]init];
-    contactDetails16 = [[NSMutableArray alloc]init];
-    contactDetails17 = [[NSMutableArray alloc]init];
-    contactDetails18 = [[NSMutableArray alloc]init];
-    contactDetails19 = [[NSMutableArray alloc]init];
-    contactDetails20 = [[NSMutableArray alloc]init];
-    contactDetails21 = [[NSMutableArray alloc]init];
-    contactDetails22 = [[NSMutableArray alloc]init];
-    contactDetails23 = [[NSMutableArray alloc]init];
-    //setting default view that is guideline view
-    
-    _commonView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
-    
-    _POCView.hidden = YES;
-    _mapView.hidden = YES;
-    _guidelineView.hidden = NO;
-    _commonView.layer.cornerRadius = 10;
-    _guidelineView.backgroundColor = [UIColor clearColor]; 
-    _commonView.layer.masksToBounds = YES;
-    
-    
-    // delegate and managed object setting
-    
-    id appDelegate = (id)[[UIApplication sharedApplication] delegate];
-    self.managedObjectContext = [appDelegate managedObjectContext];
-    _pressCount = 0;
-    self.cardDescriptionTableView.delegate = self;
-    self.cardDescriptionTableView.dataSource = self;
-    _cardDescriptionTableView.userInteractionEnabled = YES;
-    _favoriteSelectionImage.userInteractionEnabled = YES;
-    _tapToAddIntoFavorites.delegate = self;
-    _tapToAddIntoFavorites = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTapToAddIntoFavorites:)];
-    [self.favoriteSelectionImage addGestureRecognizer:_tapToAddIntoFavorites];
-    [self.cardDescriptionTableView reloadData];
-    [self storeContactCSVDataToCoreData];
-    [self fetchContactInformationFromCoreData];
-}
 
 
 -(void) fetchContactInformationFromCoreData
@@ -242,22 +281,35 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc]init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
     [fetchRequest setEntity:entity];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@",_cardName];
+    [fetchRequest setPredicate:predicate];
     
     NSArray *fetchResults = [[NSArray alloc]init];
     NSError *error;
     if((fetchResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
     {
-        //NSLog(@"description are:%@",fetchResults);
-        NSLog(@"name==== %@",[[fetchResults objectAtIndex:0] contactDetail]);
+        NSLog(@"===description are:%@",fetchResults);
+        NSLog(@"name==== %@",[fetchResults objectAtIndex:0]);
     }
     for (Product *obj in fetchResults)
     {
         NSLog(@"contact detail are: %@",obj.contactDetail);
         for (ContactType *contactObj in obj.contactDetail)
         {
-            NSLog(@"contact name==== %@",contactObj.contactName);
+            NSLog(@"dsn===%@",contactObj.contactDetail.dsn);
+//            NSLog(@"contact name==== %@",contactObj.contactName);
+            if([contactObj.contactDetail.dsn length] > 0)
+            {
+                [_contactDetailDSNArray addObject:contactObj.contactDetail.dsn];
+            }
+            if([contactObj.contactName length] > 0)
+            {
+                [_contactTypeArray addObject:contactObj.contactName];
+            }
         }
     }
+    NSLog(@"cont are: %d",[_contactTypeArray count]);
+    NSLog(@"dsn count are : %d",[_contactDetailDSNArray count]);
 }
 
 -(void) storeContactCSVDataToCoreData
@@ -477,8 +529,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"card details count = %d",[_cardDetails count]);
-    return [_cardDetails count];
+    if(tableView == _cardDescriptionTableView)
+    {
+        return [_cardDetails count];
+    }
+    else
+    {
+        return [_contactTypeArray count];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -489,25 +547,49 @@
     {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellData];
     }
-    
-    cell.textLabel.text = [_cardDetails objectAtIndex:indexPath.row];
-    UIButton *accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)]; 
-    accessoryButton.tag = indexPath.row;
-    UIImage *imageView = [UIImage imageNamed:@"arrow.png"];
-    [accessoryButton setImage:imageView forState:UIControlStateNormal];
-    [accessoryButton addTarget:self action:@selector(accessoryButtonDisclosureTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [cell setAccessoryView:accessoryButton];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;    
-    accessoryButton.tag = indexPath.row;
-    
+      
     cell.textLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     cell.backgroundColor = [UIColor clearColor]; 
-    return cell;    
+
+    if(tableView == _cardDescriptionTableView)
+    {
+        UIButton *accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)]; 
+        accessoryButton.tag = indexPath.row;
+        UIImage *imageView = [UIImage imageNamed:@"arrow.png"];
+        [accessoryButton setImage:imageView forState:UIControlStateNormal];
+        [accessoryButton addTarget:self action:@selector(accessoryButtonDisclosureTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [cell setAccessoryView:accessoryButton];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;    
+        accessoryButton.tag = indexPath.row;
+
+        cell.textLabel.text = [_cardDetails objectAtIndex:indexPath.row];
+        return cell;    
+    }
+    else 
+    {
+        UIButton *accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)]; 
+        accessoryButton.tag = indexPath.row;
+        UIImage *imageView = [UIImage imageNamed:@"arrow.png"];
+        [accessoryButton setImage:imageView forState:UIControlStateNormal];
+        [accessoryButton addTarget:self action:@selector(accessoryButtonDisclosureForContactTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [cell setAccessoryView:accessoryButton];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;    
+        accessoryButton.tag = indexPath.row;
+
+        cell.textLabel.text = [_contactTypeArray objectAtIndex:indexPath.row];
+        return cell;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(tableView == _cardDescriptionTableView)
+    {
     NSLog(@"row selected are %@",indexPath.row);
+    }
+    else {
+        NSLog(@"from POC table");
+    }
 }
 
 - (void) accessoryButtonDisclosureTapped : (UIButton *)sender
@@ -522,6 +604,19 @@
     [self.navigationController pushViewController:pushForDetail animated:YES];
     
 }
+
+-(void) accessoryButtonDisclosureForContactTapped : (UIButton *)sender
+{
+    NSLog(@"got it:)");
+    UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    ContactDetailDescription *pushForContactDescription = [storyboard instantiateViewControllerWithIdentifier:@"contactDescriptor"];
+    pushForContactDescription.contactTypeName = [_contactTypeArray objectAtIndex:sender.tag];
+    NSLog(@"card name=== : %@",_cardName);
+    pushForContactDescription.contactOfProductName = _cardName; 
+    pushForContactDescription.productNameFromContactDetail = _productNameFromContactCSV;
+    [self.navigationController pushViewController:pushForContactDescription animated:YES];
+}
+
 
 
 
