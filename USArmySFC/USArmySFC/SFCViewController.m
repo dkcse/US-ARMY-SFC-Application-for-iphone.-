@@ -162,7 +162,7 @@
     
     
 # pragma favoriteView setting
-
+    
     _favoritesView.backgroundColor = [UIColor clearColor];
     _favoriteTableView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
     _favoriteTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
@@ -181,8 +181,7 @@
         {
             [_listOfCards addObject:[allLinedStrings objectAtIndex:i]];
         }
-        NSLog(@"real count  = %d",[_listOfCards count]); 
-
+        
         for (int j=0; j<18; j++)
         {
             if([[_listOfCards objectAtIndex:j] isEqualToString:[_listOfCards objectAtIndex:j+1]])
@@ -192,7 +191,7 @@
                 NSLog(@"language = %@",[allLinedStrings objectAtIndex:((27*(j+2))+5)]);
             }
         }
-       
+        
         [self deleteAllEntities];
         [self storeGuidelineCSVDataToCoreData];
         [self fetchProductNameFromCoreData];
@@ -265,8 +264,8 @@
         //NSLog(@"product name from core data = %@",[_cardNameFromCoreData objectAtIndex:--indexForCard]);
         Product *productObjectForRelationship = productObject ;
         [descriptionObject setProductDescription:productObjectForRelationship];
-       // NSLog(@"data are :%@",productObjectForRelationship.productDetail.sfc_main_title);
-       // NSLog(@"hello");
+        // NSLog(@"data are :%@",productObjectForRelationship.productDetail.sfc_main_title);
+        // NSLog(@"hello");
         
     }
     NSError *error;
@@ -274,7 +273,7 @@
     {
         NSLog(@"couldn't save 1:%@",[error localizedDescription]);
     }
-
+    
 }
 
 
@@ -293,12 +292,12 @@
         fetchedName = fetchedResults;
         _cardNameFromCoreData = [fetchedName mutableCopy];
         NSMutableArray *productName = [[NSMutableArray alloc]init];
-
+        
         for(Product *obj in fetchedResults)
-         {
+        {
             [productName addObject:obj.name];
-         }
-        NSLog(@"before array are : %@",productName);
+        }
+        //NSLog(@"before array are : %@",productName);
         NSMutableArray *cardNoToDelete = [[NSMutableArray alloc]init];
         NSInteger index1,index2;
         for (index1 = 0; index1 < [productName count]; index1++)
@@ -317,25 +316,25 @@
         for( NSString *name in productName)
         {
             if(![_productNameUnique containsObject:name])
-               {
-                   [_productNameUnique addObject:name];
-                   NSLog(@"new product array : %@",_productNameUnique);
-               }
+            {
+                [_productNameUnique addObject:name];
+                //NSLog(@"new product array : %@",_productNameUnique);
+            }
             else 
             {
                 [repeatedProductArray addObject:name];
-                NSLog(@"repeated product array : %@",repeatedProductArray);
+                //NSLog(@"repeated product array : %@",repeatedProductArray);
             }
         }
         
         
-
+        
         for (int count = 0; count < [cardNoToDelete count]; count++)
         {
             NSLog(@"position to delete = %d",[[cardNoToDelete objectAtIndex:count]integerValue]);
         }
-   // NSLog(@"name of card are : %@",productName);
-    NSLog(@"name of card with diffrent lang are : %@",_cardNoWithDiffLang);
+        // NSLog(@"name of card are : %@",productName);
+        NSLog(@"name of card with diffrent lang are : %@",_cardNoWithDiffLang);
     }
     else
     {
@@ -355,12 +354,12 @@
     {
         if(indexPath.row==_selectedCellToExpand)
         {
-        NSInteger heightForRow = 125;
-        if( _checkForTableViewHidden == YES)
-        {
-            heightForRow = 50;
-        }
-        return heightForRow;
+            NSInteger heightForRow = 125;
+            if( _checkForTableViewHidden == YES)
+            {
+                heightForRow = 50;
+            }
+            return heightForRow;
         }
     }
     return 50;
@@ -440,9 +439,9 @@
             {
                 if(indexPath.row==_selectedCellToExpand)
                 {
-                UIImage *imageView = [UIImage imageNamed:@"icon_collapse.png"];
-                [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-                [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonCollapseTapped:) forControlEvents:UIControlEventTouchUpInside];
+                    UIImage *imageView = [UIImage imageNamed:@"icon_collapse.png"];
+                    [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
+                    [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonCollapseTapped:) forControlEvents:UIControlEventTouchUpInside];
                 }
             }
             _tableCell.cellDataLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
@@ -506,7 +505,7 @@
         {
             NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
         }
-
+        
         NSLog(@"sent data are = %@",[favourite name]);
         pushForDescription1.cardName = [favourite name];
         pushForDescription1.cardDetails = _attributeArray;
@@ -524,7 +523,7 @@
     NSLog(@"at disclosure:%@",_selectedProduct.productDetail.about);
     
     NSLog(@"array of detail are before: %@",_attributeArray);
-
+    
     [self availableDescription];
     [self performSegueWithIdentifier:@"Show Card Description Segue" sender:self];
 }
@@ -658,8 +657,8 @@
         [_attributeArray addObject:@"General Info"];
     }
     
-   // _selectedProduct = Nil;
-
+    // _selectedProduct = Nil;
+    
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -739,7 +738,7 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
     [fetchRequest setEntity:entity];
-
+    
     NSError *error;    
     NSArray *fetchedResults;
     
@@ -767,7 +766,7 @@
     
     self.navigationItem.title = @"About";
     [self.navigationController.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:48.0/255.0 green:49.0/255.0 blue:37.0/255.0 alpha:1.0],UITextAttributeTextColor, nil]];
-
+    
     self.moreView.backgroundColor = [UIColor clearColor];
     self.cardsView.hidden = YES;
     self.favoritesView.hidden = YES;
@@ -789,7 +788,7 @@
     
     self.navigationItem.title = @"All Field Cards";
     [self.navigationController.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:48.0/255.0 green:49.0/255.0 blue:37.0/255.0 alpha:1.0],UITextAttributeTextColor, nil]];
-
+    
     self.moreNavigationButton.hidden = YES;
     self.favoritesView.hidden = YES;
     self.moreView.hidden = YES;

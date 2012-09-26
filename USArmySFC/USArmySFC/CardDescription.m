@@ -36,7 +36,7 @@
 @property (nonatomic,strong) NSMutableArray *contactDetails21;
 @property (nonatomic,strong) NSMutableArray *contactDetails22;
 @property (nonatomic,strong) NSMutableArray *contactDetails23;
-@property (nonatomic,strong) NSArray *productNameFromContactCSV;
+@property (nonatomic) NSMutableArray *productNameFromContactCSV;
 
 @end
 
@@ -85,7 +85,7 @@
     if([self searchForNameInCoreData : _cardName])
     {
         NSLog(@"name present in coredata");
-       _favoriteSelectionImage.image = [UIImage imageNamed:@"star.png"];
+        _favoriteSelectionImage.image = [UIImage imageNamed:@"star.png"];
     }
     else 
     {
@@ -121,7 +121,7 @@
     _mapView.hidden = YES;
     _guidelineView.hidden = YES;
     _POCView.backgroundColor = [UIColor clearColor];
-
+    
 }
 
 - (IBAction)mapDescription:(id)sender
@@ -146,18 +146,18 @@
     
     if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
     {
-//        for(Favorites *obj in fetchedResults)
-//        {
-//            if([obj.name isEqualToString:_cardNameLabel.text])
-//            {
-//                NSLog(@"found : %@",_cardNameLabel);
-//                return YES;
-//            }
-//            else 
-//            {
-//                return NO;
-//            }
-//        }
+        //        for(Favorites *obj in fetchedResults)
+        //        {
+        //            if([obj.name isEqualToString:_cardNameLabel.text])
+        //            {
+        //                NSLog(@"found : %@",_cardNameLabel);
+        //                return YES;
+        //            }
+        //            else 
+        //            {
+        //                return NO;
+        //            }
+        //        }
         NSLog(@"%@",fetchedResults);
         
         if(![_managedObjectContext save:&error])
@@ -176,13 +176,13 @@
         return NO;
     }
 }
-                                         
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     // contact detail
-    _productNameFromContactCSV = [[NSArray alloc]init];
+    _productNameFromContactCSV = [[NSMutableArray alloc]init];
     contactDetails1 = [[NSMutableArray alloc]init];
     contactDetails2 = [[NSMutableArray alloc]init];
     contactDetails3 = [[NSMutableArray alloc]init];
@@ -209,7 +209,7 @@
     //setting default view that is guideline view
     
     _commonView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
-
+    
     _POCView.hidden = YES;
     _mapView.hidden = YES;
     _guidelineView.hidden = NO;
@@ -232,6 +232,32 @@
     [self.favoriteSelectionImage addGestureRecognizer:_tapToAddIntoFavorites];
     [self.cardDescriptionTableView reloadData];
     [self storeContactCSVDataToCoreData];
+    [self fetchContactInformationFromCoreData];
+}
+
+
+-(void) fetchContactInformationFromCoreData
+{
+    NSLog(@"fetching from coredat");
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc]init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    NSArray *fetchResults = [[NSArray alloc]init];
+    NSError *error;
+    if((fetchResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
+    {
+        //NSLog(@"description are:%@",fetchResults);
+        NSLog(@"name==== %@",[[fetchResults objectAtIndex:0] contactDetail]);
+    }
+    for (Product *obj in fetchResults)
+    {
+        NSLog(@"contact detail are: %@",obj.contactDetail);
+        for (ContactType *contactObj in obj.contactDetail)
+        {
+            NSLog(@"contact name==== %@",contactObj.contactName);
+        }
+    }
 }
 
 -(void) storeContactCSVDataToCoreData
@@ -239,27 +265,36 @@
     FileReaderLineByLine *readerForContractsCSV = [[FileReaderLineByLine alloc] initWithFilePath:@"/Users/deepakkumar/US SFC/Contacts-Table.csv"];
     _lineOfContactCSV = nil;
     
+
     while ((_lineOfContactCSV = [readerForContractsCSV readLine]))
     {
+        NSArray *contactIndex1 = [[NSArray alloc]init];
         NSArray* allLinedStrings = [_lineOfContactCSV componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-        
-        
+        contactIndex1 = [[allLinedStrings objectAtIndex:0] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
+
+        //storing product name from CSV file
+        int count = 1;
+        while(count < ([contactIndex1 count]))
+        {
+            [_productNameFromContactCSV addObject:[contactIndex1 objectAtIndex:count]];
+            count += 5;
+        }
+        //Contact type starts from 18th index in CSV reading one by one
         for (int lineCount = 18; lineCount < [allLinedStrings count]-1; lineCount++)
         {
-            _productNameFromContactCSV = [[allLinedStrings objectAtIndex:0] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
-            NSLog(@"product name :%@",_productNameFromContactCSV);
             NSLog(@"All lined Strings for contacts - %@",[allLinedStrings objectAtIndex:lineCount]);
             NSArray *iterateLine = [[allLinedStrings objectAtIndex:lineCount] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
             NSLog(@"count no for iteration = %d",[iterateLine count]);
-         
+            
             NSArray *halfArray;
             NSRange theRange;
             NSMutableArray *subArray  = [[NSMutableArray alloc] initWithCapacity:23];
             
+            //dividing each contact type into array of arrays of contacts for each product
             for(int i=0;i<23;i++)
             {   if(i == 0)
                 {
-                   theRange.location = 0; 
+                theRange.location = 0; 
                 }
                 theRange.length = 5;
                 halfArray = [iterateLine subarrayWithRange:theRange];
@@ -267,7 +302,7 @@
                 [subArray addObject:halfArray];
                 NSLog(@"sub array : %@",[subArray objectAtIndex:0]);
             } 
-            
+            // storing contacts for product in seperate array 
             [contactDetails1 addObject:[subArray objectAtIndex:0]];
             [contactDetails2 addObject:[subArray objectAtIndex:1]];
             [contactDetails3 addObject:[subArray objectAtIndex:2]];
@@ -292,36 +327,47 @@
             [contactDetails22 addObject:[subArray objectAtIndex:21]];
             [contactDetails23 addObject:[subArray objectAtIndex:22]];
         }
-        
-            NSLog(@"contact 1 = %@",contactDetails1);
-            
-        for (int i = 0; i<20; i++)
-        {
-        ContactType *contactType = (ContactType *)[NSEntityDescription insertNewObjectForEntityForName:@"ContactType" inManagedObjectContext:_managedObjectContext];
-        
-        NSLog(@"name :%@",[[contactDetails1 objectAtIndex:i]objectAtIndex:1]);
-        contactType.contactName = [[contactDetails1 objectAtIndex:i]objectAtIndex:1];
-        Contact_details *contactDetails = (Contact_details *)[NSEntityDescription insertNewObjectForEntityForName:@"Contact_details" inManagedObjectContext:_managedObjectContext];
-        contactDetails.contact = [[contactDetails1 objectAtIndex:i]objectAtIndex:1];
-        contactDetails.dsn = [[contactDetails1 objectAtIndex:i]objectAtIndex:2];
-        contactDetails.civilion = [[contactDetails1 objectAtIndex:i]objectAtIndex:3];
-        contactDetails.frequency = [[contactDetails1 objectAtIndex:i]objectAtIndex:4];
-        contactDetails.forContact = contactType;
-            
-//         contactType.productRelation=   
-            
-        }    
-        NSError *error;
-        [self.managedObjectContext save:&error];
-        
-        //   NSArray *data1 = [[allLinedStrings objectAtIndex:0] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
-        //  NSArray *data2 = [[allLinedStrings objectAtIndex:1] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
-        //  NSLog(@"%@",[data2 objectAtIndex:1]);
-        // NSLog(@"count = %d-",[data1 count]);
-
     
+        //storing contacts into database for each product
+        for (int count1 = 0 ; count1 < [_productNameFromContactCSV count]-2; count1++)
+        {
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
+            [fetchRequest setEntity:entity];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@",[_productNameFromContactCSV objectAtIndex:count1]];
+            NSLog(@"predicat : %@",predicate);
+            [fetchRequest setPredicate:predicate];
+            NSError *error;    
+            NSArray *fetchedResults = [[NSArray alloc] init];
+            
+                        
+            if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
+            {
+                NSLog(@"product ed details are :%@",fetchedResults);
+                NSLog(@"product name =%@",_productNameFromContactCSV);
+            }
+            else
+            {
+                NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+            }
+            
+            //iterating through array of arrays for each product selected in outer loop
+            for (int i = 0; i<23; i++)
+            {
+                ContactType *contactType = (ContactType *)[NSEntityDescription insertNewObjectForEntityForName:@"ContactType" inManagedObjectContext:_managedObjectContext];
+                contactType.contactName = [[contactDetails1 objectAtIndex:i]objectAtIndex:1];
+                Contact_details *contactDetails = (Contact_details *)[NSEntityDescription insertNewObjectForEntityForName:@"Contact_details" inManagedObjectContext:_managedObjectContext];
+                contactDetails.contact = [[contactDetails1 objectAtIndex:i]objectAtIndex:1];
+                contactDetails.dsn = [[contactDetails1 objectAtIndex:i]objectAtIndex:2];
+                contactDetails.civilion = [[contactDetails1 objectAtIndex:i]objectAtIndex:3];
+                contactDetails.frequency = [[contactDetails1 objectAtIndex:i]objectAtIndex:4];
+                contactDetails.forContact = contactType;
+                contactType.productRelation = [fetchedResults objectAtIndex:0];   
+            }    
+            [self.managedObjectContext save:&error];
         }
     }
+}
 
 
 
@@ -389,7 +435,7 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
     [fetchRequest setEntity:entity];
-
+    
     NSError *error;    
     NSArray *fetchedResults;
     if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
@@ -398,7 +444,7 @@
         fetchedName = fetchedResults;
         NSMutableArray *copyOfFetchedName = [[NSMutableArray alloc]init];
         copyOfFetchedName = [fetchedName mutableCopy];
-    
+        
         if([copyOfFetchedName count])
         {
             NSLog(@"name of favorites are : %@",copyOfFetchedName);
@@ -443,7 +489,7 @@
     {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellData];
     }
-
+    
     cell.textLabel.text = [_cardDetails objectAtIndex:indexPath.row];
     UIButton *accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)]; 
     accessoryButton.tag = indexPath.row;
@@ -468,13 +514,13 @@
 {
     NSLog(@"hello disclosure pressed");
     UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-  
+    
     DetailDescriptionViewController *pushForDetail = [storyboard instantiateViewControllerWithIdentifier:@"detailDescriptor"]; 
     pushForDetail.detailViewHeading = _cardName;
     pushForDetail.detailHeading = [_cardDetails objectAtIndex:sender.tag];
     pushForDetail.detailDescription = [_detailDescription objectAtIndex:sender.tag];
     [self.navigationController pushViewController:pushForDetail animated:YES];
-
+    
 }
 
 

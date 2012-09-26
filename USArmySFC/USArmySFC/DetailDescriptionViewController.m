@@ -32,7 +32,7 @@
     self.navigationItem.titleView = label;
     label.text = _detailViewHeading;
     [label sizeToFit];
-
+    
     //view settings
     _descriptionSubview.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
     _descriptionSubview.layer.cornerRadius = 10;

@@ -10,19 +10,13 @@
 
 @interface FileReaderLineByLine : NSObject
 {
-//    NSString * filePath;
-//    NSFileHandle * fileHandle;
     unsigned long long currentOffset;
     unsigned long long totalFileLength;
-    
-//    NSString * lineDelimiter;
-//    NSUInteger chunkSize;
 }
 @property (nonatomic,strong) NSString *filePath;
 @property (nonatomic,strong) NSFileHandle *fileHandle;
 @property (nonatomic, copy) NSString * lineDelimiter;
 @property (nonatomic) NSUInteger chunkSize;
-
 
 - (id) initWithFilePath:(NSString *)aPath;
 

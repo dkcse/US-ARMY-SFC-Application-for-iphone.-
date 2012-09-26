@@ -52,9 +52,9 @@
     </entity>
     <elements>
         <element name="Contact_details" positionX="-4509" positionY="-621" width="128" height="120"/>
+        <element name="ContactType" positionX="-4554" positionY="-792" width="128" height="105"/>
         <element name="Description" positionX="-3944" positionY="-738" width="128" height="450"/>
         <element name="Favorite" positionX="-4340" positionY="-549" width="128" height="60"/>
-        <element name="Product" positionX="-4221" positionY="-849" width="128" height="90"/>
-        <element name="ContactType" positionX="-4554" positionY="-792" width="128" height="105"/>
+        <element name="Product" positionX="-4221" positionY="-849" width="128" height="105"/>
     </elements>
 </model>

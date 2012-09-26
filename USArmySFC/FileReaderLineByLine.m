@@ -109,21 +109,21 @@
             break; 
         }
         NSData * chunk = [_fileHandle readDataOfLength:_chunkSize];
-
+        
         NSRange newLineRange = [chunk rangeOfData_dd:newLineData];
         if (newLineRange.location != NSNotFound) 
         {
             //include the length so we can include the delimiter in the string
             chunk = [chunk subdataWithRange:NSMakeRange(0, newLineRange.location+[newLineData length])];
-
+            
             shouldReadMore = NO;
         }
-       
+        
         
         [currentData appendData:chunk];
         currentOffset += [chunk length];
     }
-
+    
     
     NSString * line = [[NSString alloc] initWithData:currentData encoding:NSUTF16StringEncoding];
     return line;
@@ -135,13 +135,5 @@
 }
 
 
-- (void) enumerateLinesUsingBlock:(void(^)(NSString*, BOOL*))block {
-    NSString * line = nil;
-    BOOL stop = NO;
-    while (stop == NO && (line = [self readLine])) 
-    {
-        block(line, &stop);
-    }
-}
 
 @end

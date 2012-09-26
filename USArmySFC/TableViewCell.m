@@ -28,25 +28,25 @@
     {
         
         // Initialization code
-       //_insideTableView.delegate = self;
-       //_insideTableView.dataSource =self;
-       // _insideTableView.hidden = YES;
-       // _languageArray = [[NSArray alloc] initWithObjects:@"English",@"German",nil];
+        //_insideTableView.delegate = self;
+        //_insideTableView.dataSource =self;
+        // _insideTableView.hidden = YES;
+        // _languageArray = [[NSArray alloc] initWithObjects:@"English",@"German",nil];
         //[_insideTableView reloadData];
         
-//        UITableView *tbl = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 300, 100) style:UITableViewStyleGrouped];
-//        tbl.delegate = self;
-//        tbl.dataSource = self;
-//        [self addSubview:tbl];
-                         
-            }
+        //        UITableView *tbl = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 300, 100) style:UITableViewStyleGrouped];
+        //        tbl.delegate = self;
+        //        tbl.dataSource = self;
+        //        [self addSubview:tbl];
+        
+    }
     return self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 
@@ -56,7 +56,7 @@
     _insideTableView.delegate = self;
     _insideTableView.dataSource =self;
     _insideTableView.backgroundColor = [UIColor clearColor];
-
+    
     // _insideTableView.hidden = YES;
     _languageArray = [[NSArray alloc] initWithObjects:@"English",@"German",nil];
     [_insideTableView reloadData];
@@ -101,20 +101,20 @@
     accessoryButton.tag = indexPath.row;
     [cell.textLabel sizeToFit];
     //cell.textLabel.font = [UIFont systemFontOfSize:24];
-
-//    if(indexPath.row == 0)
-//    {
-//        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_top.png"]];
-//    }
-//    else if (indexPath.row == [_languageArray count]) 
-//    {
-//        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_bottom.png"]];
-//    }
-//    else
-//    {
-//        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_middle.png"]];
-//    }
-
+    
+    //    if(indexPath.row == 0)
+    //    {
+    //        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_top.png"]];
+    //    }
+    //    else if (indexPath.row == [_languageArray count]) 
+    //    {
+    //        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_bottom.png"]];
+    //    }
+    //    else
+    //    {
+    //        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_middle.png"]];
+    //    }
+    
     
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -135,7 +135,7 @@
     CardDescription *pushForDescriptionCustom = [story instantiateViewControllerWithIdentifier:@"cardDescriptor"];
     UINavigationController *referenceToNavController = [[UINavigationController alloc]init];
     pushForDescriptionCustom.cardName = [_cardArrayForTableView objectAtIndex:_index];    
-
+    
     
     referenceToNavController = [_celldelegate sendNavigationControllerInstance];
     NSLog(@"reference = %@",referenceToNavController);
