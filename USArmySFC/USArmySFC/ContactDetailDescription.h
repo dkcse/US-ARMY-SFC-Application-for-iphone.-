@@ -11,6 +11,7 @@
 #import "ContactType.h"
 #import "Contact_details.h"
 #import "Product.h"
+#import "NSString+RemoveQuotes.h"
 
 @interface ContactDetailDescription : UIViewController<UITableViewDataSource,UITableViewDelegate>
 

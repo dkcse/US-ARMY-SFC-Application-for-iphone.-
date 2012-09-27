@@ -53,6 +53,9 @@
 @synthesize favoriteSelectionImage = _favoriteSelectionImage;
 @synthesize cardDescriptionTableView = _cardDescriptionTableView;
 @synthesize POCTableView = _POCTableView;
+@synthesize guidelineOutlet = _guidelineOutlet;
+@synthesize POCOutlet = _POCOutlet;
+@synthesize mapsOutlet = _mapsOutlet;
 @synthesize cardName = _cardName;
 @synthesize cardSubtitleLabel = _cardSubtitleLabel;
 @synthesize tapToAddIntoFavorites = _tapToAddIntoFavorites;
@@ -80,47 +83,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // contact detail array allocation
-    _productNameFromContactCSV = [[NSMutableArray alloc]init];
-    _contactTypeArray = [[NSMutableArray alloc]init];
-    _contactDetailDSNArray = [[NSMutableArray alloc]init];
-    _contactDetailFrequencyArray = [[NSMutableArray alloc]init];
-    _contactDetailContactArray = [[NSMutableArray alloc]init];
-    _contactDetailCivilionArray = [[NSMutableArray alloc]init];
-    contactDetails1 = [[NSMutableArray alloc]init];
-    contactDetails2 = [[NSMutableArray alloc]init];
-    contactDetails3 = [[NSMutableArray alloc]init];
-    contactDetails4 = [[NSMutableArray alloc]init];
-    contactDetails5 = [[NSMutableArray alloc]init];
-    contactDetails6 = [[NSMutableArray alloc]init];
-    contactDetails7 = [[NSMutableArray alloc]init];
-    contactDetails8 = [[NSMutableArray alloc]init];
-    contactDetails9 = [[NSMutableArray alloc]init];
-    contactDetails10 = [[NSMutableArray alloc]init];
-    contactDetails11 = [[NSMutableArray alloc]init];
-    contactDetails12 = [[NSMutableArray alloc]init];
-    contactDetails13 = [[NSMutableArray alloc]init];
-    contactDetails14 = [[NSMutableArray alloc]init];
-    contactDetails15 = [[NSMutableArray alloc]init];
-    contactDetails16 = [[NSMutableArray alloc]init];
-    contactDetails17 = [[NSMutableArray alloc]init];
-    contactDetails18 = [[NSMutableArray alloc]init];
-    contactDetails19 = [[NSMutableArray alloc]init];
-    contactDetails20 = [[NSMutableArray alloc]init];
-    contactDetails21 = [[NSMutableArray alloc]init];
-    contactDetails22 = [[NSMutableArray alloc]init];
-    contactDetails23 = [[NSMutableArray alloc]init];
-    //setting default view that is guideline view
-    
+    [self allocate];
     _commonView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
-   
+    [_guidelineOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_guidelines_pressed.png"] forState:UIControlStateNormal];
+
+    NSArray *firstSubstring = [_cardName componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" "]];
+    
+    self.navigationItem.title = [[firstSubstring objectAtIndex:0]substringFromIndex:1];
+    [self.navigationController.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:34.0/255.0 green:36.0/255.0 blue:24.0/255.0 alpha:1.0],UITextAttributeTextColor, nil]];
+
     _mapView.hidden = YES;
     _commonView.layer.cornerRadius = 10;
     _commonView.layer.masksToBounds = YES;
     [self.commonView bringSubviewToFront:_cardDescriptionTableView];
-    
-    // delegate and managed object setting
     
     id appDelegate = (id)[[UIApplication sharedApplication] delegate];
     self.managedObjectContext = [appDelegate managedObjectContext];
@@ -155,6 +130,41 @@
     [self.POCTableView reloadData];
     
 }
+
+-(void) allocate
+{
+    _productNameFromContactCSV = [[NSMutableArray alloc]init];
+    _contactTypeArray = [[NSMutableArray alloc]init];
+    _contactDetailDSNArray = [[NSMutableArray alloc]init];
+    _contactDetailFrequencyArray = [[NSMutableArray alloc]init];
+    _contactDetailContactArray = [[NSMutableArray alloc]init];
+    _contactDetailCivilionArray = [[NSMutableArray alloc]init];
+    contactDetails1 = [[NSMutableArray alloc]init];
+    contactDetails2 = [[NSMutableArray alloc]init];
+    contactDetails3 = [[NSMutableArray alloc]init];
+    contactDetails4 = [[NSMutableArray alloc]init];
+    contactDetails5 = [[NSMutableArray alloc]init];
+    contactDetails6 = [[NSMutableArray alloc]init];
+    contactDetails7 = [[NSMutableArray alloc]init];
+    contactDetails8 = [[NSMutableArray alloc]init];
+    contactDetails9 = [[NSMutableArray alloc]init];
+    contactDetails10 = [[NSMutableArray alloc]init];
+    contactDetails11 = [[NSMutableArray alloc]init];
+    contactDetails12 = [[NSMutableArray alloc]init];
+    contactDetails13 = [[NSMutableArray alloc]init];
+    contactDetails14 = [[NSMutableArray alloc]init];
+    contactDetails15 = [[NSMutableArray alloc]init];
+    contactDetails16 = [[NSMutableArray alloc]init];
+    contactDetails17 = [[NSMutableArray alloc]init];
+    contactDetails18 = [[NSMutableArray alloc]init];
+    contactDetails19 = [[NSMutableArray alloc]init];
+    contactDetails20 = [[NSMutableArray alloc]init];
+    contactDetails21 = [[NSMutableArray alloc]init];
+    contactDetails22 = [[NSMutableArray alloc]init];
+    contactDetails23 = [[NSMutableArray alloc]init];
+
+}
+
 
 - (void) deleteAllEntities
 {
@@ -204,6 +214,9 @@
 
 - (IBAction)guidelineDescription:(id)sender
 {
+    [_guidelineOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_guidelines_pressed.png"] forState:UIControlStateNormal];
+    [_POCOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_poc_normal.png"] forState:UIControlStateNormal];
+    [_mapsOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_maps_normal.png"] forState:UIControlStateNormal];
     _mapView.hidden = YES;
     _POCTableView.hidden = YES;
     _cardDescriptionTableView.hidden = NO;
@@ -213,6 +226,9 @@
 - (IBAction)POCDescription:(id)sender
 {
     NSLog(@"POC description");
+    [_POCOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_pressed_pressed.png"] forState:UIControlStateNormal];
+    [_mapsOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_maps_normal.png"] forState:UIControlStateNormal];
+    [_guidelineOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_guidelines_normal.png"] forState:UIControlStateNormal];
     _POCTableView.hidden = NO;
     _cardDescriptionTableView.hidden = YES;
     _mapView.hidden = YES;
@@ -222,6 +238,9 @@
 
 - (IBAction)mapDescription:(id)sender
 {
+    [_mapsOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_maps_pressed.png"] forState:UIControlStateNormal];
+    [_POCOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_poc_normal.png"] forState:UIControlStateNormal];
+    [_guidelineOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_guidelines_normal.png"] forState:UIControlStateNormal];
     NSLog(@"maps description");
     _cardDescriptionTableView.hidden = YES;
     _POCTableView.hidden = YES;
@@ -288,16 +307,12 @@
     NSError *error;
     if((fetchResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
     {
-        NSLog(@"===description are:%@",fetchResults);
-        NSLog(@"name==== %@",[fetchResults objectAtIndex:0]);
+    
     }
     for (Product *obj in fetchResults)
     {
-        NSLog(@"contact detail are: %@",obj.contactDetail);
         for (ContactType *contactObj in obj.contactDetail)
         {
-            NSLog(@"dsn===%@",contactObj.contactDetail.dsn);
-//            NSLog(@"contact name==== %@",contactObj.contactName);
             if([contactObj.contactDetail.dsn length] > 0)
             {
                 [_contactDetailDSNArray addObject:contactObj.contactDetail.dsn];
@@ -308,9 +323,7 @@
             }
         }
     }
-    NSLog(@"cont are: %d",[_contactTypeArray count]);
-    NSLog(@"dsn count are : %d",[_contactDetailDSNArray count]);
-}
+ }
 
 -(void) storeContactCSVDataToCoreData
 {
@@ -334,9 +347,7 @@
         //Contact type starts from 18th index in CSV reading one by one
         for (int lineCount = 18; lineCount < [allLinedStrings count]-1; lineCount++)
         {
-            NSLog(@"All lined Strings for contacts - %@",[allLinedStrings objectAtIndex:lineCount]);
             NSArray *iterateLine = [[allLinedStrings objectAtIndex:lineCount] componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@";"]];
-            NSLog(@"count no for iteration = %d",[iterateLine count]);
             
             NSArray *halfArray;
             NSRange theRange;
@@ -352,7 +363,6 @@
                 halfArray = [iterateLine subarrayWithRange:theRange];
                 theRange.location += 5;
                 [subArray addObject:halfArray];
-                NSLog(@"sub array : %@",[subArray objectAtIndex:0]);
             } 
             // storing contacts for product in seperate array 
             [contactDetails1 addObject:[subArray objectAtIndex:0]];
@@ -387,7 +397,7 @@
             NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
             [fetchRequest setEntity:entity];
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@",[_productNameFromContactCSV objectAtIndex:count1]];
-            NSLog(@"predicat : %@",predicate);
+           
             [fetchRequest setPredicate:predicate];
             NSError *error;    
             NSArray *fetchedResults = [[NSArray alloc] init];
@@ -395,8 +405,6 @@
                         
             if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
             {
-                NSLog(@"product ed details are :%@",fetchedResults);
-                NSLog(@"product name =%@",_productNameFromContactCSV);
             }
             else
             {
@@ -426,11 +434,9 @@
 
 -(void) handleTapToAddIntoFavorites:(UITapGestureRecognizer*)tapGesture
 {
-    NSLog(@"tapped");    
     if(_pressCount % 2 == 0 && _favoriteSelectionImage.image == [UIImage imageNamed:@"star_normal.png"])
     {
         _pressCount++;
-        NSLog(@"count = %d",_pressCount);
         _favoriteSelectionImage.image = [UIImage imageNamed:@"star.png"];
         [self addToCoreData];
     }
@@ -444,7 +450,6 @@
 
 - (void) deleteFromCoreData
 {
-    NSLog(@"delete called");
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
     [fetchRequest setEntity:entity];
@@ -477,7 +482,6 @@
 - (void) addToCoreData
 {
     Favorites *favoriteObject = (Favorites *)[NSEntityDescription insertNewObjectForEntityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
-    NSLog(@"name = %@",_cardNameLabel.text);
     [favoriteObject setName:_cardNameLabel.text];
     [self fetchFromCoreData];
 }
@@ -497,10 +501,6 @@
         NSMutableArray *copyOfFetchedName = [[NSMutableArray alloc]init];
         copyOfFetchedName = [fetchedName mutableCopy];
         
-        if([copyOfFetchedName count])
-        {
-            NSLog(@"name of favorites are : %@",copyOfFetchedName);
-        }
     }
     else
     {
@@ -513,6 +513,9 @@
     [self setCardNameLabel:nil];
     [self setFavoriteSelectionImage:nil];
     [self setCardDescriptionTableView:nil];
+    [self setGuidelineOutlet:nil];
+    [self setPOCOutlet:nil];
+    [self setMapsOutlet:nil];
     [super viewDidUnload];
 }
 
@@ -576,7 +579,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;    
         accessoryButton.tag = indexPath.row;
 
-        cell.textLabel.text = [_contactTypeArray objectAtIndex:indexPath.row];
+        cell.textLabel.text = [[_contactTypeArray objectAtIndex:indexPath.row]stringByRemoveLeadingAndTrailingQuotes];
         return cell;
     }
 }
@@ -594,9 +597,7 @@
 
 - (void) accessoryButtonDisclosureTapped : (UIButton *)sender
 {
-    NSLog(@"hello disclosure pressed");
     UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    
     DetailDescriptionViewController *pushForDetail = [storyboard instantiateViewControllerWithIdentifier:@"detailDescriptor"]; 
     pushForDetail.detailViewHeading = _cardName;
     pushForDetail.detailHeading = [_cardDetails objectAtIndex:sender.tag];
@@ -607,17 +608,12 @@
 
 -(void) accessoryButtonDisclosureForContactTapped : (UIButton *)sender
 {
-    NSLog(@"got it:)");
     UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     ContactDetailDescription *pushForContactDescription = [storyboard instantiateViewControllerWithIdentifier:@"contactDescriptor"];
     pushForContactDescription.contactTypeName = [_contactTypeArray objectAtIndex:sender.tag];
-    NSLog(@"card name=== : %@",_cardName);
     pushForContactDescription.contactOfProductName = _cardName; 
     pushForContactDescription.productNameFromContactDetail = _productNameFromContactCSV;
     [self.navigationController pushViewController:pushForContactDescription animated:YES];
 }
-
-
-
 
 @end

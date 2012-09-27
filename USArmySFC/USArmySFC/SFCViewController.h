@@ -14,6 +14,7 @@
 #import "Product.h"
 #import "FileReaderLineByLine.h"
 #import "Description.h"
+#import "NSString+RemoveQuotes.h"
 
 @interface SFCViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,customDelegate,NSXMLParserDelegate>
 
@@ -27,12 +28,19 @@
 @property (strong, nonatomic) IBOutlet UIButton *moreNavigationButton;
 @property (strong, nonatomic) IBOutlet UITableView *favoriteTableView;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) IBOutlet UIButton *favoriteOutlet;
+@property (strong, nonatomic) IBOutlet UIButton *cardOutlet;
+@property (strong, nonatomic) IBOutlet UIButton *moreOutlet;
 
 @property (nonatomic,strong) NSMutableArray *cardNameFromCoreData;
-@property (nonatomic) BOOL *test;
+@property (nonatomic) BOOL test;
 
 - (IBAction)showFavoriteView:(id)sender;
 - (IBAction)showMoreOption:(id)sender;
 - (IBAction)showAvailableCards:(id)sender;
 
 @end
+
+///
+//poc detail for inside table view,favorite table get called.
+//ui design.

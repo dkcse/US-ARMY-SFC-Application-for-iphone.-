@@ -15,6 +15,7 @@
 #import "ContactType.h"
 #import "Contact_details.h"
 #import "Product.h"
+#import "NSString+RemoveQuotes.h"
 
 @interface CardDescription : UIViewController<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate>
 
@@ -26,6 +27,11 @@
 @property (strong, nonatomic) IBOutlet UIImageView *favoriteSelectionImage;
 @property (strong, nonatomic) IBOutlet UITableView *cardDescriptionTableView;
 @property (strong,nonatomic) IBOutlet UITableView *POCTableView;
+@property (strong, nonatomic) IBOutlet UIButton *guidelineOutlet;
+@property (strong, nonatomic) IBOutlet UIButton *POCOutlet;
+
+@property (strong, nonatomic) IBOutlet UIButton *mapsOutlet;
+
 @property (nonatomic,strong) NSString *cardName;
 @property (nonatomic,strong) NSString *cardSubTitle;
 @property (nonatomic,strong) NSMutableArray *cardDetails;

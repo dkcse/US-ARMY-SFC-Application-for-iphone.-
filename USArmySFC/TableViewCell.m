@@ -19,6 +19,10 @@
 @synthesize celldelegate = _celldelegate;
 @synthesize index = _index;
 @synthesize cardArrayForTableView = _cardArrayForTableView;
+@synthesize productNameFromMainView = _productNameFromMainView;
+@synthesize languageArrayFromMainView = _languageArrayFromMainView;
+@synthesize attributeArray = _attributeArray;
+@synthesize descriptionArray = _descriptionArray;
 
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -26,18 +30,6 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self)
     {
-        
-        // Initialization code
-        //_insideTableView.delegate = self;
-        //_insideTableView.dataSource =self;
-        // _insideTableView.hidden = YES;
-        // _languageArray = [[NSArray alloc] initWithObjects:@"English",@"German",nil];
-        //[_insideTableView reloadData];
-        
-        //        UITableView *tbl = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 300, 100) style:UITableViewStyleGrouped];
-        //        tbl.delegate = self;
-        //        tbl.dataSource = self;
-        //        [self addSubview:tbl];
         
     }
     return self;
@@ -52,13 +44,19 @@
 
 -(void)layoutSubviews
 { 
+    NSLog(@"lang arra :%@",_languageArrayFromMainView);
     _cellDataLabel.backgroundColor = [UIColor clearColor];
     _insideTableView.delegate = self;
     _insideTableView.dataSource =self;
     _insideTableView.backgroundColor = [UIColor clearColor];
-    
-    // _insideTableView.hidden = YES;
-    _languageArray = [[NSArray alloc] initWithObjects:@"English",@"German",nil];
+    if([_languageArrayFromMainView count] > 0)
+    {
+        _languageArray  = _languageArrayFromMainView;
+    }
+    else 
+    {
+        _languageArray = [[NSMutableArray alloc] initWithObjects:@"English",@"German",nil];
+    }    
     [_insideTableView reloadData];
     _insideTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     
@@ -74,9 +72,6 @@
 {
     return 40;
 }
-
-
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
@@ -100,50 +95,26 @@
     [cell setAccessoryView:accessoryButton];
     accessoryButton.tag = indexPath.row;
     [cell.textLabel sizeToFit];
-    //cell.textLabel.font = [UIFont systemFontOfSize:24];
-    
-    //    if(indexPath.row == 0)
-    //    {
-    //        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_top.png"]];
-    //    }
-    //    else if (indexPath.row == [_languageArray count]) 
-    //    {
-    //        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_bottom.png"]];
-    //    }
-    //    else
-    //    {
-    //        cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_middle.png"]];
-    //    }
-    
-    
-    
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    
-    
     return cell;
 }
 
 
 -(void) accessoryButtonDisclosureTapped:(UIButton *)sender
 {
-    NSLog(@"tapped");
     NSString *nameForCardLabel = [[NSString alloc]init];
-    NSLog(@"array = %@",_cardArrayForTableView);
+    NSLog(@"array = %@",_productNameFromMainView);
     nameForCardLabel = [_cardArrayForTableView objectAtIndex:_index];
     NSLog(@"card name = %@",nameForCardLabel);
     UIStoryboard *story = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     CardDescription *pushForDescriptionCustom = [story instantiateViewControllerWithIdentifier:@"cardDescriptor"];
     UINavigationController *referenceToNavController = [[UINavigationController alloc]init];
-    pushForDescriptionCustom.cardName = [_cardArrayForTableView objectAtIndex:_index];    
-    
-    
+    pushForDescriptionCustom.cardName = _productNameFromMainView;  
+    pushForDescriptionCustom.cardDetails = _attributeArray;
+    pushForDescriptionCustom.detailDescription = _descriptionArray;
     referenceToNavController = [_celldelegate sendNavigationControllerInstance];
-    NSLog(@"reference = %@",referenceToNavController);
-    
     [referenceToNavController pushViewController:pushForDescriptionCustom animated:YES];
     
 }
-
-
 
 @end

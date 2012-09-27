@@ -135,6 +135,7 @@
 		6AE58D1E16102B4A004434F9 /* DetailDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AE58D1D16102B4A004434F9 /* DetailDescriptionViewController.m */; };
 		6AE58D2016105506004434F9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AE58D1F16105505004434F9 /* QuartzCore.framework */; };
 		6AE94C4A1601BE1F007D5BA5 /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AE94C491601BE1F007D5BA5 /* TableViewCell.m */; };
+		6AECE5BC16142C8D0094BF00 /* NSString+RemoveQuotes.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AECE5BB16142C8D0094BF00 /* NSString+RemoveQuotes.m */; };
 		6AF471CC1602F54800007CAE /* CardDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AF471CB1602F54800007CAE /* CardDescription.m */; };
 		6AF471D916030AE100007CAE /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AF471D716030AE100007CAE /* MainStoryboard.storyboard */; };
 /* End PBXBuildFile section */
@@ -296,6 +297,8 @@
 		6AE58D1F16105505004434F9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		6AE94C481601BE1F007D5BA5 /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TableViewCell.h; path = ../TableViewCell.h; sourceTree = "<group>"; };
 		6AE94C491601BE1F007D5BA5 /* TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TableViewCell.m; path = ../TableViewCell.m; sourceTree = "<group>"; };
+		6AECE5BA16142C8D0094BF00 /* NSString+RemoveQuotes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RemoveQuotes.h"; sourceTree = "<group>"; };
+		6AECE5BB16142C8D0094BF00 /* NSString+RemoveQuotes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+RemoveQuotes.m"; sourceTree = "<group>"; };
 		6AF471CA1602F54800007CAE /* CardDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardDescription.h; sourceTree = "<group>"; };
 		6AF471CB1602F54800007CAE /* CardDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardDescription.m; sourceTree = "<group>"; };
 		6AF471D816030AE100007CAE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
@@ -320,17 +323,10 @@
 		6ADE5E77160052F600D76A53 = {
 			isa = PBXGroup;
 			children = (
-				6AC00E241612248300E96390 /* Product.h */,
-				6AC00E251612248300E96390 /* Product.m */,
-				6AC00E211612248300E96390 /* ContactType.h */,
-				6AC00E221612248300E96390 /* ContactType.m */,
-				6AC00E1E1612248300E96390 /* Contact_details.h */,
-				6AC00E1F1612248300E96390 /* Contact_details.m */,
-				6AC00E1B1612248200E96390 /* Favorites.h */,
-				6AC00E1C1612248200E96390 /* Favorites.m */,
-				6AC00E181612248200E96390 /* Description.h */,
-				6AC00E191612248200E96390 /* Description.m */,
-				6ADE5E8C160052F600D76A53 /* USArmySFC */,
+				6AECE5B31614176F0094BF00 /* Architecture */,
+				6AECE5B2161417280094BF00 /* Categories */,
+				6AECE5B11614170F0094BF00 /* DataModel */,
+				6AECE5B6161417C20094BF00 /* Code */,
 				6ADE5E85160052F600D76A53 /* Frameworks */,
 				6ADE5E83160052F600D76A53 /* Products */,
 			);
@@ -359,10 +355,11 @@
 		6ADE5E8C160052F600D76A53 /* USArmySFC */ = {
 			isa = PBXGroup;
 			children = (
-				6AF471C91602F2D600007CAE /* CardsViewGroup */,
+				6AF471C91602F2D600007CAE /* ControllersAndModels */,
 				6AF471D716030AE100007CAE /* MainStoryboard.storyboard */,
-				6ADEA8D51607060F00A14E45 /* Favorites.xcdatamodeld */,
+				6AECE5B7161418A20094BF00 /* Resources */,
 				6ADE5E8D160052F600D76A53 /* Supporting Files */,
+				6AECE5B9161419360094BF00 /* Design */,
 			);
 			path = USArmySFC;
 			sourceTree = "<group>";
@@ -370,10 +367,6 @@
 		6ADE5E8D160052F600D76A53 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				6AD3E3781612D41700393E2F /* Contacts-Table.csv */,
-				6A857858160C9E4500F7D484 /* Guidelines_Table.csv */,
-				6AD6D38F160889620072BB85 /* SFC_content_formatted.xml */,
-				6ADE5EA31600530800D76A53 /* SFC */,
 				6ADE5E8E160052F600D76A53 /* USArmySFC-Info.plist */,
 				6ADE5E8F160052F600D76A53 /* InfoPlist.strings */,
 				6ADE5E92160052F600D76A53 /* main.m */,
@@ -382,27 +375,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		6ADE5EA31600530800D76A53 /* SFC */ = {
-			isa = PBXGroup;
-			children = (
-				6ADE5EA41600530800D76A53 /* 11.08.14 - design slices */,
-				6ADE5F0A1600530800D76A53 /* 11.08.31 - sfc ui design */,
-				6ADE5F141600530800D76A53 /* 11.09.16 - designs */,
-				6ADE5F241600530800D76A53 /* 11.09.26 - splash video */,
-			);
-			path = SFC;
-			sourceTree = "<group>";
-		};
 		6ADE5EA41600530800D76A53 /* 11.08.14 - design slices */ = {
 			isa = PBXGroup;
 			children = (
-				6ADE5EA51600530800D76A53 /* Slices */,
-				6ADE5EC81600530800D76A53 /* Slices2 */,
-				6ADE5EEC1600530800D76A53 /* Slices3 */,
-				6ADE5EF31600530800D76A53 /* slices4 */,
 				6ADE5EFB1600530800D76A53 /* Text details */,
 			);
-			path = "11.08.14 - design slices";
+			name = "11.08.14 - design slices";
+			path = "SFC/11.08.14 - design slices";
 			sourceTree = "<group>";
 		};
 		6ADE5EA51600530800D76A53 /* Slices */ = {
@@ -443,7 +422,8 @@
 				6ADE5EC61600530800D76A53 /* tab_more_normal.png */,
 				6ADE5EC71600530800D76A53 /* tab_more_selected.png */,
 			);
-			path = Slices;
+			name = Slices;
+			path = "SFC/11.08.14 - design slices/Slices";
 			sourceTree = "<group>";
 		};
 		6ADE5EC81600530800D76A53 /* Slices2 */ = {
@@ -474,7 +454,8 @@
 				6ADE5EDF1600530800D76A53 /* tab_btn_pressed_pressed.png */,
 				6ADE5EE01600530800D76A53 /* Text details */,
 			);
-			path = Slices2;
+			name = Slices2;
+			path = "SFC/11.08.14 - design slices/Slices2";
 			sourceTree = "<group>";
 		};
 		6ADE5EE01600530800D76A53 /* Text details */ = {
@@ -505,7 +486,8 @@
 				6ADE5EF11600530800D76A53 /* cell_top.png */,
 				6ADE5EF21600530800D76A53 /* note_divider.png */,
 			);
-			path = Slices3;
+			name = Slices3;
+			path = "SFC/11.08.14 - design slices/Slices3";
 			sourceTree = "<group>";
 		};
 		6ADE5EF31600530800D76A53 /* slices4 */ = {
@@ -519,7 +501,8 @@
 				6ADE5EF91600530800D76A53 /* gradient.png */,
 				6ADE5EFA1600530800D76A53 /* map_bg.png */,
 			);
-			path = slices4;
+			name = slices4;
+			path = "SFC/11.08.14 - design slices/slices4";
 			sourceTree = "<group>";
 		};
 		6ADE5EFB1600530800D76A53 /* Text details */ = {
@@ -556,7 +539,8 @@
 				6ADE5F121600530800D76A53 /* 2.6 Edit Contact Details.jpg */,
 				6ADE5F131600530800D76A53 /* 2.8 Edit Notes.jpg */,
 			);
-			path = "11.08.31 - sfc ui design";
+			name = "11.08.31 - sfc ui design";
+			path = "SFC/11.08.31 - sfc ui design";
 			sourceTree = "<group>";
 		};
 		6ADE5F141600530800D76A53 /* 11.09.16 - designs */ = {
@@ -578,7 +562,8 @@
 				6ADE5F221600530800D76A53 /* 2.8 Edit Notes.jpg */,
 				6ADE5F231600530800D76A53 /* 2.9 Add Custom Entry.jpg */,
 			);
-			path = "11.09.16 - designs";
+			name = "11.09.16 - designs";
+			path = "SFC/11.09.16 - designs";
 			sourceTree = "<group>";
 		};
 		6ADE5F241600530800D76A53 /* 11.09.26 - splash video */ = {
@@ -586,10 +571,102 @@
 			children = (
 				6ADE5F251600530800D76A53 /* Splash Screen 0.2.mov */,
 			);
-			path = "11.09.26 - splash video";
+			name = "11.09.26 - splash video";
+			path = "SFC/11.09.26 - splash video";
 			sourceTree = "<group>";
 		};
-		6AF471C91602F2D600007CAE /* CardsViewGroup */ = {
+		6AECE5B11614170F0094BF00 /* DataModel */ = {
+			isa = PBXGroup;
+			children = (
+				6AC00E241612248300E96390 /* Product.h */,
+				6AC00E251612248300E96390 /* Product.m */,
+				6AC00E211612248300E96390 /* ContactType.h */,
+				6AC00E221612248300E96390 /* ContactType.m */,
+				6AC00E1E1612248300E96390 /* Contact_details.h */,
+				6AC00E1F1612248300E96390 /* Contact_details.m */,
+				6AC00E1B1612248200E96390 /* Favorites.h */,
+				6AC00E1C1612248200E96390 /* Favorites.m */,
+				6AC00E181612248200E96390 /* Description.h */,
+				6AC00E191612248200E96390 /* Description.m */,
+				6ADEA8D51607060F00A14E45 /* Favorites.xcdatamodeld */,
+			);
+			name = DataModel;
+			sourceTree = "<group>";
+		};
+		6AECE5B2161417280094BF00 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				6AECE5BA16142C8D0094BF00 /* NSString+RemoveQuotes.h */,
+				6AECE5BB16142C8D0094BF00 /* NSString+RemoveQuotes.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		6AECE5B31614176F0094BF00 /* Architecture */ = {
+			isa = PBXGroup;
+			children = (
+				6AECE5B5161417A40094BF00 /* Project Plan */,
+				6AECE5B4161417880094BF00 /* Diagram */,
+			);
+			name = Architecture;
+			sourceTree = "<group>";
+		};
+		6AECE5B4161417880094BF00 /* Diagram */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Diagram;
+			sourceTree = "<group>";
+		};
+		6AECE5B5161417A40094BF00 /* Project Plan */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Project Plan";
+			sourceTree = "<group>";
+		};
+		6AECE5B6161417C20094BF00 /* Code */ = {
+			isa = PBXGroup;
+			children = (
+				6ADE5E8C160052F600D76A53 /* USArmySFC */,
+			);
+			name = Code;
+			sourceTree = "<group>";
+		};
+		6AECE5B7161418A20094BF00 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6AECE5B8161419190094BF00 /* CSV And XML file */,
+				6ADE5EA51600530800D76A53 /* Slices */,
+				6ADE5EC81600530800D76A53 /* Slices2 */,
+				6ADE5EEC1600530800D76A53 /* Slices3 */,
+				6ADE5EF31600530800D76A53 /* slices4 */,
+				6ADE5F241600530800D76A53 /* 11.09.26 - splash video */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		6AECE5B8161419190094BF00 /* CSV And XML file */ = {
+			isa = PBXGroup;
+			children = (
+				6AD3E3781612D41700393E2F /* Contacts-Table.csv */,
+				6A857858160C9E4500F7D484 /* Guidelines_Table.csv */,
+				6AD6D38F160889620072BB85 /* SFC_content_formatted.xml */,
+			);
+			name = "CSV And XML file";
+			sourceTree = "<group>";
+		};
+		6AECE5B9161419360094BF00 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				6ADE5EA41600530800D76A53 /* 11.08.14 - design slices */,
+				6ADE5F0A1600530800D76A53 /* 11.08.31 - sfc ui design */,
+				6ADE5F141600530800D76A53 /* 11.09.16 - designs */,
+			);
+			name = Design;
+			sourceTree = "<group>";
+		};
+		6AF471C91602F2D600007CAE /* ControllersAndModels */ = {
 			isa = PBXGroup;
 			children = (
 				6ADE5E95160052F600D76A53 /* SFCAppDelegate.h */,
@@ -607,7 +684,7 @@
 				6AD3E37D1613176000393E2F /* ContactDetailDescription.h */,
 				6AD3E37E1613176000393E2F /* ContactDetailDescription.m */,
 			);
-			name = CardsViewGroup;
+			name = ControllersAndModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -796,6 +873,7 @@
 				6AC00E231612248300E96390 /* ContactType.m in Sources */,
 				6AC00E261612248300E96390 /* Product.m in Sources */,
 				6AD3E37F1613176000393E2F /* ContactDetailDescription.m in Sources */,
+				6AECE5BC16142C8D0094BF00 /* NSString+RemoveQuotes.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -934,7 +1012,8 @@
 				6ADEA8D61607060F00A14E45 /* Favorites.xcdatamodel */,
 			);
 			currentVersion = 6ADEA8D61607060F00A14E45 /* Favorites.xcdatamodel */;
-			path = Favorites.xcdatamodeld;
+			name = Favorites.xcdatamodeld;
+			path = USArmySFC/Favorites.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

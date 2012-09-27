@@ -30,7 +30,7 @@
     label.textAlignment = UITextAlignmentCenter;
     label.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     self.navigationItem.titleView = label;
-    label.text = _detailViewHeading;
+    label.text = [_detailViewHeading stringByRemoveLeadingAndTrailingQuotes];
     [label sizeToFit];
     
     //view settings
@@ -43,7 +43,6 @@
     _descriptionHeading.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     _descriptionTextView.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     _descriptionTextView.text = _detailDescription;
-    NSLog(@"detail detail description are : %@",_detailDescription);
 }
 
 - (void)viewDidLoad
@@ -63,4 +62,8 @@
 }
 
 
+- (IBAction)goBack:(id)sender 
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 @end

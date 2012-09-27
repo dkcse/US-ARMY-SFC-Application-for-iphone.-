@@ -25,5 +25,9 @@
 @property (strong,nonatomic) NSArray *languageArray;
 @property (nonatomic) NSInteger index;
 @property (nonatomic,strong) NSMutableArray *cardArrayForTableView;
+@property (nonatomic,strong) NSString *productNameFromMainView;
+@property (nonatomic,strong) NSMutableArray *languageArrayFromMainView;
+@property (nonatomic,strong) NSMutableArray *attributeArray;
+@property (nonatomic,strong) NSMutableArray *descriptionArray;
 
 @end

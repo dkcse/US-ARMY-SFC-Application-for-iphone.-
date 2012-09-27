@@ -48,8 +48,8 @@
     _contactDetailView.layer.cornerRadius = 10;
     _contactDetailView.layer.masksToBounds = YES;
     
-    _contactDetailLabelForProduct.text = _contactOfProductName;
-    _contactDetailLabelForContactType.text = _contactTypeName;
+    _contactDetailLabelForProduct.text = [_contactOfProductName stringByRemoveLeadingAndTrailingQuotes];
+    _contactDetailLabelForContactType.text = [_contactTypeName stringByRemoveLeadingAndTrailingQuotes];
     _contactDetailLabelForProduct.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     _contactDetailLabelForContactType.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     
@@ -66,7 +66,6 @@
 -(void) checkForIndexAndContactType
 {
     _productIndex = 0;
-    NSLog(@"array to check are: %@",_productNameFromContactDetail);
     for (int i = 0; i<[_productNameFromContactDetail count]; i++)
     {
     
@@ -91,9 +90,6 @@
         [_cellTextLabelArray addObject:@"FREQUENCY"];
         [_cellTextDetailArray addObject:[_contactDetailFrequency objectAtIndex:_productIndex]];
     }
-
-    NSLog(@"conty are : %d",[_cellTextLabelArray count]);
-        
 }
 
 -(void) fetchContactDetailsFromCoreData
@@ -108,9 +104,6 @@
     NSError *error;
     if((fetchResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
     {
-        NSLog(@"===description are:%@",fetchResults);
-        NSLog(@"cont are = %d",[fetchResults count]);
-        NSLog(@"name==== %@",[fetchResults objectAtIndex:0]);
         for (ContactType *type in fetchResults)
         {
             [_contactDetailContactName addObject:type.contactDetail.contact];
@@ -118,11 +111,6 @@
             [_contactDetailFrequency addObject:type.contactDetail.frequency];
             [_contactDetailCivilion addObject:type.contactDetail.civilion];
         }
-        NSLog(@"frequency no== %@",_contactDetailFrequency);
-        NSLog(@"civilion no== %@",_contactDetailCivilion);
-        NSLog(@"contact name== %@",_contactDetailContactName);
-        NSLog(@"contact no== %@",_contactDetailDSN);
-
     }
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -137,16 +125,17 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellData = @"actionData";    
+    static NSString *cellData = @"contactDescription";    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellData];
     if (cell == nil) 
     {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellData];
     }
+    cell.textLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+    cell.detailTextLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+    cell.backgroundColor = [UIColor clearColor];
     cell.textLabel.text = [_cellTextLabelArray objectAtIndex:indexPath.row];
     cell.detailTextLabel.text = [_cellTextDetailArray objectAtIndex:indexPath.row];
-    cell.backgroundColor = [UIColor clearColor];
-    cell.textLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     return cell;
 }
 - (void)viewDidUnload

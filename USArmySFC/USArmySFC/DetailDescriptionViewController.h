@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import "NSString+RemoveQuotes.h"
 
 @interface DetailDescriptionViewController : UIViewController
 
@@ -20,5 +21,6 @@
 @property (nonatomic,strong) NSString *detailViewHeading;
 @property (nonatomic,strong) NSString *detailHeading;
 @property (nonatomic,strong) NSString *detailDescription;
+- (IBAction)goBack:(id)sender;
 
 @end
