@@ -140,6 +140,7 @@
 
 -(void) parseGuidelineCSV
 {
+    
     FileReaderLineByLine * readerForGuidelinesCSV = [[FileReaderLineByLine alloc] initWithFilePath:@"/Users/deepakkumar/US SFC/Guidelines_Table.csv"];
     _lineOfGuidelineCSV = nil;
     
@@ -310,12 +311,14 @@
             [productName addObject:obj.name];
         }
         _productNameUnique=[[NSMutableArray alloc]init];
-        NSMutableArray *repeatedProductArray=[[NSMutableArray alloc]init];
-        for( NSString *name in productName)
+      //  NSMutableArray *repeatedProductArray=[[NSMutableArray alloc]init];
+          for( NSString *name in productName)
         {
             NSMutableDictionary *dict = [[NSMutableDictionary alloc]init];
             [dict setValue:name forKey:@"name"];
             [dict setValue:@"notRepeated" forKey:@"isRepeated"];
+            
+            
             if(![_productNameUnique containsObject:dict])
             {
                 [_productNameUnique addObject:dict];
@@ -326,9 +329,11 @@
                 [dict setValue:name forKey:@"name"];
                 [dict setValue:@"Repeated" forKey:@"isRepeated"];
                 [_productNameUnique addObject:dict];
-                [repeatedProductArray addObject:name];
+               // [repeatedProductArray addObject:name];
             }
+            
         }
+    NSLog(@"product name :%@",_productNameUnique);
     }
     else
     {
@@ -420,7 +425,7 @@
             _tableCell = (TableViewCell *)cell;
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             _tableCell.celldelegate = self;
-            _tableCell.cellDataLabel.text = [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"name"]stringByRemoveLeadingAndTrailingQuotes];
+            _tableCell.cellDataLabel.text = [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"name"] stringByRemoveLeadingAndTrailingQuotes];
             [_tableCell.insideTableView setTag:indexPath.row];
             _tableCell.index = indexPath.row;
             _tableCell.cardArrayForTableView = _listOfCards;
@@ -461,7 +466,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdNormal];
             }
         }
-        cell.textLabel.text = [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"name"]stringByRemoveLeadingAndTrailingQuotes];
+        cell.textLabel.text = [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"name"] stringByRemoveLeadingAndTrailingQuotes];
         _accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)]; 
         _accessoryButton.tag = indexPath.row;
         UIImage *imageView = [UIImage imageNamed:@"arrow.png"];
@@ -511,7 +516,7 @@
 -(void) accessoryButtonDisclosureTapped:(UIButton *)sender
 {
     //language remaining
-    _selectedProduct = [_cardNameFromCoreData objectAtIndex:sender.tag];
+    _selectedProduct = [_cardNameFromCoreData objectAtIndex:sender.tag] ;
     _selectedCardName = [_selectedProduct name];
     _selectedCardSubtitle = _selectedProduct.productDetail.sfc_subtitle;
     [self availableDescription];
@@ -689,7 +694,7 @@
     _checkForTableViewHidden = NO;
     TableViewCell *cell = (TableViewCell *)[self.cardsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
 
-    cell.productNameFromMainView = [[[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"]stringByRemoveLeadingAndTrailingQuotes];
+    cell.productNameFromMainView = [[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"];
     _selectedCellToExpand = sender.tag;
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];

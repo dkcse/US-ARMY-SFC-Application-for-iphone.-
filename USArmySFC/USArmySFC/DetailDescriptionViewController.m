@@ -28,12 +28,17 @@
     label.backgroundColor = [UIColor clearColor];
     label.font = [UIFont boldSystemFontOfSize:20.0];
     label.textAlignment = UITextAlignmentCenter;
-    label.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+    label.textColor = [UIColor colorWithRed:34.0/255.0 green:36.0/255.0 blue:24.0/255.0 alpha:1.0];
+   
+    label.text = _detailViewHeading;
+    NSArray *firstSubstring = [label.text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" "]];
+
+    label.text = [[firstSubstring objectAtIndex:0]substringFromIndex:1];
     self.navigationItem.titleView = label;
-    label.text = [_detailViewHeading stringByRemoveLeadingAndTrailingQuotes];
     [label sizeToFit];
     
     //view settings
+    
     _descriptionSubview.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
     _descriptionSubview.layer.cornerRadius = 10;
     _descriptionSubview.layer.masksToBounds = YES;

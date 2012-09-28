@@ -15,7 +15,8 @@
 		6AC00E201612248300E96390 /* Contact_details.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AC00E1F1612248300E96390 /* Contact_details.m */; };
 		6AC00E231612248300E96390 /* ContactType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AC00E221612248300E96390 /* ContactType.m */; };
 		6AC00E261612248300E96390 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AC00E251612248300E96390 /* Product.m */; };
-		6AD3E3791612D41700393E2F /* Contacts-Table.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6AD3E3781612D41700393E2F /* Contacts-Table.csv */; };
+		6AC5EEC416159841004616FC /* ArchitectureDiagram.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6AC5EEC316159841004616FC /* ArchitectureDiagram.pdf */; };
+		6AC5EEC616159854004616FC /* projectplan.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6AC5EEC516159854004616FC /* projectplan.pdf */; };
 		6AD3E37F1613176000393E2F /* ContactDetailDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD3E37E1613176000393E2F /* ContactDetailDescription.m */; };
 		6AD6D390160889620072BB85 /* SFC_content_formatted.xml in Resources */ = {isa = PBXBuildFile; fileRef = 6AD6D38F160889620072BB85 /* SFC_content_formatted.xml */; };
 		6ADE5E87160052F600D76A53 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ADE5E86160052F600D76A53 /* UIKit.framework */; };
@@ -138,6 +139,7 @@
 		6AECE5BC16142C8D0094BF00 /* NSString+RemoveQuotes.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AECE5BB16142C8D0094BF00 /* NSString+RemoveQuotes.m */; };
 		6AF471CC1602F54800007CAE /* CardDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AF471CB1602F54800007CAE /* CardDescription.m */; };
 		6AF471D916030AE100007CAE /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AF471D716030AE100007CAE /* MainStoryboard.storyboard */; };
+		6AF61932161561B2000DC353 /* Contacts-Table.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6AF61931161561B2000DC353 /* Contacts-Table.csv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -155,7 +157,8 @@
 		6AC00E221612248300E96390 /* ContactType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactType.m; sourceTree = "<group>"; };
 		6AC00E241612248300E96390 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
 		6AC00E251612248300E96390 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Product.m; sourceTree = "<group>"; };
-		6AD3E3781612D41700393E2F /* Contacts-Table.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Contacts-Table.csv"; path = "../../../US SFC/Contacts-Table.csv"; sourceTree = "<group>"; };
+		6AC5EEC316159841004616FC /* ArchitectureDiagram.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = ArchitectureDiagram.pdf; sourceTree = "<group>"; };
+		6AC5EEC516159854004616FC /* projectplan.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = projectplan.pdf; sourceTree = "<group>"; };
 		6AD3E37D1613176000393E2F /* ContactDetailDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactDetailDescription.h; sourceTree = "<group>"; };
 		6AD3E37E1613176000393E2F /* ContactDetailDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactDetailDescription.m; sourceTree = "<group>"; };
 		6AD6D38F160889620072BB85 /* SFC_content_formatted.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SFC_content_formatted.xml; sourceTree = "<group>"; };
@@ -302,6 +305,7 @@
 		6AF471CA1602F54800007CAE /* CardDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardDescription.h; sourceTree = "<group>"; };
 		6AF471CB1602F54800007CAE /* CardDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardDescription.m; sourceTree = "<group>"; };
 		6AF471D816030AE100007CAE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		6AF61931161561B2000DC353 /* Contacts-Table.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Contacts-Table.csv"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -614,6 +618,7 @@
 		6AECE5B4161417880094BF00 /* Diagram */ = {
 			isa = PBXGroup;
 			children = (
+				6AC5EEC316159841004616FC /* ArchitectureDiagram.pdf */,
 			);
 			name = Diagram;
 			sourceTree = "<group>";
@@ -621,6 +626,7 @@
 		6AECE5B5161417A40094BF00 /* Project Plan */ = {
 			isa = PBXGroup;
 			children = (
+				6AC5EEC516159854004616FC /* projectplan.pdf */,
 			);
 			name = "Project Plan";
 			sourceTree = "<group>";
@@ -649,7 +655,7 @@
 		6AECE5B8161419190094BF00 /* CSV And XML file */ = {
 			isa = PBXGroup;
 			children = (
-				6AD3E3781612D41700393E2F /* Contacts-Table.csv */,
+				6AF61931161561B2000DC353 /* Contacts-Table.csv */,
 				6A857858160C9E4500F7D484 /* Guidelines_Table.csv */,
 				6AD6D38F160889620072BB85 /* SFC_content_formatted.xml */,
 			);
@@ -848,7 +854,9 @@
 				6A9709D516047E1E00A41F3C /* Bg2.png in Resources */,
 				6AD6D390160889620072BB85 /* SFC_content_formatted.xml in Resources */,
 				6A857859160C9E4500F7D484 /* Guidelines_Table.csv in Resources */,
-				6AD3E3791612D41700393E2F /* Contacts-Table.csv in Resources */,
+				6AF61932161561B2000DC353 /* Contacts-Table.csv in Resources */,
+				6AC5EEC416159841004616FC /* ArchitectureDiagram.pdf in Resources */,
+				6AC5EEC616159854004616FC /* projectplan.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

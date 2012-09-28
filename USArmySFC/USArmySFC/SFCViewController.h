@@ -40,7 +40,3 @@
 - (IBAction)showAvailableCards:(id)sender;
 
 @end
-
-///
-//poc detail for inside table view,favorite table get called.
-//ui design.

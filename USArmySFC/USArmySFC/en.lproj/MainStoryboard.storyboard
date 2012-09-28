@@ -333,20 +333,20 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="FPN-AG-txh">
-                        <barButtonItem key="leftBarButtonItem" id="Jab-H1-SSR">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4Kx-2L-cUz">
-                                <rect key="frame" x="5" y="5" width="70" height="33"/>
+                        <barButtonItem key="leftBarButtonItem" id="mQO-2l-FjO">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="D1S-Ci-owI">
+                                <rect key="frame" x="5" y="5" width="80" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="  Products" backgroundImage="nav_btn_products_normal.png">
-                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <state key="highlighted">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="goBack:" destination="EI8-0e-Fb9" eventType="touchUpInside" id="28B-Bk-tQo"/>
+                                    <action selector="goBack:" destination="EI8-0e-Fb9" eventType="touchUpInside" id="UH3-DY-WtY"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -367,7 +367,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="70" y="-649"/>
+            <point key="canvasLocation" x="-15" y="-657"/>
         </scene>
         <!--Detail Description View Controller-->
         <scene sceneID="Ddr-iA-qFF">
@@ -440,7 +440,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="464" y="-643"/>
+            <point key="canvasLocation" x="411" y="-657"/>
         </scene>
         <!--Contact Detail Description-->
         <scene sceneID="dwE-QJ-tYW">
@@ -554,78 +554,6 @@
         <image name="tab_fav_normal.png" width="150" height="86"/>
         <image name="tab_more_normal.png" width="150" height="86"/>
     </resources>
-    <classes>
-        <class className="CardDescription" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CardDescription.h"/>
-            <relationships>
-                <relationship kind="action" name="POCDescription:"/>
-                <relationship kind="action" name="goBack:"/>
-                <relationship kind="action" name="guidelineDescription:"/>
-                <relationship kind="action" name="mapDescription:"/>
-                <relationship kind="outlet" name="POCOutlet" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="POCTableView" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="cardDescriptionTableView" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="cardLogoImage" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="cardNameLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="cardSubtitleLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="commonView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="favoriteSelectionImage" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="guidelineOutlet" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="mapView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="mapsOutlet" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="ContactDetailDescription" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ContactDetailDescription.h"/>
-            <relationships>
-                <relationship kind="outlet" name="backgroundImage" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="contactDetailLabelForContactType" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="contactDetailLabelForProduct" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="contactDetailTableView" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="contactDetailView" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="DetailDescriptionViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/DetailDescriptionViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="goBack:"/>
-                <relationship kind="outlet" name="descriptionBackgroundImage" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="descriptionHeading" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="descriptionMainView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="descriptionSubview" candidateClass="UIView"/>
-                <relationship kind="outlet" name="descriptionTextView" candidateClass="UITextView"/>
-            </relationships>
-        </class>
-        <class className="SFCViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SFCViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="showAvailableCards:"/>
-                <relationship kind="action" name="showFavoriteView:"/>
-                <relationship kind="action" name="showMoreOption:"/>
-                <relationship kind="outlet" name="cardOutlet" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="cardsTableView" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="cardsView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="favoriteOutlet" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="favoriteTableView" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="favoritesView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="moreNavigationButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="moreOutlet" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="moreScrollView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="moreTextView" candidateClass="UITextView"/>
-                <relationship kind="outlet" name="moreView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="moreViewButton" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="TableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TableViewCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="cellDataLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="divider" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="insideTableView" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="plusButton" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
