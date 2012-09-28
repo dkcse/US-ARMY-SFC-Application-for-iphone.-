@@ -36,6 +36,9 @@
 @property (nonatomic,strong) NSString *cardSubTitle;
 @property (nonatomic,strong) NSMutableArray *cardDetails;
 @property (nonatomic,strong) NSMutableArray *detailDescription;
+@property (nonatomic,strong) NSMutableArray *productNameFromSFCView;
+@property (nonatomic) NSInteger selectedProductRowNo;
+
 
 @property (nonatomic,strong) UITapGestureRecognizer *tapToAddIntoFavorites;
 @property (nonatomic,strong) NSManagedObjectContext *managedObjectContext;

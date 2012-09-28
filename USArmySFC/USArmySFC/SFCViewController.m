@@ -83,6 +83,7 @@
 @synthesize selectedProduct = _selectedProduct;
 @synthesize selectedCellToExpand = _selectedCellToExpand;
 @synthesize languageArray = _languageArray;
+@synthesize selectedRowNo = _selectedRowNo;
 
 
 
@@ -311,8 +312,7 @@
             [productName addObject:obj.name];
         }
         _productNameUnique=[[NSMutableArray alloc]init];
-      //  NSMutableArray *repeatedProductArray=[[NSMutableArray alloc]init];
-          for( NSString *name in productName)
+        for( NSString *name in productName)
         {
             NSMutableDictionary *dict = [[NSMutableDictionary alloc]init];
             [dict setValue:name forKey:@"name"];
@@ -516,12 +516,31 @@
 -(void) accessoryButtonDisclosureTapped:(UIButton *)sender
 {
     //language remaining
-    _selectedProduct = [_cardNameFromCoreData objectAtIndex:sender.tag] ;
-    _selectedCardName = [_selectedProduct name];
+    //_selectedProduct = [_cardNameFromCoreData objectAtIndex:sender.tag] ;
+    //_selectedCardName = [_selectedProduct name];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
+    [fetchRequest setEntity:entity];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@",[[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"]];
+    [fetchRequest setPredicate:predicate];
+    NSError *error;    
+    NSArray *fetchedResults;
+    
+    if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
+    {
+        NSLog(@"favorite details are :%@",fetchedResults);
+    }
+    else
+    {
+        NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+    }
+    _selectedProduct = [fetchedResults objectAtIndex:0];
+
+    _selectedRowNo = sender.tag;
     _selectedCardSubtitle = _selectedProduct.productDetail.sfc_subtitle;
     [self availableDescription];
     [self performSegueWithIdentifier:@"Show Card Description Segue" sender:self];
-}
+} 
 
 -(void) availableDescription
 {
@@ -673,6 +692,8 @@
         next.cardSubTitle = _selectedCardSubtitle;
         next.cardDetails = _attributeArray;
         next.detailDescription = _descriptionArray;
+        next.productNameFromSFCView = _productNameUnique;
+        next.selectedProductRowNo = _selectedRowNo;
     }
 }
 
@@ -694,7 +715,8 @@
     _checkForTableViewHidden = NO;
     TableViewCell *cell = (TableViewCell *)[self.cardsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
 
-    cell.productNameFromMainView = [[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"];
+    cell.productNameFromMainView = _productNameUnique;
+    cell.selectedRow = sender.tag;
     _selectedCellToExpand = sender.tag;
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];

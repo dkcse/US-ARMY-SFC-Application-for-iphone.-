@@ -23,6 +23,7 @@
 @synthesize languageArrayFromMainView = _languageArrayFromMainView;
 @synthesize attributeArray = _attributeArray;
 @synthesize descriptionArray = _descriptionArray;
+@synthesize selectedRow = _selectedRow;
 
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -109,7 +110,8 @@
     UIStoryboard *story = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     CardDescription *pushForDescriptionCustom = [story instantiateViewControllerWithIdentifier:@"cardDescriptor"];
     UINavigationController *referenceToNavController = [[UINavigationController alloc]init];
-    pushForDescriptionCustom.cardName = _productNameFromMainView;  
+    pushForDescriptionCustom.productNameFromSFCView = _productNameFromMainView;
+    pushForDescriptionCustom.selectedProductRowNo = _selectedRow;
     pushForDescriptionCustom.cardDetails = _attributeArray;
     pushForDescriptionCustom.detailDescription = _descriptionArray;
     referenceToNavController = [_celldelegate sendNavigationControllerInstance];

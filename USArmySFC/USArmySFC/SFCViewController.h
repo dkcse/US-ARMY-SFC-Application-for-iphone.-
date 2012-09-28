@@ -34,6 +34,7 @@
 
 @property (nonatomic,strong) NSMutableArray *cardNameFromCoreData;
 @property (nonatomic) BOOL test;
+@property (nonatomic) NSInteger selectedRowNo;
 
 - (IBAction)showFavoriteView:(id)sender;
 - (IBAction)showMoreOption:(id)sender;

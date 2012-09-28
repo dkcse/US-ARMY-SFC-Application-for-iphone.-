@@ -32,5 +32,6 @@
 @property (nonatomic) NSInteger productIndex;
 @property (nonatomic,strong) NSMutableArray *cellTextLabelArray;
 @property (nonatomic,strong) NSMutableArray *cellTextDetailArray;
+- (IBAction)goBack:(id)sender;
 
 @end

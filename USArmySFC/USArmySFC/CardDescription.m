@@ -65,7 +65,8 @@
 @synthesize cardSubTitle = _cardSubTitle;
 @synthesize detailDescription = _detailDescription;
 @synthesize lineOfContactCSV = _lineOfContactCSV;
-
+@synthesize productNameFromSFCView = _productNameFromSFCView;
+@synthesize selectedProductRowNo = _selectedProductRowNo;
 //setting views
 @synthesize commonView = _commonView;
 @synthesize mapView = _mapView;
@@ -84,6 +85,7 @@
 {
     [super viewDidLoad];
     [self allocate];
+    NSLog(@"array ===: %@",_contactTypeArray);
     _commonView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
     [_guidelineOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_guidelines_pressed.png"] forState:UIControlStateNormal];
 
@@ -115,9 +117,12 @@
     _tapToAddIntoFavorites.delegate = self;
     _tapToAddIntoFavorites = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTapToAddIntoFavorites:)];
     [self.favoriteSelectionImage addGestureRecognizer:_tapToAddIntoFavorites];
-    
-    _cardNameLabel.text = _cardName;
-    _cardSubtitleLabel.text = _cardSubTitle;
+    _cardNameLabel.text = [[_productNameFromSFCView objectAtIndex:_selectedProductRowNo]valueForKey:@"name"];
+    if([_cardName length] > 0)
+    {
+        _cardNameLabel.text = _cardName;
+    }
+        _cardSubtitleLabel.text = _cardSubTitle;
     _cardSubtitleLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     _cardNameLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     _cardDescriptionTableView.backgroundColor = [UIColor clearColor];
@@ -300,14 +305,25 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc]init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
     [fetchRequest setEntity:entity];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@",_cardName];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@",[[_productNameFromSFCView objectAtIndex:_selectedProductRowNo]valueForKey:@"name"]];
     [fetchRequest setPredicate:predicate];
-    
+
+
+    if ([_cardName length] > 0)
+    {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name=%@",_cardName];
+        [fetchRequest setPredicate:predicate];
+    }
+           
     NSArray *fetchResults = [[NSArray alloc]init];
     NSError *error;
     if((fetchResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
     {
+        NSLog(@"fetch: %@",fetchResults);
     
+    }
+    else {
+        NSLog(@"error");
     }
     for (Product *obj in fetchResults)
     {
@@ -323,6 +339,7 @@
             }
         }
     }
+    NSLog(@"array====%@",_contactTypeArray);
  }
 
 -(void) storeContactCSVDataToCoreData
@@ -565,6 +582,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;    
         accessoryButton.tag = indexPath.row;
 
+        NSLog(@"array :%@",_productNameFromSFCView);
         cell.textLabel.text = [_cardDetails objectAtIndex:indexPath.row];
         return cell;    
     }
@@ -579,6 +597,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;    
         accessoryButton.tag = indexPath.row;
 
+        NSLog(@"contact type array :%@",_contactTypeArray);
         cell.textLabel.text = [[_contactTypeArray objectAtIndex:indexPath.row]stringByRemoveLeadingAndTrailingQuotes];
         return cell;
     }
@@ -599,7 +618,7 @@
 {
     UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     DetailDescriptionViewController *pushForDetail = [storyboard instantiateViewControllerWithIdentifier:@"detailDescriptor"]; 
-    pushForDetail.detailViewHeading = _cardName;
+    pushForDetail.detailViewHeading = [[_productNameFromSFCView objectAtIndex:_selectedProductRowNo]valueForKey:@"name"];
     pushForDetail.detailHeading = [_cardDetails objectAtIndex:sender.tag];
     pushForDetail.detailDescription = [_detailDescription objectAtIndex:sender.tag];
     [self.navigationController pushViewController:pushForDetail animated:YES];
@@ -611,8 +630,14 @@
     UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     ContactDetailDescription *pushForContactDescription = [storyboard instantiateViewControllerWithIdentifier:@"contactDescriptor"];
     pushForContactDescription.contactTypeName = [_contactTypeArray objectAtIndex:sender.tag];
-    pushForContactDescription.contactOfProductName = _cardName; 
-    pushForContactDescription.productNameFromContactDetail = _productNameFromContactCSV;
+    pushForContactDescription.contactOfProductName = [[_productNameFromSFCView objectAtIndex:_selectedProductRowNo]valueForKey:@"name"];
+
+    if([_cardName length] > 0)
+    {
+        pushForContactDescription.contactOfProductName = _cardName;
+    }
+                             
+        pushForContactDescription.productNameFromContactDetail = _productNameFromContactCSV;
     [self.navigationController pushViewController:pushForContactDescription animated:YES];
 }
 

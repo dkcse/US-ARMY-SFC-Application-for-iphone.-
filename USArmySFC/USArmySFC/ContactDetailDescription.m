@@ -149,4 +149,8 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (IBAction)goBack:(id)sender 
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 @end
