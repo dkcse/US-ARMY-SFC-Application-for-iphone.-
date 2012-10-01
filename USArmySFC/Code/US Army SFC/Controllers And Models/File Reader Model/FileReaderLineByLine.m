@@ -73,11 +73,11 @@
         {
             return nil;
         }
-        if(aPath == @"/Users/deepakkumar/US SFC/Contacts-Table.csv")
+        if([aPath isEqualToString:[[NSBundle mainBundle]pathForResource:@"Contacts-Table" ofType:@"csv"]])
         {
             _lineDelimiter = [[NSString alloc] initWithString:@"\n"];
         }
-        else if (aPath == @"/Users/deepakkumar/US SFC/Guidelines_Table.csv")
+        else if ([aPath isEqualToString:[[NSBundle mainBundle]pathForResource:@"Guidelines_Table" ofType:@"csv"]])
         {
             _lineDelimiter = [[NSString alloc]initWithString:@";"];
         }

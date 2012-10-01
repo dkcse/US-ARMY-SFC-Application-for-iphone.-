@@ -45,7 +45,6 @@
 
 -(void)layoutSubviews
 { 
-    NSLog(@"lang arra :%@",_languageArrayFromMainView);
     _cellDataLabel.backgroundColor = [UIColor clearColor];
     _insideTableView.delegate = self;
     _insideTableView.dataSource =self;
@@ -59,7 +58,7 @@
         _languageArray = [[NSMutableArray alloc] initWithObjects:@"English",@"German",nil];
     }    
     [_insideTableView reloadData];
-    _insideTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+    _insideTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];  
     
 }
 
@@ -84,7 +83,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
     }
     cell.backgroundColor = [UIColor clearColor];
-    self.divider.image = [UIImage imageNamed:@"note_divider.png"];
+    self.divider.backgroundColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];  
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     cell.textLabel.text = [self.languageArray objectAtIndex:indexPath.row]; 
     cell.textLabel.textColor = [UIColor colorWithRed:141.0/255.0 green:255.0/255.0 blue:224.0/255.0 alpha:1.0];

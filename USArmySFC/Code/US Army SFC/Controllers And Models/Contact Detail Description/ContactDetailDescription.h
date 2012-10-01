@@ -33,5 +33,6 @@
 @property (nonatomic,strong) NSMutableArray *cellTextLabelArray;
 @property (nonatomic,strong) NSMutableArray *cellTextDetailArray;
 - (IBAction)goBack:(id)sender;
+- (IBAction)editTableCell:(id)sender;
 
 @end

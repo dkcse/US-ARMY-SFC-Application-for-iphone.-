@@ -344,7 +344,7 @@
 
 -(void) storeContactCSVDataToCoreData
 {
-    FileReaderLineByLine *readerForContractsCSV = [[FileReaderLineByLine alloc] initWithFilePath:@"/Users/deepakkumar/US SFC/Contacts-Table.csv"];
+    FileReaderLineByLine *readerForContractsCSV = [[FileReaderLineByLine alloc] initWithFilePath:[[NSBundle mainBundle]pathForResource:@"Contacts-Table" ofType:@"csv"]];
     _lineOfContactCSV = nil;
     
 

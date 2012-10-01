@@ -153,4 +153,23 @@
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+- (IBAction)editTableCell:(id)sender
+{
+    [_contactDetailTableView setEditing: YES animated: YES];
+}
+
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath 
+{    
+    if (editingStyle == UITableViewCellEditingStyleDelete) 
+    {
+        NSLog(@"deleting");
+       // [_contactDetailTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }   
+    else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+    }   
+}
+
 @end

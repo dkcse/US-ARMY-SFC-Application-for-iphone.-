@@ -85,9 +85,11 @@
 @synthesize languageArray = _languageArray;
 @synthesize selectedRowNo = _selectedRowNo;
 
-
-
-
+#ifdef DEBUG
+#   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#   define DLog(...)
+#endif
 
 - (void)viewDidLoad
 {
@@ -131,7 +133,7 @@
 //        [userDefaults setBool:YES forKey:@"Something"];
 //        
 //        NSLog(@"Added");
-//    }    
+//    }  
     [self setMoreViewAttribute];
     [self setCardViewAttribute];
     [self setFavoriteViewAttribute];
@@ -141,8 +143,8 @@
 
 -(void) parseGuidelineCSV
 {
-    
-    FileReaderLineByLine * readerForGuidelinesCSV = [[FileReaderLineByLine alloc] initWithFilePath:@"/Users/deepakkumar/US SFC/Guidelines_Table.csv"];
+    //@"/Users/deepakkumar/US SFC/Guidelines_Table.csv"
+    FileReaderLineByLine * readerForGuidelinesCSV = [[FileReaderLineByLine alloc] initWithFilePath:[[NSBundle mainBundle]pathForResource:@"Guidelines_Table" ofType:@"csv"]];
     _lineOfGuidelineCSV = nil;
     
     while ((_lineOfGuidelineCSV = [readerForGuidelinesCSV readLine]))
@@ -158,8 +160,8 @@
             if([[_listOfCards objectAtIndex:j] isEqualToString:[_listOfCards objectAtIndex:j+1]])
             {
                 [_listOfCards removeObjectAtIndex:j+1];
-                NSLog(@"language = %@",[allLinedStrings objectAtIndex:((27*(j+1))+5)]);
-                NSLog(@"language = %@",[allLinedStrings objectAtIndex:((27*(j+2))+5)]);
+                DLog(@"language = %@",[allLinedStrings objectAtIndex:((27*(j+1))+5)]);
+                DLog(@"language = %@",[allLinedStrings objectAtIndex:((27*(j+2))+5)]);
             }
         }
         
@@ -287,7 +289,7 @@
     NSError *error;
     if (![_managedObjectContext save:&error]) 
     {
-        NSLog(@"couldn't save 1:%@",[error localizedDescription]);
+       DLog(@"couldn't save 1:%@",[error localizedDescription]);
     }
     
 }
@@ -333,11 +335,11 @@
             }
             
         }
-    NSLog(@"product name :%@",_productNameUnique);
+   DLog(@"product name :%@",_productNameUnique);
     }
     else
     {
-        NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+        DLog(@"error : %@  and %@",[error description],[error userInfo]);  
     }
 }
 
@@ -372,7 +374,7 @@
     }
     else
     {
-        NSLog(@"count = %d",[self.listOfCards count]);
+        DLog(@"count = %d",[self.listOfCards count]);
         return [_productNameUnique count]; 
     }
     
@@ -389,7 +391,7 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
             cell.backgroundColor = [UIColor clearColor];
         }
-        NSLog(@"data= %@",_storeFetchedName);
+        DLog(@"data= %@",_storeFetchedName);
         if([_storeFetchedName count] > 0)
         {
             Favorites *favourite = [self.storeFetchedName objectAtIndex:indexPath.row];
@@ -496,16 +498,16 @@
         
         if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
         {
-            NSLog(@"favorite details are :%@",fetchedResults);
+            DLog(@"favorite details are :%@",fetchedResults);
             _selectedProduct = [fetchedResults objectAtIndex:0];
             [self availableDescription];
         }
         else
         {
-            NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+            DLog(@"error : %@  and %@",[error description],[error userInfo]);  
         }
         
-        NSLog(@"sent data are = %@",[favourite name]);
+        DLog(@"sent data are = %@",[favourite name]);
         pushForDescription1.cardName = [favourite name];
         pushForDescription1.cardDetails = _attributeArray;
         pushForDescription1.detailDescription = _descriptionArray;
@@ -515,9 +517,6 @@
 
 -(void) accessoryButtonDisclosureTapped:(UIButton *)sender
 {
-    //language remaining
-    //_selectedProduct = [_cardNameFromCoreData objectAtIndex:sender.tag] ;
-    //_selectedCardName = [_selectedProduct name];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
     [fetchRequest setEntity:entity];
