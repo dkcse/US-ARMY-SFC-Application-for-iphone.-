@@ -106,6 +106,7 @@
     self.cardDescriptionTableView.dataSource = self;
     self.cardDescriptionTableView.userInteractionEnabled = YES;
     self.cardDescriptionTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+    [_cardDescriptionTableView setAllowsSelection:YES];
     
     _POCTableView.hidden = YES;
     self.POCTableView.delegate = self;
@@ -230,6 +231,7 @@
 
 - (IBAction)POCDescription:(id)sender
 {
+    [self.commonView bringSubviewToFront:_POCTableView];
     NSLog(@"POC description");
     [_POCOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_pressed_pressed.png"] forState:UIControlStateNormal];
     [_mapsOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_maps_normal.png"] forState:UIControlStateNormal];
@@ -339,7 +341,6 @@
             }
         }
     }
-    NSLog(@"array====%@",_contactTypeArray);
  }
 
 -(void) storeContactCSVDataToCoreData
@@ -581,8 +582,7 @@
         [cell setAccessoryView:accessoryButton];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;    
         accessoryButton.tag = indexPath.row;
-
-        NSLog(@"array :%@",_productNameFromSFCView);
+        NSLog(@"index :%@",[_cardDetails objectAtIndex:indexPath.row]);
         cell.textLabel.text = [_cardDetails objectAtIndex:indexPath.row];
         return cell;    
     }
@@ -597,7 +597,6 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;    
         accessoryButton.tag = indexPath.row;
 
-        NSLog(@"contact type array :%@",_contactTypeArray);
         cell.textLabel.text = [[_contactTypeArray objectAtIndex:indexPath.row]stringByRemoveLeadingAndTrailingQuotes];
         return cell;
     }
@@ -607,38 +606,32 @@
 {
     if(tableView == _cardDescriptionTableView)
     {
-    NSLog(@"row selected are %@",indexPath.row);
+    NSLog(@"row selected are %d",indexPath.row);
+        UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+        DetailDescriptionViewController *pushForDetail = [storyboard instantiateViewControllerWithIdentifier:@"detailDescriptor"]; 
+        pushForDetail.detailViewHeading = [[_productNameFromSFCView objectAtIndex:_selectedProductRowNo]valueForKey:@"name"];
+        pushForDetail.detailHeading = [_cardDetails objectAtIndex:indexPath.row];
+        pushForDetail.detailDescription = [_detailDescription objectAtIndex:indexPath.row];
+        [self.navigationController pushViewController:pushForDetail animated:YES];
+
     }
-    else {
-        NSLog(@"from POC table");
-    }
-}
-
-- (void) accessoryButtonDisclosureTapped : (UIButton *)sender
-{
-    UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    DetailDescriptionViewController *pushForDetail = [storyboard instantiateViewControllerWithIdentifier:@"detailDescriptor"]; 
-    pushForDetail.detailViewHeading = [[_productNameFromSFCView objectAtIndex:_selectedProductRowNo]valueForKey:@"name"];
-    pushForDetail.detailHeading = [_cardDetails objectAtIndex:sender.tag];
-    pushForDetail.detailDescription = [_detailDescription objectAtIndex:sender.tag];
-    [self.navigationController pushViewController:pushForDetail animated:YES];
-    
-}
-
--(void) accessoryButtonDisclosureForContactTapped : (UIButton *)sender
-{
-    UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    ContactDetailDescription *pushForContactDescription = [storyboard instantiateViewControllerWithIdentifier:@"contactDescriptor"];
-    pushForContactDescription.contactTypeName = [_contactTypeArray objectAtIndex:sender.tag];
-    pushForContactDescription.contactOfProductName = [[_productNameFromSFCView objectAtIndex:_selectedProductRowNo]valueForKey:@"name"];
-
-    if([_cardName length] > 0)
+    else 
     {
-        pushForContactDescription.contactOfProductName = _cardName;
-    }
-                             
+        UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+        ContactDetailDescription *pushForContactDescription = [storyboard instantiateViewControllerWithIdentifier:@"contactDescriptor"];
+        pushForContactDescription.contactTypeName = [_contactTypeArray objectAtIndex:indexPath.row];
+        pushForContactDescription.contactOfProductName = [[_productNameFromSFCView objectAtIndex:_selectedProductRowNo]valueForKey:@"name"];
+        
+        if([_cardName length] > 0)
+        {
+            pushForContactDescription.contactOfProductName = _cardName;
+        }
+        
         pushForContactDescription.productNameFromContactDetail = _productNameFromContactCSV;
-    [self.navigationController pushViewController:pushForContactDescription animated:YES];
+        [self.navigationController pushViewController:pushForContactDescription animated:YES];
+
+    }
 }
+
 
 @end

@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import <MediaPlayer/MediaPlayer.h>
+
 
 @interface SFCAppDelegate : UIResponder <UIApplicationDelegate>
 

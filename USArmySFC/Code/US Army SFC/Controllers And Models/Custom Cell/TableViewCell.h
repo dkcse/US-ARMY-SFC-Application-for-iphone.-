@@ -8,10 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "CardDescription.h"
+#import "Product.h"
+#import "Description.h"
+#import "NSString+RemoveQuotes.h"
+
 
 @protocol customDelegate <NSObject>
 
 - (UINavigationController *) sendNavigationControllerInstance;
+- (NSDictionary *) sendAttributeAndDescription:(Product *)selectedProduct;
 
 @end
 
@@ -30,5 +35,8 @@
 @property (nonatomic,strong) NSMutableArray *attributeArray;
 @property (nonatomic,strong) NSMutableArray *descriptionArray;
 @property (nonatomic) NSInteger selectedRow;
+@property (nonatomic) NSDictionary *description;
+@property (nonatomic,strong) Product *selectedProduct;
+@property (nonatomic,strong)NSManagedObjectContext *managedObjectContext;
 
 @end

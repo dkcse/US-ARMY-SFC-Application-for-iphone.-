@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A39CA43161C3AF900257B5B /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A39CA42161C3AF900257B5B /* MediaPlayer.framework */; };
+		6A39CA4F161C480F00257B5B /* Splash2.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 6A39CA4E161C480F00257B5B /* Splash2.mp4 */; };
+		6A39CA5A161C6D0400257B5B /* CustomMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A39CA59161C6D0400257B5B /* CustomMoviePlayerViewController.m */; };
 		6A9D49481619805D009D846B /* Guidelines_Table.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6A9D49471619805D009D846B /* Guidelines_Table.csv */; };
 		6ADE5E87160052F600D76A53 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ADE5E86160052F600D76A53 /* UIKit.framework */; };
 		6ADE5E89160052F600D76A53 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ADE5E88160052F600D76A53 /* Foundation.framework */; };
@@ -126,7 +129,6 @@
 		6ADF833A161959F300E8FCA3 /* 2.7.2 Edit Points of Contact.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADF82BE161959F300E8FCA3 /* 2.7.2 Edit Points of Contact.jpg */; };
 		6ADF833B161959F300E8FCA3 /* 2.8 Edit Notes.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADF82BF161959F300E8FCA3 /* 2.8 Edit Notes.jpg */; };
 		6ADF833C161959F300E8FCA3 /* 2.9 Add Custom Entry.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6ADF82C0161959F300E8FCA3 /* 2.9 Add Custom Entry.jpg */; };
-		6ADF833D161959F300E8FCA3 /* Splash Screen 0.2.mov in Resources */ = {isa = PBXBuildFile; fileRef = 6ADF82C2161959F300E8FCA3 /* Splash Screen 0.2.mov */; };
 		6ADF833E161959F300E8FCA3 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ADF82C4161959F300E8FCA3 /* MainStoryboard.storyboard */; };
 		6ADF834216195B1200E8FCA3 /* NSString+RemoveQuotes.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ADF834116195B1200E8FCA3 /* NSString+RemoveQuotes.m */; };
 		6ADF834616195B8000E8FCA3 /* SFCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ADF834516195B8000E8FCA3 /* SFCAppDelegate.m */; };
@@ -145,6 +147,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6A39CA42161C3AF900257B5B /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		6A39CA4E161C480F00257B5B /* Splash2.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Splash2.mp4; sourceTree = "<group>"; };
+		6A39CA58161C6D0400257B5B /* CustomMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomMoviePlayerViewController.h; sourceTree = "<group>"; };
+		6A39CA59161C6D0400257B5B /* CustomMoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomMoviePlayerViewController.m; sourceTree = "<group>"; };
 		6A9D49471619805D009D846B /* Guidelines_Table.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Guidelines_Table.csv; path = "../../../../US SFC/Guidelines_Table.csv"; sourceTree = "<group>"; };
 		6ADE5E82160052F600D76A53 /* USArmySFC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = USArmySFC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6ADE5E86160052F600D76A53 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -283,7 +289,6 @@
 		6ADF82BE161959F300E8FCA3 /* 2.7.2 Edit Points of Contact.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "2.7.2 Edit Points of Contact.jpg"; sourceTree = "<group>"; };
 		6ADF82BF161959F300E8FCA3 /* 2.8 Edit Notes.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "2.8 Edit Notes.jpg"; sourceTree = "<group>"; };
 		6ADF82C0161959F300E8FCA3 /* 2.9 Add Custom Entry.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "2.9 Add Custom Entry.jpg"; sourceTree = "<group>"; };
-		6ADF82C2161959F300E8FCA3 /* Splash Screen 0.2.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "Splash Screen 0.2.mov"; sourceTree = "<group>"; };
 		6ADF82C4161959F300E8FCA3 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		6ADF834016195B1200E8FCA3 /* NSString+RemoveQuotes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RemoveQuotes.h"; sourceTree = "<group>"; };
 		6ADF834116195B1200E8FCA3 /* NSString+RemoveQuotes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+RemoveQuotes.m"; sourceTree = "<group>"; };
@@ -315,6 +320,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A39CA43161C3AF900257B5B /* MediaPlayer.framework in Frameworks */,
 				6AE58D2016105506004434F9 /* QuartzCore.framework in Frameworks */,
 				6ADE5E87160052F600D76A53 /* UIKit.framework in Frameworks */,
 				6ADEA8E0160707BA00A14E45 /* CoreData.framework in Frameworks */,
@@ -326,6 +332,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A39CA57161C6D0300257B5B /* VideoController */ = {
+			isa = PBXGroup;
+			children = (
+				6A39CA58161C6D0400257B5B /* CustomMoviePlayerViewController.h */,
+				6A39CA59161C6D0400257B5B /* CustomMoviePlayerViewController.m */,
+			);
+			path = VideoController;
+			sourceTree = "<group>";
+		};
 		6ADE5E77160052F600D76A53 = {
 			isa = PBXGroup;
 			children = (
@@ -348,6 +363,7 @@
 		6ADE5E85160052F600D76A53 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6A39CA42161C3AF900257B5B /* MediaPlayer.framework */,
 				6AE58D1F16105505004434F9 /* QuartzCore.framework */,
 				6ADEA8DE160707A100A14E45 /* CoreData.framework */,
 				6ADE5E86160052F600D76A53 /* UIKit.framework */,
@@ -397,6 +413,7 @@
 		6ADF8222161957E200E8FCA3 /* Controllers And Models */ = {
 			isa = PBXGroup;
 			children = (
+				6A39CA57161C6D0300257B5B /* VideoController */,
 				6ADF835B16195CD000E8FCA3 /* SFC Main View Controller */,
 				6ADF835716195CA300E8FCA3 /* File Reader Model */,
 				6ADF834316195B8000E8FCA3 /* SFCAppDelegate */,
@@ -632,7 +649,7 @@
 		6ADF82C1161959F300E8FCA3 /* 11.09.26 - splash video */ = {
 			isa = PBXGroup;
 			children = (
-				6ADF82C2161959F300E8FCA3 /* Splash Screen 0.2.mov */,
+				6A39CA4E161C480F00257B5B /* Splash2.mp4 */,
 			);
 			path = "11.09.26 - splash video";
 			sourceTree = "<group>";
@@ -921,13 +938,13 @@
 				6ADF833A161959F300E8FCA3 /* 2.7.2 Edit Points of Contact.jpg in Resources */,
 				6ADF833B161959F300E8FCA3 /* 2.8 Edit Notes.jpg in Resources */,
 				6ADF833C161959F300E8FCA3 /* 2.9 Add Custom Entry.jpg in Resources */,
-				6ADF833D161959F300E8FCA3 /* Splash Screen 0.2.mov in Resources */,
 				6ADF833E161959F300E8FCA3 /* MainStoryboard.storyboard in Resources */,
 				6ADF83611619655500E8FCA3 /* projectplan.pdf in Resources */,
 				6ADF83641619656200E8FCA3 /* ArchitectureDiagram.pdf in Resources */,
 				6ADF837116197AC900E8FCA3 /* Contacts-Table.csv in Resources */,
 				6ADF837416197AC900E8FCA3 /* SFC_content_formatted.xml in Resources */,
 				6A9D49481619805D009D846B /* Guidelines_Table.csv in Resources */,
+				6A39CA4F161C480F00257B5B /* Splash2.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -953,6 +970,7 @@
 				6ADF835A16195CA300E8FCA3 /* FileReaderLineByLine.m in Sources */,
 				6ADF835E16195CD000E8FCA3 /* SFCViewController.m in Sources */,
 				6ADF83681619677300E8FCA3 /* Favorites.xcdatamodeld in Sources */,
+				6A39CA5A161C6D0400257B5B /* CustomMoviePlayerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -965,8 +983,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Rohit Singal (UGQKS7R3ZE)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Rohit Singal (UGQKS7R3ZE)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Ankur Dhanuka (HAWR45Y3YX)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ankur Dhanuka (HAWR45Y3YX)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks/**",
@@ -985,8 +1003,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "0DACFEA6-6DD4-455F-9209-7623E993E947";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0DACFEA6-6DD4-455F-9209-7623E993E947";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -997,8 +1015,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Rohit Singal (UGQKS7R3ZE)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Rohit Singal (UGQKS7R3ZE)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Ankur Dhanuka (HAWR45Y3YX)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ankur Dhanuka (HAWR45Y3YX)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks/**",
@@ -1011,8 +1029,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "0DACFEA6-6DD4-455F-9209-7623E993E947";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0DACFEA6-6DD4-455F-9209-7623E993E947";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

@@ -24,6 +24,9 @@
 @synthesize attributeArray = _attributeArray;
 @synthesize descriptionArray = _descriptionArray;
 @synthesize selectedRow = _selectedRow;
+@synthesize description = _description;
+@synthesize selectedProduct = _selectedProduct;
+@synthesize managedObjectContext = _managedObjectContext;
 
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -45,6 +48,8 @@
 
 -(void)layoutSubviews
 { 
+    id appDelegate = (id)[[UIApplication sharedApplication] delegate];
+    self.managedObjectContext = [appDelegate managedObjectContext];
     _cellDataLabel.backgroundColor = [UIColor clearColor];
     _insideTableView.delegate = self;
     _insideTableView.dataSource =self;
@@ -103,16 +108,49 @@
 -(void) accessoryButtonDisclosureTapped:(UIButton *)sender
 {
     NSString *nameForCardLabel = [[NSString alloc]init];
-    NSLog(@"array = %@",_productNameFromMainView);
     nameForCardLabel = [_cardArrayForTableView objectAtIndex:_index];
-    NSLog(@"card name = %@",nameForCardLabel);
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
+    [fetchRequest setEntity:entity];
+    NSLog(@"name are : %@",[[_productNameFromMainView objectAtIndex:_selectedRow]valueForKey:@"name"]);
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name=%@",[[_productNameFromMainView objectAtIndex:_selectedRow]valueForKey:@"name"]];
+    [fetchRequest setPredicate:predicate];
+    NSError *error;
+    NSArray *fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    
+    if(([fetchedResults count] > 0))
+    {
+        NSArray *fetchedName = [[NSArray alloc]init];
+        fetchedName = fetchedResults;
+       // NSMutableArray *productName = [[NSMutableArray alloc]init];
+        
+        for(Product *obj in fetchedResults)
+        {
+            NSString *language = [_languageArray objectAtIndex:sender.tag];
+            if([[obj.productDetail.language stringByRemoveLeadingAndTrailingQuotes] isEqualToString:language])
+            {
+                _selectedProduct = obj;
+                NSLog(@"lang are : %@",_selectedProduct);
+            }
+        }
+    }
+    else
+    {
+        NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+    }
+
+        NSLog(@"selected product : %@",_selectedProduct);
     UIStoryboard *story = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     CardDescription *pushForDescriptionCustom = [story instantiateViewControllerWithIdentifier:@"cardDescriptor"];
     UINavigationController *referenceToNavController = [[UINavigationController alloc]init];
     pushForDescriptionCustom.productNameFromSFCView = _productNameFromMainView;
     pushForDescriptionCustom.selectedProductRowNo = _selectedRow;
-    pushForDescriptionCustom.cardDetails = _attributeArray;
-    pushForDescriptionCustom.detailDescription = _descriptionArray;
+    _description = [_celldelegate sendAttributeAndDescription:_selectedProduct];
+    
+    pushForDescriptionCustom.cardDetails = [[_description allKeys].mutableCopy objectAtIndex:0];
+    pushForDescriptionCustom.detailDescription = [[_description allValues].mutableCopy objectAtIndex:0];
+    NSLog(@"array aaa :%@",pushForDescriptionCustom.cardDetails);
     referenceToNavController = [_celldelegate sendNavigationControllerInstance];
     [referenceToNavController pushViewController:pushForDescriptionCustom animated:YES];
     

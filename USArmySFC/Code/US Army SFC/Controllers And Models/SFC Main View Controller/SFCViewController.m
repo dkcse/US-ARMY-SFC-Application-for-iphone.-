@@ -34,15 +34,16 @@
 @property (nonatomic,strong) NSMutableArray *descriptionArray;
 @property (nonatomic,strong) Product *selectedProduct;
 @property (nonatomic) NSInteger selectedCellToExpand;
-
 @property (nonatomic,strong) NSMutableArray *languageArray;
-
+@property (nonatomic) BOOL viewDidLoadFirst;
+@property (nonatomic,strong) NSMutableArray *indexWithPlusButton;
 
 @end
 
 @implementation SFCViewController
 
 @synthesize listOfCards = _listOfCards;
+@synthesize movieContainerView = _movieContainerView;
 @synthesize favoritesView = _favoritesView;
 @synthesize cardsView = _cardsView;
 @synthesize moreView = _moreView;
@@ -65,9 +66,8 @@
 @synthesize favoriteTableView = _favoriteTableView;
 @synthesize productNameUnique = _productNameUnique;
 @synthesize test = _test;
-
+@synthesize viewDidLoadFirst = _viewDidLoadFirst;
 //for csv file
-
 
 @synthesize lineOfGuidelineCSV = _lineOfGuidelineCSV;
 @synthesize cardName = _cardName;
@@ -84,6 +84,8 @@
 @synthesize selectedCellToExpand = _selectedCellToExpand;
 @synthesize languageArray = _languageArray;
 @synthesize selectedRowNo = _selectedRowNo;
+@synthesize indexWithPlusButton = _indexWithPlusButton;
+@synthesize theMovie = _theMovie;
 
 #ifdef DEBUG
 #   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
@@ -94,6 +96,52 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerPlaybackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:self.theMovie];
+    
+    @try 
+    {
+        NSBundle *Bundle = [NSBundle mainBundle];
+        NSString *moviePath = [Bundle pathForResource:@"Splash2" ofType:@"mp4"];
+        NSURL *videoURL = [NSURL fileURLWithPath:moviePath];
+        
+//        _theMovie = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL]; 
+//       // [self presentMoviePlayerViewControllerAnimated:_theMovie];
+//        _theMovie.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
+//       // [_theMovie.view setFrame: self.view.bounds];
+//        _theMovie.moviePlayer.controlStyle  = MPMovieControlStyleNone;
+//        [self.movieContainerView addSubview:_theMovie.view];
+        
+        
+        
+       _theMovie = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
+        
+        // Register for the playback finished notification.
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(playerPlaybackDidFinish:)
+                                                     name:MPMoviePlayerPlaybackDidFinishNotification
+                                                   object:_theMovie.moviePlayer];
+        
+        
+        //Present
+        [self presentModalViewController:_theMovie animated:NO];
+        _theMovie.moviePlayer.controlStyle = MPMovieControlStyleEmbedded;
+        _theMovie.moviePlayer.scalingMode = MPMovieScalingModeAspectFill;
+        
+        // Play the movie!
+       _theMovie.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
+        [_theMovie.moviePlayer play];
+        
+        
+
+        
+    }
+    @catch (NSException *exception)
+    {
+        NSLog(@"%@",[exception description]);
+    }
+      
+    _viewDidLoadFirst = YES;
     _cardsTableView.delegate = self;
     _cardsTableView.dataSource = self;
     _favoriteTableView.delegate = self;
@@ -106,6 +154,7 @@
     _cardNoWithDiffLang = [[NSMutableArray alloc]init] ;
     id appDelegate = (id)[[UIApplication sharedApplication] delegate];
     self.managedObjectContext = [appDelegate managedObjectContext];
+    
     
     [_cardOutlet setBackgroundImage:[UIImage imageNamed:@"tab_cards_selected.png"] forState:UIControlStateNormal];
     NSString *path = [[NSBundle mainBundle] pathForResource:@"SFC_content_formatted" ofType:@"xml"];
@@ -138,8 +187,32 @@
     [self setCardViewAttribute];
     [self setFavoriteViewAttribute];
     [self parseGuidelineCSV];
-      
 }
+
+- (void) playerPlaybackDidFinish:(NSNotification*)notification
+{
+    NSLog(@"WHY?");
+    
+    //self.movieContainerView.hidden = YES;
+    
+   // [_theMovie dismissModalViewControllerAnimated:NO];
+}
+
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
+    
+    CGRect frame = CGRectMake(20.0, 372.0,64.0,38.0);
+    _favoriteOutlet.frame = frame;
+    
+    if(!(_viewDidLoadFirst))
+    {
+        [self fetchFromCoreData];
+    }
+    [_favoriteTableView reloadData];
+}
+
 
 -(void) parseGuidelineCSV
 {
@@ -210,7 +283,7 @@
     _checkForTableViewHidden = YES;
     self.moreNavigationButton.hidden = YES;
     
-    _listOfCards = [[NSMutableArray alloc]init]; 
+    _listOfCards = [[NSMutableArray alloc]init];
     _numberOfRows = 14;
     _cardsTableView.backgroundColor = [UIColor blackColor];
     
@@ -335,7 +408,6 @@
             }
             
         }
-   DLog(@"product name :%@",_productNameUnique);
     }
     else
     {
@@ -513,32 +585,65 @@
         pushForDescription1.detailDescription = _descriptionArray;
         [self.navigationController pushViewController:pushForDescription1 animated:YES];
     }
+    else
+    {
+        NSLog(@"second tableview selected");
+        if( [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"isRepeated"]isEqualToString:@"notRepeated"])        {
+            NSLog(@"arrow pressed");
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
+            [fetchRequest setEntity:entity];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@",[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"name"]];
+            [fetchRequest setPredicate:predicate];
+            NSError *error;    
+            NSArray *fetchedResults;
+            
+            if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
+            {
+                NSLog(@"favorite details are :%@",fetchedResults);
+            }
+            else
+            {
+                NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+            }
+            _selectedProduct = [fetchedResults objectAtIndex:0];
+            
+            _selectedRowNo = indexPath.row;
+            _selectedCardSubtitle = _selectedProduct.productDetail.sfc_subtitle;
+            [self availableDescription];
+            [self performSegueWithIdentifier:@"Show Card Description Segue" sender:self];
+
+        }
+        else {
+            NSLog(@"plus pressed");
+        }
+    }
 }
 
 -(void) accessoryButtonDisclosureTapped:(UIButton *)sender
 {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
-    [fetchRequest setEntity:entity];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@",[[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"]];
-    [fetchRequest setPredicate:predicate];
-    NSError *error;    
-    NSArray *fetchedResults;
-    
-    if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
-    {
-        NSLog(@"favorite details are :%@",fetchedResults);
-    }
-    else
-    {
-        NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
-    }
-    _selectedProduct = [fetchedResults objectAtIndex:0];
-
-    _selectedRowNo = sender.tag;
-    _selectedCardSubtitle = _selectedProduct.productDetail.sfc_subtitle;
-    [self availableDescription];
-    [self performSegueWithIdentifier:@"Show Card Description Segue" sender:self];
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
+//    [fetchRequest setEntity:entity];
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@",[[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"]];
+//    [fetchRequest setPredicate:predicate];
+//    NSError *error;    
+//    NSArray *fetchedResults;
+//    
+//    if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
+//    {
+//        NSLog(@"favorite details are :%@",fetchedResults);
+//    }
+//    else
+//    {
+//        NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+//    }
+//    _selectedProduct = [fetchedResults objectAtIndex:0];
+//
+//    _selectedRowNo = sender.tag;
+//    _selectedCardSubtitle = _selectedProduct.productDetail.sfc_subtitle;
+//    [self availableDescription];
+//    [self performSegueWithIdentifier:@"Show Card Description Segue" sender:self];
 } 
 
 -(void) availableDescription
@@ -673,7 +778,7 @@
     NSMutableArray *descriptionWithoutQuote= [[NSMutableArray alloc]init];
     for (int count1 = 0; count1 < [_descriptionArray count]; count1++)
     {
-        NSString *attribute = [[_descriptionArray objectAtIndex:count1]stringByRemoveLeadingAndTrailingQuotes];
+        NSString *attribute = [_descriptionArray objectAtIndex:count1];
         [descriptionWithoutQuote addObject:attribute];
     }
 
@@ -698,7 +803,7 @@
 
 - (void) accessoryButtonCollapseTapped : (UIButton *) sender
 {
-    _checkForTableViewHidden = YES;
+     _checkForTableViewHidden = YES;
     [_cardsTableView reloadData];
 }
 
@@ -708,8 +813,29 @@
     return self.navigationController;
 }
 
+- (NSDictionary *) sendAttributeAndDescription : (Product *)sentProduct
+{
+    NSLog(@"prod are :%@",sentProduct);
+    _selectedProduct = sentProduct;
+    [self availableDescription];
+    NSLog(@"attr araa : %@",_attributeArray);
+    NSLog(@"attr araa : %@",_descriptionArray);
+    NSArray *attribute = [[NSArray alloc]init];
+    attribute = [_attributeArray mutableCopy];
+    
+    NSArray *description = [[NSArray alloc]init];
+    description = [_descriptionArray mutableCopy];
+  //  NSMutableDictionary *descriptionDictionary = [[NSMutableDictionary alloc]initWithObjects:description forKeys:attribute];
+    NSDictionary *descriptionDictionary = [NSDictionary dictionaryWithObjectsAndKeys:description,attribute, nil];
+    NSLog(@"sent dictionary are: %@",descriptionDictionary);
+    return descriptionDictionary;
+}
+
 - (void) accessoryButtonExpandTapped:(UIButton *)sender
 {
+    _indexWithPlusButton = [[NSMutableArray alloc]init];
+    [_indexWithPlusButton addObject:[NSNumber numberWithInteger:sender.tag]];
+    NSLog(@"indexes are : %@",_indexWithPlusButton);
     NSLog(@"name = %@",[[[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"]stringByRemoveLeadingAndTrailingQuotes]);
     _checkForTableViewHidden = NO;
     TableViewCell *cell = (TableViewCell *)[self.cardsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
@@ -722,7 +848,7 @@
     [fetchRequest setEntity:entity];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@",[[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"]];
     [fetchRequest setPredicate:predicate];
-    NSError *error;    
+    NSError *error;
     NSArray *fetchedResults;
     
     if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
@@ -736,14 +862,6 @@
         NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
     }
      [_languageArray removeAllObjects];
-    for (int languageCount = 0 ; languageCount < [fetchedResults count]; languageCount++)
-    {
-        Product *product = [fetchedResults objectAtIndex:languageCount];
-        _selectedProduct = [fetchedResults objectAtIndex:languageCount];
-        [self availableDescription];
-        NSString *name = product.productDetail.language;
-        [_languageArray addObject:[name stringByRemoveLeadingAndTrailingQuotes]];
-    }
 
    
     cell.languageArrayFromMainView = _languageArray;
@@ -770,6 +888,7 @@
     [self setFavoriteOutlet:nil];
     [self setCardOutlet:nil];
     [self setMoreOutlet:nil];
+    [self setMovieContainerView:nil];
     [super viewDidUnload];
 }
 
@@ -787,11 +906,10 @@
     [self.navigationController.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:48.0/255.0 green:49.0/255.0 blue:37.0/255.0 alpha:1.0],UITextAttributeTextColor, nil]];
     self.cardsView.hidden =YES;
     self.moreView.hidden = YES;
+    _viewDidLoadFirst = NO;
     [self fetchFromCoreData];
      self.favoritesView.hidden = NO;
     [_favoriteTableView reloadData];
-   
-    
 }
 
 - (void) fetchFromCoreData
@@ -802,22 +920,33 @@
     
     NSError *error;    
     NSArray *fetchedResults;
+    fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
     
-    if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
+    if([fetchedResults count] > 0)
     {
         NSArray *fetchedName = [[NSArray alloc]init];
         fetchedName = fetchedResults;
         _storeFetchedName = [[NSMutableArray alloc]init];
         _storeFetchedName = [fetchedName mutableCopy];
+        NSLog(@"result are : %@",fetchedResults);
     }
     else
     {
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"FAVORITE!"
+                                                          message:@"No favorite PRODUCT Selected,select PRODUCT from list as FAVORITE"
+                                                         delegate:nil
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        [message show];
+
         NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
     }
+    NSLog(@"result are : %@",fetchedResults);
+    _viewDidLoadFirst = YES;
 }
 
 
-- (IBAction)showMoreOption:(id)sender 
+- (IBAction)showMoreOption:(id)sender
 {
         [_moreOutlet setBackgroundImage:[UIImage imageNamed:@"tab_more_selected.png"] forState:UIControlStateNormal];
         [_cardOutlet setBackgroundImage:[UIImage imageNamed:@"tab_cards_normal.png"] forState:UIControlStateNormal];
@@ -854,6 +983,16 @@
     self.favoritesView.hidden = YES;
     self.moreView.hidden = YES;
     self.cardsView.hidden = NO;
+}
+
+- (IBAction)takeFeedback:(id)sender
+{
+    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"FAVORITE!"
+                                                      message:@"Mail is not configured in this device"
+                                                     delegate:nil
+                                            cancelButtonTitle:@"OK"
+                                            otherButtonTitles:nil];
+    [message show];
 }
 
 

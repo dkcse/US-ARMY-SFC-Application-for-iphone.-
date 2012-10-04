@@ -15,8 +15,12 @@
 #import "FileReaderLineByLine.h"
 #import "Description.h"
 #import "NSString+RemoveQuotes.h"
+#import "CustomMoviePlayerViewController.h"
+
 
 @interface SFCViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,customDelegate,NSXMLParserDelegate>
+
+@property (strong, nonatomic) IBOutlet UIView *movieContainerView;
 
 @property (strong, nonatomic) IBOutlet UIView *favoritesView;
 @property (strong, nonatomic) IBOutlet UIView *moreView;
@@ -36,8 +40,11 @@
 @property (nonatomic) BOOL test;
 @property (nonatomic) NSInteger selectedRowNo;
 
+@property (strong,nonatomic) MPMoviePlayerViewController *theMovie;
+
 - (IBAction)showFavoriteView:(id)sender;
 - (IBAction)showMoreOption:(id)sender;
 - (IBAction)showAvailableCards:(id)sender;
+- (IBAction)takeFeedback:(id)sender;
 
 @end

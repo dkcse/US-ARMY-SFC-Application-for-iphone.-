@@ -47,7 +47,7 @@
     _descriptionHeading.text = _detailHeading;
     _descriptionHeading.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     _descriptionTextView.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
-    _descriptionTextView.text = _detailDescription;
+    _descriptionTextView.text = [_detailDescription stringByRemoveLeadingAndTrailingQuotes];
 }
 
 - (void)viewDidLoad
