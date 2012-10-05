@@ -28,7 +28,6 @@
 @synthesize selectedProduct = _selectedProduct;
 @synthesize managedObjectContext = _managedObjectContext;
 
-
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -63,10 +62,10 @@
         _languageArray = [[NSMutableArray alloc] initWithObjects:@"English",@"German",nil];
     }    
     [_insideTableView reloadData];
-    _insideTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];  
+    _insideTableView.separatorColor = [UIColor colorWithRed:141.0/255.0 green:255.0/255.0 blue:224.0/255.0 alpha:1.0];
+
     
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection: (NSInteger)section;
 {
@@ -80,7 +79,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    
     static NSString *cellId = @"actionCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: cellId];
     if (cell == nil)
@@ -104,8 +102,12 @@
     return cell;
 }
 
-
 -(void) accessoryButtonDisclosureTapped:(UIButton *)sender
+{
+    NSLog(@"accessory button pressed");
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *nameForCardLabel = [[NSString alloc]init];
     nameForCardLabel = [_cardArrayForTableView objectAtIndex:_index];
@@ -123,11 +125,11 @@
     {
         NSArray *fetchedName = [[NSArray alloc]init];
         fetchedName = fetchedResults;
-       // NSMutableArray *productName = [[NSMutableArray alloc]init];
+        // NSMutableArray *productName = [[NSMutableArray alloc]init];
         
         for(Product *obj in fetchedResults)
         {
-            NSString *language = [_languageArray objectAtIndex:sender.tag];
+            NSString *language = [_languageArray objectAtIndex:indexPath.row];
             if([[obj.productDetail.language stringByRemoveLeadingAndTrailingQuotes] isEqualToString:language])
             {
                 _selectedProduct = obj;
@@ -139,8 +141,8 @@
     {
         NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
     }
-
-        NSLog(@"selected product : %@",_selectedProduct);
+    
+    NSLog(@"selected product : %@",_selectedProduct);
     UIStoryboard *story = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     CardDescription *pushForDescriptionCustom = [story instantiateViewControllerWithIdentifier:@"cardDescriptor"];
     UINavigationController *referenceToNavController = [[UINavigationController alloc]init];
@@ -153,7 +155,5 @@
     NSLog(@"array aaa :%@",pushForDescriptionCustom.cardDetails);
     referenceToNavController = [_celldelegate sendNavigationControllerInstance];
     [referenceToNavController pushViewController:pushForDescriptionCustom animated:YES];
-    
 }
-
 @end

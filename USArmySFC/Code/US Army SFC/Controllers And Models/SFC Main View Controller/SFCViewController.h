@@ -20,8 +20,6 @@
 
 @interface SFCViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,customDelegate,NSXMLParserDelegate>
 
-@property (strong, nonatomic) IBOutlet UIView *movieContainerView;
-
 @property (strong, nonatomic) IBOutlet UIView *favoritesView;
 @property (strong, nonatomic) IBOutlet UIView *moreView;
 @property (strong, nonatomic) IBOutlet UIView *cardsView;
