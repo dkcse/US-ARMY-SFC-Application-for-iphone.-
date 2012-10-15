@@ -40,7 +40,9 @@
 @property (nonatomic,strong) NSMutableArray *languageArray;
 @property (nonatomic) BOOL viewDidLoadFirst;
 @property (nonatomic,strong) NSMutableSet *indexWithPlusButton;
+@property (nonatomic,strong) NSMutableSet *indexWithExpandedSeperator;
 @property (nonatomic,strong) NSArray *fetchFavoriteName;
+@property (nonatomic) BOOL cellLabelColor;
 
 @end
 
@@ -50,6 +52,7 @@
 @synthesize favoritesView = _favoritesView;
 @synthesize cardsView = _cardsView;
 @synthesize moreView = _moreView;
+@synthesize favoritesEditView = _favoritesEditView;
 @synthesize cardsTableView = _cardsTableView;
 @synthesize moreTextView = _moreTextView;
 @synthesize moreScrollView = _moreScrollView;
@@ -94,7 +97,12 @@
 @synthesize languageArray = _languageArray;
 @synthesize selectedRowNo = _selectedRowNo;
 @synthesize indexWithPlusButton = _indexWithPlusButton;
+@synthesize indexWithExpandedSeperator = _indexWithExpandedSeperator;
 @synthesize theMovie = _theMovie;
+@synthesize cellLabelColor = _cellLabelColor;
+@synthesize favoriteEditNavigationButton = _favoriteEditNavigationButton;
+@synthesize backgroundImageView = _backgroundImageView;
+@synthesize favoriteEditTableView = _favoriteEditTableView;
 
 
 #ifdef DEBUG
@@ -107,6 +115,8 @@
 {
     [super viewDidLoad];
     self.needToChangeCollapseImage = YES;
+    _favoritesEditView.hidden = YES;
+    _favoritesEditView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Bg2.png"]];
     
     @try 
     {
@@ -151,7 +161,6 @@
     id appDelegate = (id)[[UIApplication sharedApplication] delegate];
     self.managedObjectContext = [appDelegate managedObjectContext];
     
-    
     [_cardOutlet setBackgroundImage:[UIImage imageNamed:@"tab_cards_selected.png"] forState:UIControlStateNormal];
     NSString *path = [[NSBundle mainBundle] pathForResource:@"SFC_content_formatted" ofType:@"xml"];
     NSURL *url = [NSURL fileURLWithPath:path];
@@ -170,25 +179,25 @@
         [noInternetConnectionAlert show];
     }
     
-    //    NSUserDefaults *userDefaults = [[NSUserDefaults alloc]init];
-    //    
-    //    if(!([userDefaults objectForKey:@"Something"])){
-    //        [[NSUserDefaults standardUserDefaults] synchronize];
-    //         [self parseGuidelineCSV];
-    //        [userDefaults setBool:YES forKey:@"Something"];
-    //        
-    //        NSLog(@"Added");
-    //    }  
+    NSUserDefaults *userDefaults = [[NSUserDefaults alloc]init];
+    
+    if(!([userDefaults boolForKey:@"Something"])){
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [self parseGuidelineCSV];
+        [userDefaults setBool:YES forKey:@"Something"];
+        
+        NSLog(@"Added");
+    }  
     [self setMoreViewAttribute];
     [self setCardViewAttribute];
     [self setFavoriteViewAttribute];
-    [self parseGuidelineCSV];
+    [self fetchProductNameFromCoreData];
+    [self.cardsTableView reloadData];
 }
+
 
 - (void) playerPlaybackDidFinish:(NSNotification*)notification
 {
-    NSLog(@"WHY?");
-    
     //self.movieContainerView.hidden = YES;
     
     // [_theMovie dismissModalViewControllerAnimated:NO];
@@ -245,14 +254,14 @@
         
         [self deleteAllEntities];
         [self storeGuidelineCSVDataToCoreData];
-        [self fetchProductNameFromCoreData];
-        [self.cardsTableView reloadData];
     }
     
 }
 
 -(void) setFavoriteViewAttribute
 {
+    _favoriteEditTableView.delegate = self;
+    _favoriteEditTableView.dataSource = self;
     _favoritesView.backgroundColor = [UIColor clearColor];
     _favoriteTableView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
     _favoriteTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
@@ -287,6 +296,7 @@
     [self.navigationController.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:34.0/255.0 green:36.0/255.0 blue:24.0/255.0 alpha:1.0],UITextAttributeTextColor, nil]];
     _checkForTableViewHidden = YES;
     self.moreNavigationButton.hidden = YES;
+    self.favoriteEditNavigationButton.hidden = YES;
     
     _listOfCards = [[NSMutableArray alloc]init];
     _numberOfRows = 14;
@@ -419,6 +429,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath: (NSIndexPath *)indexPath;
 {
+    if (tableView == _favoriteEditTableView)
+    {
+        return 50;
+    }
     if(tableView == _favoriteTableView)
     {
         return 50;
@@ -442,7 +456,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"count : %i",[_storeFetchedName count]);
+    if (tableView == _favoriteEditTableView)
+    {
+        return [_productNameUnique count];
+    }
     if(tableView == _favoriteTableView)
     {
         return [_storeFetchedName count];
@@ -457,6 +474,92 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
+    if (tableView == _favoriteEditTableView)
+    {
+        static NSString *cellIdCustom = @"customCell";
+        static NSString *cellIdNormal = @"normalCell";
+        UITableViewCell *cell = nil;
+        
+        if( [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"isRepeated"]isEqualToString:@"Repeated"])
+        {
+            cell = [self.cardsTableView dequeueReusableCellWithIdentifier:cellIdCustom];
+            
+            if (cell == nil)
+            {
+                cell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdCustom];
+            }
+            _tableCell = (TableViewCell *)cell;
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            _tableCell.celldelegate = self;
+            _tableCell.cellDataLabel.text = [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"name"] stringByRemoveLeadingAndTrailingQuotes];
+            
+            _tableCell.cellDataLabel.lineBreakMode = UILineBreakModeCharacterWrap;
+            _tableCell.cellDataLabel.numberOfLines = 1;
+            [[_tableCell cellDataLabel] sizeToFit];
+            
+            [_tableCell.insideTableView setTag:indexPath.row];
+            _tableCell.index = indexPath.row;
+            _tableCell.cardArrayForTableView = _listOfCards;
+            if(_checkForTableViewHidden == YES)
+            {
+                UIImage *imageView = [UIImage imageNamed:@"star_normal.png"];
+                [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
+                [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonExpandTapped:) forControlEvents:UIControlEventTouchUpInside];
+                [_tableCell.plusButton setTag:indexPath.row];
+                
+            }
+            else 
+            {
+                if(indexPath.row==_selectedCellToExpand)
+                {
+                    UIImage *imageView = [UIImage imageNamed:@"star_normal.png"];
+                    [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
+                    [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonCollapseTapped:) forControlEvents:UIControlEventTouchUpInside];
+                }
+            }
+            if (!_cellLabelColor)
+            {
+                _tableCell.cellDataLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+            }
+            
+            
+            if(_checkForTableViewHidden == NO &&indexPath.row==_selectedCellToExpand)
+            {
+                _tableCell.insideTableView.hidden = NO;
+            }
+            else
+            {
+                _tableCell.insideTableView.hidden = YES;
+            }
+            
+            return _tableCell;
+        }
+        else
+        {
+            cell = [self.cardsTableView dequeueReusableCellWithIdentifier:cellIdNormal];
+            if (cell == nil)
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdNormal];
+            }
+        }
+        cell.textLabel.text = [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"name"] stringByRemoveLeadingAndTrailingQuotes];
+        cell.textLabel.lineBreakMode = UILineBreakModeCharacterWrap;
+        cell.textLabel.numberOfLines = 1;
+        [cell.textLabel sizeToFit];
+        
+        _accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)]; 
+        _accessoryButton.tag = indexPath.row;
+        UIImage *imageView = [UIImage imageNamed:@"star_normal.png"];
+        [_accessoryButton setImage:imageView forState:UIControlStateNormal];
+        [_accessoryButton addTarget:self action:@selector(accessoryButtonDisclosureTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [cell setAccessoryView:_accessoryButton];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+        return cell;
+        
+    }
+    
+    
     if(tableView == _favoriteTableView)
     {
         static NSString *cellId = @"actionCell";
@@ -474,13 +577,14 @@
         {
             Favorites *favourite = [self.storeFetchedName objectAtIndex:indexPath.row];
             cell.textLabel.text = [[favourite name]stringByRemoveLeadingAndTrailingQuotes];
+            cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+            cell.textLabel.numberOfLines = 0;
+            [cell.textLabel sizeToFit];
             imageView = [UIImage imageNamed:@"arrow.png"];
-            
         }
         else 
         {
             imageView = nil;
-            
         }
         
         _accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)];
@@ -503,6 +607,8 @@
         
         if( [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"isRepeated"]isEqualToString:@"Repeated"])
         {
+            [_indexWithPlusButton addObject:[NSNumber numberWithInteger:indexPath.row]];
+            
             cell = [self.cardsTableView dequeueReusableCellWithIdentifier:cellIdCustom];
             
             if (cell == nil)
@@ -513,6 +619,11 @@
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             _tableCell.celldelegate = self;
             _tableCell.cellDataLabel.text = [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"name"] stringByRemoveLeadingAndTrailingQuotes];
+            
+            _tableCell.cellDataLabel.lineBreakMode = UILineBreakModeCharacterWrap;
+            _tableCell.cellDataLabel.numberOfLines = 1;
+            [[_tableCell cellDataLabel] sizeToFit];
+            
             [_tableCell.insideTableView setTag:indexPath.row];
             _tableCell.index = indexPath.row;
             _tableCell.cardArrayForTableView = _listOfCards;
@@ -534,37 +645,40 @@
                 }
             }
             
-//            if(indexPath.row == self.expandedRowNumber)
-//            {
-//                 if(self.needToChangeCollapseImage)
-//                 {
-//                     UIImage *imageView = [UIImage imageNamed:@"icon_collapse.png"];
-//                     [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-//                     [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonCollapseTapped:) forControlEvents:UIControlEventTouchUpInside]; 
-//                     self.needToChangeCollapseImage = NO;
-//                 }
-//                 else {
-//                     UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
-//                     [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-//                     self.needToChangeCollapseImage = YES;
-//                 }
-////                if(_tableCell.plusButton.imageView.image == [UIImage imageNamed:@"icon_expand.png"])
-////                {
-////                    imageView = [UIImage imageNamed:@"icon_collapse.png"];
-////                }
-////                else if(_tableCell.plusButton.imageView.image == [UIImage imageNamed:@"con_collapse.png"]) {
-////                    imageView = [UIImage imageNamed:@"icon_expand.png"];
-////                }
-//                            }
-//            else  {
-//                UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
-//                [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-//                [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonExpandTapped:) forControlEvents:UIControlEventTouchUpInside];
-//                [_tableCell.plusButton setTag:indexPath.row];
-//
-//            }
+            //            if(indexPath.row == self.expandedRowNumber)
+            //            {
+            //                 if(self.needToChangeCollapseImage)
+            //                 {
+            //                     UIImage *imageView = [UIImage imageNamed:@"icon_collapse.png"];
+            //                     [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
+            //                     [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonCollapseTapped:) forControlEvents:UIControlEventTouchUpInside]; 
+            //                     self.needToChangeCollapseImage = NO;
+            //                 }
+            //                 else {
+            //                     UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
+            //                     [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
+            //                     self.needToChangeCollapseImage = YES;
+            //                 }
+            ////                if(_tableCell.plusButton.imageView.image == [UIImage imageNamed:@"icon_expand.png"])
+            ////                {
+            ////                    imageView = [UIImage imageNamed:@"icon_collapse.png"];
+            ////                }
+            ////                else if(_tableCell.plusButton.imageView.image == [UIImage imageNamed:@"con_collapse.png"]) {
+            ////                    imageView = [UIImage imageNamed:@"icon_expand.png"];
+            ////                }
+            //                            }
+            //            else  {
+            //                UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
+            //                [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
+            //                [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonExpandTapped:) forControlEvents:UIControlEventTouchUpInside];
+            //                [_tableCell.plusButton setTag:indexPath.row];
+            //
+            //            }
+            if (!_cellLabelColor)
+            {
+                _tableCell.cellDataLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+            }
             
-            _tableCell.cellDataLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
             
             if(_checkForTableViewHidden == NO &&indexPath.row==_selectedCellToExpand)
             {
@@ -585,6 +699,10 @@
             }
         }
         cell.textLabel.text = [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"name"] stringByRemoveLeadingAndTrailingQuotes];
+        cell.textLabel.lineBreakMode = UILineBreakModeCharacterWrap;
+        cell.textLabel.numberOfLines = 1;
+        [cell.textLabel sizeToFit];
+        
         _accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)]; 
         _accessoryButton.tag = indexPath.row;
         UIImage *imageView = [UIImage imageNamed:@"arrow.png"];
@@ -596,34 +714,34 @@
         
         
         //NSString *labelString = [_tableCell.cellDataLabel.text stringByRemoveLeadingAndTrailingQuotes];
-
-    
-      //  NSLog(@"name are : %@ and expandedText : %@",labelString,_expandedRowText);
-//        if([[NSString stringWithFormat:@"\"%@\"",_tableCell.cellDataLabel.text] isEqualToString:_expandedRowText])
-//        {
-//            if(_needToChangeCollapseImage)
-//            {
-//                UIImage *imageView = [UIImage imageNamed:@"icon_collapse.png"];
-//                [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-//               // [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonCollapseTapped:) forControlEvents:UIControlEventTouchUpInside]; 
-//                self.needToChangeCollapseImage = NO;
-//            }
-//            else {
-//                UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
-//                [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-//                self.needToChangeCollapseImage = YES;
-//            }
-//            
-//        }
-//        else {
-//            
-//            UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
-//            [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-//           // [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonExpandTapped:) forControlEvents:UIControlEventTouchUpInside];
-//           // [_tableCell.plusButton setTag:indexPath.row];
-//            
-//        }
-
+        
+        
+        //  NSLog(@"name are : %@ and expandedText : %@",labelString,_expandedRowText);
+        //        if([[NSString stringWithFormat:@"\"%@\"",_tableCell.cellDataLabel.text] isEqualToString:_expandedRowText])
+        //        {
+        //            if(_needToChangeCollapseImage)
+        //            {
+        //                UIImage *imageView = [UIImage imageNamed:@"icon_collapse.png"];
+        //                [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
+        //               // [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonCollapseTapped:) forControlEvents:UIControlEventTouchUpInside]; 
+        //                self.needToChangeCollapseImage = NO;
+        //            }
+        //            else {
+        //                UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
+        //                [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
+        //                self.needToChangeCollapseImage = YES;
+        //            }
+        //            
+        //        }
+        //        else {
+        //            
+        //            UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
+        //            [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
+        //           // [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonExpandTapped:) forControlEvents:UIControlEventTouchUpInside];
+        //           // [_tableCell.plusButton setTag:indexPath.row];
+        //            
+        //        }
+        
         return cell;
     }
 }
@@ -840,11 +958,110 @@
 
 - (void) accessoryButtonCollapseTapped : (UIButton *) sender
 {
-//    if(self.expandedRowNumber == sender.tag)
-//    {
-//        self.needToChangeCollapseImage  = YES;
-//    }
+    //    if(self.expandedRowNumber == sender.tag)
+    //    {
+    //        self.needToChangeCollapseImage  = YES;
+    //    }
+    TableViewCell *cell = (TableViewCell *)[self.cardsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
+    cell.divider.frame = CGRectMake(0, 49, 320, 1);
+    cell.cellDataLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     _checkForTableViewHidden = YES;
+    [_cardsTableView reloadData];
+}
+
+
+- (void) accessoryButtonExpandTapped:(UIButton *)sender
+{
+    //    NSLog(@"expanded row number : %d",_expandedRowNumber);
+    //    if (_expandedRowNumber)
+    //    {
+    
+    NSArray *indexesForSeperator = [[NSArray alloc]init];
+    indexesForSeperator = [_indexWithPlusButton allObjects];
+    NSArray *indexes = [_indexWithPlusButton allObjects];
+    NSLog(@"index are : %@",indexes);
+    for (int index = 0; index < [_indexWithPlusButton count]; index++)
+    {
+        TableViewCell *cell = (TableViewCell *)[self.cardsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[[indexes objectAtIndex:index]integerValue] inSection:0]];
+        if ([[indexes objectAtIndex:index]integerValue] != sender.tag)
+        {
+            NSLog(@"position to change : %d",[[indexes objectAtIndex:index]integerValue]);
+            UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
+            [cell.plusButton setImage:imageView forState:UIControlStateNormal]; 
+            cell.divider.frame = CGRectMake(0, 49, 320, 1);
+            cell.cellDataLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+        }
+        else
+        {
+            cell.cellDataLabel.textColor = [UIColor colorWithRed:141.0/255.0 green:255.0/255.0 blue:224.0/255.0 alpha:1.0];
+            cell.divider.frame = CGRectMake(0, 132, 320, 1);
+        }
+    }
+    //        NSLog(@"already selected");
+    //    }
+    //    self.expandedRowNumber = sender.tag; 
+    //    self.expandedRowText = [[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"];
+    //    
+    //    NSLog(@"string : %@",_expandedRowText);
+    //    [_indexWithPlusButton addObject:[NSNumber numberWithInteger:sender.tag]];
+    //    NSLog(@"indexes are : %@",_indexWithPlusButton);
+    
+    //    NSArray* unsorted = [_indexWithPlusButton allObjects];
+    //    
+    //    NSIndexPath *path = [[NSIndexPath alloc]init];
+    //    NSMutableArray *pathArray = [[NSMutableArray alloc]initWithCapacity:3];
+    
+    //    for (int index = 0; index < [unsorted count]; index++)
+    //    {
+    //        if ([unsorted objectAtIndex:index] !=[NSNumber numberWithInteger:sender.tag])
+    //        {
+    //            path = [NSIndexPath indexPathWithIndex:index];
+    //            [pathArray addObject:path];
+    //            [_cardsTableView reloadRowsAtIndexPaths:pathArray withRowAnimation:UITableViewRowAnimationNone];
+    //        }
+    //    }
+    NSLog(@"name = %@",[[[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"]stringByRemoveLeadingAndTrailingQuotes]);
+    _checkForTableViewHidden = NO;
+    TableViewCell *cell = (TableViewCell *)[self.cardsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
+    cell.productNameFromMainView = _productNameUnique;
+    cell.selectedRow = sender.tag;
+    _selectedCellToExpand = sender.tag;
+    //cell.divider.frame = CGRectMake(0, 132, 320, 1);
+    _cellLabelColor = YES;
+//    cell.cellDataLabel.textColor = [UIColor colorWithRed:141.0/255.0 green:255.0/255.0 blue:224.0/255.0 alpha:1.0];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
+    [fetchRequest setEntity:entity];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@",[[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"]];
+    [fetchRequest setPredicate:predicate];
+    NSError *error;
+    NSArray *fetchedResults;
+    
+    if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
+    {
+        NSLog(@"product== details are :%@",fetchedResults);
+        //        _selectedProduct = [fetchedResults objectAtIndex:0];
+        //        [self availableDescription];
+    }
+    else
+    {
+        NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+    }
+    [_languageArray removeAllObjects];
+    
+    
+    cell.languageArrayFromMainView = _languageArray;
+    cell.attributeArray = _attributeArray;
+    cell.descriptionArray = _descriptionArray;
+    
+    
+    //    [UIView animateWithDuration:4.0 animations:^{
+    //        cell.contentView.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
+    //        self.cardsTableView.rowHeight = 125.0;
+    //        [_cardsTableView reloadData];
+    //    }];
+    
     [_cardsTableView reloadData];
 }
 
@@ -872,65 +1089,7 @@
     return descriptionDictionary;
 }
 
-- (void) accessoryButtonExpandTapped:(UIButton *)sender
-{
-    self.expandedRowNumber = sender.tag;
-    self.expandedRowText = [[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"];
-    
-    NSLog(@"string : %@",_expandedRowText);
-    [_indexWithPlusButton addObject:[NSNumber numberWithInteger:sender.tag]];
-    NSLog(@"indexes are : %@",_indexWithPlusButton);
-    
-       
-       
-//    NSArray* unsorted = [_indexWithPlusButton allObjects];
-//    
-//    NSIndexPath *path = [[NSIndexPath alloc]init];
-//    NSMutableArray *pathArray = [[NSMutableArray alloc]initWithCapacity:3];
-    
-//    for (int index = 0; index < [unsorted count]; index++)
-//    {
-//        if ([unsorted objectAtIndex:index] !=[NSNumber numberWithInteger:sender.tag])
-//        {
-//            path = [NSIndexPath indexPathWithIndex:index];
-//            [pathArray addObject:path];
-//            [_cardsTableView reloadRowsAtIndexPaths:pathArray withRowAnimation:UITableViewRowAnimationNone];
-//        }
-//    }
-    NSLog(@"name = %@",[[[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"]stringByRemoveLeadingAndTrailingQuotes]);
-    _checkForTableViewHidden = NO;
-    TableViewCell *cell = (TableViewCell *)[self.cardsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
-    NSLog(@"text , : %@ tag are %d",cell,sender.tag);
-    cell.productNameFromMainView = _productNameUnique;
-    cell.selectedRow = sender.tag;
-    _selectedCellToExpand = sender.tag;
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
-    [fetchRequest setEntity:entity];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@",[[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"]];
-    [fetchRequest setPredicate:predicate];
-    NSError *error;
-    NSArray *fetchedResults;
-    
-    if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
-    {
-        NSLog(@"product== details are :%@",fetchedResults);
-        //        _selectedProduct = [fetchedResults objectAtIndex:0];
-        //        [self availableDescription];
-    }
-    else
-    {
-        NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
-    }
-    [_languageArray removeAllObjects];
-    
-    
-    cell.languageArrayFromMainView = _languageArray;
-    cell.attributeArray = _attributeArray;
-    cell.descriptionArray = _descriptionArray;
-    
-    [_cardsTableView reloadData];
-}
+
 
 - (void) requestProductButtonTapped:(UIButton *)sender
 {
@@ -954,11 +1113,12 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    return NO;
 }
 
 - (IBAction)showFavoriteView:(id)sender
 {
+    self.favoriteEditNavigationButton.hidden = NO;
     [_favoriteOutlet setBackgroundImage:[UIImage imageNamed:@"tab_fav_selected.png"] forState:UIControlStateNormal];
     [_cardOutlet setBackgroundImage:[UIImage imageNamed:@"tab_cards_normal.png"] forState:UIControlStateNormal];
     [_moreOutlet setBackgroundImage:[UIImage imageNamed:@"tab_more_normal.png"] forState:UIControlStateNormal];
@@ -1059,6 +1219,43 @@
     [message show];
 }
 
+- (IBAction)editFavorites:(id)sender
+{
+    _favoriteEditTableView.backgroundColor = [UIColor clearColor];
+    self.backgroundImageView.frame = CGRectMake(0, 0, 320, 460);
+    self.navigationController.navigationBarHidden = YES;
+    _favoriteOutlet.hidden = YES;
+    _moreOutlet.hidden = YES;
+    _cardOutlet.hidden = YES;
+    _favoritesView.hidden = YES;
+    _favoritesEditView.backgroundColor = [UIColor clearColor];
+    _favoritesEditView.hidden = NO;
+}
+
+- (IBAction)cancelFavoriteView:(id)sender
+{
+    _favoritesEditView.hidden = YES;
+    _favoritesView.hidden = NO;
+    _favoriteOutlet.hidden = NO;
+    _moreOutlet.hidden = NO;
+    _cardOutlet.hidden = NO;
+    self.backgroundImageView.frame = CGRectMake(0, -10, 320, 456);
+    self.navigationController.navigationBarHidden = NO;
+    
+}
+
+- (IBAction)doneFavoriteView:(id)sender
+{
+    _favoritesEditView.hidden = YES;
+    _favoritesView.hidden = NO;
+    _favoriteOutlet.hidden = NO;
+    _moreOutlet.hidden = NO;
+    _cardOutlet.hidden = NO;
+    self.backgroundImageView.frame = CGRectMake(0, -10, 320, 456);
+    self.navigationController.navigationBarHidden = NO;
+    
+}
+
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict 
 {
@@ -1100,7 +1297,7 @@
         return;
     }
     
-    if ([elementName isEqualToString:@"user"]) 
+    if ([elementName isEqualToString:@"user"])
     {
         // We are done with user entry – add the parsed user 
         // object to our user array

@@ -117,6 +117,15 @@
 {
     return 50;
 }
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == [_cellTextLabelArray count]-1)
+        return UITableViewCellEditingStyleInsert;
+    else
+        return UITableViewCellEditingStyleDelete;
+}
+
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -162,12 +171,21 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath 
 {    
-    if (editingStyle == UITableViewCellEditingStyleDelete) 
+    if (editingStyle == UITableViewCellEditingStyleDelete)
     {
         NSLog(@"deleting");
+        [_cellTextLabelArray removeObjectAtIndex:indexPath.row];
+        [_cellTextDetailArray removeObjectAtIndex:indexPath.row];
+        [_contactDetailTableView reloadData];
+
        // [_contactDetailTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
+    else if (editingStyle == UITableViewCellEditingStyleInsert)
+    {
+        [_cellTextLabelArray addObject:@"Frequency"];
+        [_cellTextDetailArray addObject:@"0"];
+        NSLog(@"array : %@",_cellTextLabelArray);
+        [_contactDetailTableView reloadData];
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
     }   
 }

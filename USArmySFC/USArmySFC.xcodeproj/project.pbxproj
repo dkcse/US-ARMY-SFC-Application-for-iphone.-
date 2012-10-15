@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		6A39CA43161C3AF900257B5B /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A39CA42161C3AF900257B5B /* MediaPlayer.framework */; };
 		6A39CA4F161C480F00257B5B /* Splash2.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 6A39CA4E161C480F00257B5B /* Splash2.mp4 */; };
-		6A39CA5A161C6D0400257B5B /* CustomMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A39CA59161C6D0400257B5B /* CustomMoviePlayerViewController.m */; };
 		6A9D49481619805D009D846B /* Guidelines_Table.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6A9D49471619805D009D846B /* Guidelines_Table.csv */; };
 		6ADE5E87160052F600D76A53 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ADE5E86160052F600D76A53 /* UIKit.framework */; };
 		6ADE5E89160052F600D76A53 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ADE5E88160052F600D76A53 /* Foundation.framework */; };
@@ -149,8 +148,6 @@
 /* Begin PBXFileReference section */
 		6A39CA42161C3AF900257B5B /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		6A39CA4E161C480F00257B5B /* Splash2.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Splash2.mp4; sourceTree = "<group>"; };
-		6A39CA58161C6D0400257B5B /* CustomMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomMoviePlayerViewController.h; sourceTree = "<group>"; };
-		6A39CA59161C6D0400257B5B /* CustomMoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomMoviePlayerViewController.m; sourceTree = "<group>"; };
 		6A9D49471619805D009D846B /* Guidelines_Table.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Guidelines_Table.csv; path = "../../../../US SFC/Guidelines_Table.csv"; sourceTree = "<group>"; };
 		6ADE5E82160052F600D76A53 /* USArmySFC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = USArmySFC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6ADE5E86160052F600D76A53 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -332,15 +329,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6A39CA57161C6D0300257B5B /* VideoController */ = {
-			isa = PBXGroup;
-			children = (
-				6A39CA58161C6D0400257B5B /* CustomMoviePlayerViewController.h */,
-				6A39CA59161C6D0400257B5B /* CustomMoviePlayerViewController.m */,
-			);
-			path = VideoController;
-			sourceTree = "<group>";
-		};
 		6ADE5E77160052F600D76A53 = {
 			isa = PBXGroup;
 			children = (
@@ -413,7 +401,6 @@
 		6ADF8222161957E200E8FCA3 /* Controllers And Models */ = {
 			isa = PBXGroup;
 			children = (
-				6A39CA57161C6D0300257B5B /* VideoController */,
 				6ADF835B16195CD000E8FCA3 /* SFC Main View Controller */,
 				6ADF835716195CA300E8FCA3 /* File Reader Model */,
 				6ADF834316195B8000E8FCA3 /* SFCAppDelegate */,
@@ -970,7 +957,6 @@
 				6ADF835A16195CA300E8FCA3 /* FileReaderLineByLine.m in Sources */,
 				6ADF835E16195CD000E8FCA3 /* SFCViewController.m in Sources */,
 				6ADF83681619677300E8FCA3 /* Favorites.xcdatamodeld in Sources */,
-				6A39CA5A161C6D0400257B5B /* CustomMoviePlayerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

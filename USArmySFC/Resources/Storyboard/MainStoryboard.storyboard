@@ -13,7 +13,7 @@
                 <viewController storyboardIdentifier="Cards" id="2" customClass="SFCViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="Bg.png" id="HKV-Zn-QzG">
                                 <rect key="frame" x="0.0" y="-10" width="320" height="456"/>
@@ -65,6 +65,62 @@
                                     <action selector="showMoreOption:" destination="2" eventType="touchUpInside" id="2dR-As-fvf"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" id="7B9-bT-NJL">
+                                <rect key="frame" x="0.0" y="-44" width="320" height="460"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Add to/Remove From Favorites" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="TGn-7g-LMy">
+                                        <rect key="frame" x="40" y="50" width="230" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="All Favorites" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="EYG-mx-6f2">
+                                        <rect key="frame" x="80" y="90" width="150" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XPZ-h3-QrC">
+                                        <rect key="frame" x="6" y="90" width="72" height="37"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Cancel" backgroundImage="nav_btn_cancel_normal.png">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="cancelFavoriteView:" destination="2" eventType="touchUpInside" id="LEv-h8-lCK"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="npv-4y-LXU">
+                                        <rect key="frame" x="245" y="90" width="72" height="37"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Done" backgroundImage="nav_btn_done_normal.png">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="doneFavoriteView:" destination="2" eventType="touchUpInside" id="c2l-SB-8X6"/>
+                                        </connections>
+                                    </button>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="P3K-1y-sj2">
+                                        <rect key="frame" x="4" y="140" width="312" height="345"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </tableView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                             <view contentMode="scaleToFill" id="MgX-ab-eMc">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="370"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -117,7 +173,7 @@
                                                             </state>
                                                         </button>
                                                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="V9V-44-SnT">
-                                                            <rect key="frame" x="0.0" y="40" width="320" height="90"/>
+                                                            <rect key="frame" x="0.0" y="37" width="320" height="90"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                                             <connections>
@@ -185,6 +241,26 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="grr-Is-imn">
+                        <barButtonItem key="leftBarButtonItem" id="1sY-J5-e6M">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="gS8-39-QHq">
+                                <rect key="frame" x="5" y="5" width="58" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Edit" backgroundImage="nav_btn_edit_normal.png">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="editFavorites:" destination="2" eventType="touchUpInside" id="PAn-oL-kZy"/>
+                                </connections>
+                            </button>
+                            <connections>
+                                <action selector="editFavorites:" destination="2" id="SXL-dE-ci2"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Item" id="8EK-4z-uGM">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Bos-7B-Klp">
                                 <rect key="frame" x="240" y="5" width="75" height="33"/>
@@ -205,11 +281,15 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="backgroundImageView" destination="HKV-Zn-QzG" id="QiA-EZ-GZX"/>
                         <outlet property="cardOutlet" destination="lXM-xz-VuL" id="P4f-HG-nrx"/>
                         <outlet property="cardsTableView" destination="dXJ-DU-P4o" id="hQP-3P-DWy"/>
                         <outlet property="cardsView" destination="f1B-av-6MF" id="ICd-F2-4xj"/>
+                        <outlet property="favoriteEditNavigationButton" destination="gS8-39-QHq" id="c3j-CE-6pu"/>
+                        <outlet property="favoriteEditTableView" destination="P3K-1y-sj2" id="D8e-Gf-gxx"/>
                         <outlet property="favoriteOutlet" destination="JdC-mT-LIs" id="SWH-pu-TsL"/>
                         <outlet property="favoriteTableView" destination="p5z-ck-lgI" id="dwY-kK-tuU"/>
+                        <outlet property="favoritesEditView" destination="7B9-bT-NJL" id="3C7-0y-UgE"/>
                         <outlet property="favoritesView" destination="MgX-ab-eMc" id="oxJ-6O-a7F"/>
                         <outlet property="moreNavigationButton" destination="Bos-7B-Klp" id="AO5-0T-Xji"/>
                         <outlet property="moreOutlet" destination="QNE-aN-PjM" id="WzY-v2-2y6"/>
@@ -583,6 +663,8 @@
     </scenes>
     <resources>
         <image name="Bg.png" width="320" height="460"/>
+        <image name="nav_btn_cancel_normal.png" width="124" height="66"/>
+        <image name="nav_btn_done_normal.png" width="102" height="66"/>
         <image name="nav_btn_edit_normal.png" width="92" height="66"/>
         <image name="nav_btn_feedback_normal.png" width="146" height="66"/>
         <image name="nav_btn_feedback_pressed.png" width="146" height="66"/>

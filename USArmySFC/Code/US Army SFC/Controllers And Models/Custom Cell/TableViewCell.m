@@ -88,6 +88,10 @@
     cell.backgroundColor = [UIColor clearColor];
     self.divider.backgroundColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];  
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    cell.textLabel.lineBreakMode = UILineBreakModeCharacterWrap;
+    cell.textLabel.numberOfLines = 1;
+    [cell.textLabel sizeToFit];
+
     cell.textLabel.text = [self.languageArray objectAtIndex:indexPath.row]; 
     cell.textLabel.textColor = [UIColor colorWithRed:141.0/255.0 green:255.0/255.0 blue:224.0/255.0 alpha:1.0];
     
@@ -97,7 +101,6 @@
     [accessoryButton addTarget:self action:@selector(accessoryButtonDisclosureTapped:) forControlEvents:UIControlEventTouchUpInside];
     [cell setAccessoryView:accessoryButton];
     accessoryButton.tag = indexPath.row;
-    [cell.textLabel sizeToFit];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
@@ -109,9 +112,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *nameForCardLabel = [[NSString alloc]init];
-    nameForCardLabel = [_cardArrayForTableView objectAtIndex:_index];
-    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
     [fetchRequest setEntity:entity];
