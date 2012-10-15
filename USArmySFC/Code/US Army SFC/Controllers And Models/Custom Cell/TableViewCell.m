@@ -28,6 +28,13 @@
 @synthesize selectedProduct = _selectedProduct;
 @synthesize managedObjectContext = _managedObjectContext;
 
+#ifdef DEBUG
+#   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#   define DLog(...)
+#endif
+
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -107,7 +114,7 @@
 
 -(void) accessoryButtonDisclosureTapped:(UIButton *)sender
 {
-    NSLog(@"accessory button pressed");
+    DLog(@"accessory button pressed");
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -115,7 +122,6 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
     [fetchRequest setEntity:entity];
-    NSLog(@"name are : %@",[[_productNameFromMainView objectAtIndex:_selectedRow]valueForKey:@"name"]);
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name=%@",[[_productNameFromMainView objectAtIndex:_selectedRow]valueForKey:@"name"]];
     [fetchRequest setPredicate:predicate];
     NSError *error;
@@ -133,16 +139,14 @@
             if([[obj.productDetail.language stringByRemoveLeadingAndTrailingQuotes] isEqualToString:language])
             {
                 _selectedProduct = obj;
-                NSLog(@"lang are : %@",_selectedProduct);
             }
         }
     }
     else
     {
-        NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+        DLog(@"error : %@  and %@",[error description],[error userInfo]);  
     }
     
-    NSLog(@"selected product : %@",_selectedProduct);
     UIStoryboard *story = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     CardDescription *pushForDescriptionCustom = [story instantiateViewControllerWithIdentifier:@"cardDescriptor"];
     UINavigationController *referenceToNavController = [[UINavigationController alloc]init];
@@ -152,7 +156,6 @@
     
     pushForDescriptionCustom.cardDetails = [[_description allKeys].mutableCopy objectAtIndex:0];
     pushForDescriptionCustom.detailDescription = [[_description allValues].mutableCopy objectAtIndex:0];
-    NSLog(@"array aaa :%@",pushForDescriptionCustom.cardDetails);
     referenceToNavController = [_celldelegate sendNavigationControllerInstance];
     [referenceToNavController pushViewController:pushForDescriptionCustom animated:YES];
 }

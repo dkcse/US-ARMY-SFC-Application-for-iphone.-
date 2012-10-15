@@ -143,7 +143,7 @@
     }
     @catch (NSException *exception)
     {
-        NSLog(@"%@",[exception description]);
+        DLog(@"%@",[exception description]);
     }
     
     _viewDidLoadFirst = YES;
@@ -171,7 +171,7 @@
     
     if(successInParsingTheXMLDocument)
     {
-        NSLog(@"No Errors In Parsing ");
+        DLog(@"No Errors In Parsing ");
     }
     else
     {
@@ -181,12 +181,13 @@
     
     NSUserDefaults *userDefaults = [[NSUserDefaults alloc]init];
     
-    if(!([userDefaults boolForKey:@"Something"])){
+    if(!([userDefaults boolForKey:@"boolForGuidelineCSV"]))
+    {
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self parseGuidelineCSV];
-        [userDefaults setBool:YES forKey:@"Something"];
+        [userDefaults setBool:YES forKey:@"boolForGuidelineCSV"];
         
-        NSLog(@"Added");
+        DLog(@"Added");
     }  
     [self setMoreViewAttribute];
     [self setCardViewAttribute];
@@ -405,7 +406,6 @@
             NSMutableDictionary *dict = [[NSMutableDictionary alloc]init];
             [dict setValue:name forKey:@"name"];
             [dict setValue:@"notRepeated" forKey:@"isRepeated"];
-            
             
             if(![_productNameUnique containsObject:dict])
             {
@@ -782,7 +782,6 @@
     {
         if( [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"isRepeated"]isEqualToString:@"notRepeated"])  
         {
-            NSLog(@"arrow pressed");
             NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
             NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
             [fetchRequest setEntity:entity];
@@ -793,35 +792,34 @@
             
             if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
             {
-                NSLog(@"favorite details are :%@",fetchedResults);
+                DLog(@"favorite details are :%@",fetchedResults);
             }
             else
             {
-                NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+                DLog(@"error : %@  and %@",[error description],[error userInfo]);  
             }
             _selectedProduct = [fetchedResults objectAtIndex:0];
-            
             _selectedRowNo = indexPath.row;
             _selectedCardSubtitle = _selectedProduct.productDetail.sfc_subtitle;
             [self availableDescription];
             [self performSegueWithIdentifier:@"Show Card Description Segue" sender:self];
         }
-        else {
-            
+        else 
+        {
             UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Wrong Click!"
                                                               message:@"Click on Plus Button to see available Language."
                                                              delegate:nil
                                                     cancelButtonTitle:@"OK"
                                                     otherButtonTitles:nil];
             [message show];
-            NSLog(@"plus pressed");
+            DLog(@"plus pressed");
         }
     }
 }
 
 -(void) accessoryButtonDisclosureTapped:(UIButton *)sender
 {
-    NSLog(@"accesory button pressed");
+    DLog(@"accesory button pressed");
 } 
 
 -(void) availableDescription
@@ -979,13 +977,11 @@
     NSArray *indexesForSeperator = [[NSArray alloc]init];
     indexesForSeperator = [_indexWithPlusButton allObjects];
     NSArray *indexes = [_indexWithPlusButton allObjects];
-    NSLog(@"index are : %@",indexes);
     for (int index = 0; index < [_indexWithPlusButton count]; index++)
     {
         TableViewCell *cell = (TableViewCell *)[self.cardsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[[indexes objectAtIndex:index]integerValue] inSection:0]];
         if ([[indexes objectAtIndex:index]integerValue] != sender.tag)
         {
-            NSLog(@"position to change : %d",[[indexes objectAtIndex:index]integerValue]);
             UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
             [cell.plusButton setImage:imageView forState:UIControlStateNormal]; 
             cell.divider.frame = CGRectMake(0, 49, 320, 1);
@@ -1020,7 +1016,6 @@
     //            [_cardsTableView reloadRowsAtIndexPaths:pathArray withRowAnimation:UITableViewRowAnimationNone];
     //        }
     //    }
-    NSLog(@"name = %@",[[[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"]stringByRemoveLeadingAndTrailingQuotes]);
     _checkForTableViewHidden = NO;
     TableViewCell *cell = (TableViewCell *)[self.cardsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
     cell.productNameFromMainView = _productNameUnique;
@@ -1040,13 +1035,11 @@
     
     if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
     {
-        NSLog(@"product== details are :%@",fetchedResults);
-        //        _selectedProduct = [fetchedResults objectAtIndex:0];
-        //        [self availableDescription];
+        DLog(@"product== details are :%@",fetchedResults);
     }
     else
     {
-        NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+        DLog(@"error : %@  and %@",[error description],[error userInfo]);  
     }
     [_languageArray removeAllObjects];
     
@@ -1067,25 +1060,19 @@
 
 - (UINavigationController *) sendNavigationControllerInstance
 {
-    NSLog(@"reference222 = %@",self.navigationController);
     return self.navigationController;
 }
 
 - (NSDictionary *) sendAttributeAndDescription : (Product *)sentProduct
 {
-    NSLog(@"prod are :%@",sentProduct);
     _selectedProduct = sentProduct;
     [self availableDescription];
-    NSLog(@"attr araa : %@",_attributeArray);
-    NSLog(@"attr araa : %@",_descriptionArray);
     NSArray *attribute = [[NSArray alloc]init];
     attribute = [_attributeArray mutableCopy];
     
     NSArray *description = [[NSArray alloc]init];
     description = [_descriptionArray mutableCopy];
-    //  NSMutableDictionary *descriptionDictionary = [[NSMutableDictionary alloc]initWithObjects:description forKeys:attribute];
     NSDictionary *descriptionDictionary = [NSDictionary dictionaryWithObjectsAndKeys:description,attribute, nil];
-    NSLog(@"sent dictionary are: %@",descriptionDictionary);
     return descriptionDictionary;
 }
 
@@ -1093,7 +1080,7 @@
 
 - (void) requestProductButtonTapped:(UIButton *)sender
 {
-    NSLog(@"requesting product");
+    DLog(@"requesting product");
 }
 
 - (void)viewDidUnload
@@ -1146,7 +1133,6 @@
         NSArray *fetchedName = [[NSArray alloc]init];
         fetchedName = _fetchFavoriteName;
         self.storeFetchedName = [fetchedName mutableCopy];
-        NSLog(@"result are : %@",_fetchFavoriteName);
     }
     else
     {
@@ -1162,10 +1148,7 @@
             [message show];   
             _viewDidLoadFirst = NO;
         }
-        
-        NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
     }
-    NSLog(@"result are : %@",_fetchFavoriteName);
     _viewDidLoadFirst = YES;
 }
 
@@ -1177,6 +1160,7 @@
     [_favoriteOutlet setBackgroundImage:[UIImage imageNamed:@"tab_fav_normal.png"] forState:UIControlStateNormal];
     
     self.navigationItem.title = @"About";
+    self.favoriteEditNavigationButton.hidden = YES;
     [self.navigationController.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:48.0/255.0 green:49.0/255.0 blue:37.0/255.0 alpha:1.0],UITextAttributeTextColor, nil]];
     
     self.moreView.backgroundColor = [UIColor clearColor];
@@ -1196,7 +1180,6 @@
 
 - (IBAction)showAvailableCards:(id)sender 
 {
-    NSLog(@"hello");
     [_cardOutlet setBackgroundImage:[UIImage imageNamed:@"tab_cards_selected.png"] forState:UIControlStateNormal];
     [_favoriteOutlet setBackgroundImage:[UIImage imageNamed:@"tab_fav_normal.png"] forState:UIControlStateNormal];
     [_moreOutlet setBackgroundImage:[UIImage imageNamed:@"tab_more_normal.png"] forState:UIControlStateNormal];
@@ -1255,6 +1238,7 @@
     self.navigationController.navigationBarHidden = NO;
     
 }
+//http://ilabs.uw.edu/sites/default/files/sample_0.pdf
 
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict 

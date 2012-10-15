@@ -80,12 +80,17 @@
 @synthesize contactDetailContactArray = _contactDetailContactArray;
 @synthesize contactDetailFrequencyArray = _contactDetailFrequencyArray;
 
+#ifdef DEBUG
+#   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#   define DLog(...)
+#endif
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self allocate];
-    NSLog(@"array ===: %@",_contactTypeArray);
     _commonView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
     [_guidelineOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_guidelines_pressed.png"] forState:UIControlStateNormal];
 
@@ -129,8 +134,16 @@
     _cardDescriptionTableView.backgroundColor = [UIColor clearColor];
     _POCTableView.backgroundColor = [UIColor clearColor];
 
+    NSUserDefaults *userDefaults = [[NSUserDefaults alloc]init];
+    if(!([userDefaults boolForKey:@"boolForContactCSV"]))
+    {
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [self storeContactCSVDataToCoreData];
+        [userDefaults setBool:YES forKey:@"boolForContactCSV"];
+        DLog(@"Added");
+    }  
+
     [self deleteAllEntities];
-    [self storeContactCSVDataToCoreData];
     [self fetchContactInformationFromCoreData];
     [self.cardDescriptionTableView reloadData];
     [self.POCTableView reloadData];
@@ -197,17 +210,14 @@
 
 -(void) viewDidAppear:(BOOL)animated
 {
-    NSLog(@"hello");
     _cardLogoImage.image = [UIImage imageNamed:@"icon.png"]; 
     
     if([self searchForNameInCoreData : _cardName])
     {
-        NSLog(@"name present in coredata");
         _favoriteSelectionImage.image = [UIImage imageNamed:@"star.png"];
     }
     else 
     {
-        NSLog(@"not present in coredata");
         _favoriteSelectionImage.image = [UIImage imageNamed:@"star_normal.png"];
     }
         //[self.cardDescriptionTableView reloadData];
@@ -226,13 +236,11 @@
     _mapView.hidden = YES;
     _POCTableView.hidden = YES;
     _cardDescriptionTableView.hidden = NO;
-    NSLog(@"guideline description");
 }
 
 - (IBAction)POCDescription:(id)sender
 {
     [self.commonView bringSubviewToFront:_POCTableView];
-    NSLog(@"POC description");
     [_POCOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_pressed_pressed.png"] forState:UIControlStateNormal];
     [_mapsOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_maps_normal.png"] forState:UIControlStateNormal];
     [_guidelineOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_guidelines_normal.png"] forState:UIControlStateNormal];
@@ -248,7 +256,6 @@
     [_mapsOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_maps_pressed.png"] forState:UIControlStateNormal];
     [_POCOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_poc_normal.png"] forState:UIControlStateNormal];
     [_guidelineOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_guidelines_normal.png"] forState:UIControlStateNormal];
-    NSLog(@"maps description");
     _cardDescriptionTableView.hidden = YES;
     _POCTableView.hidden = YES;
     _mapView.hidden = NO;
@@ -280,16 +287,14 @@
         //                return NO;
         //            }
         //        }
-        NSLog(@"%@",fetchedResults);
-        
         if(![_managedObjectContext save:&error])
         {
-            NSLog(@"Could NOt Save changes : %@ , %@",[error description],[error userInfo]);
+            DLog(@"Could NOt Save changes : %@ , %@",[error description],[error userInfo]);
         }
     }
     else
     {
-        NSLog(@"error : %@  and %@",[error description],[error userInfo]); 
+        DLog(@"error : %@  and %@",[error description],[error userInfo]); 
     }
     if([fetchedResults count]>0)
         return YES;
@@ -303,7 +308,6 @@
 
 -(void) fetchContactInformationFromCoreData
 {
-    NSLog(@"fetching from coredat");
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc]init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
     [fetchRequest setEntity:entity];
@@ -321,11 +325,11 @@
     NSError *error;
     if((fetchResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
     {
-        NSLog(@"fetch: %@",fetchResults);
+        DLog(@"fetch: %@",fetchResults);
     
     }
     else {
-        NSLog(@"error");
+        DLog(@"error");
     }
     for (Product *obj in fetchResults)
     {
@@ -426,7 +430,7 @@
             }
             else
             {
-                NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+                DLog(@"error : %@  and %@",[error description],[error userInfo]);  
             }
             
             //iterating through array of arrays for each product selected in outer loop
@@ -480,7 +484,6 @@
         {
             if([obj.name isEqualToString:_cardNameLabel.text])
             {
-                NSLog(@"found : %@",_cardNameLabel);
                 [_managedObjectContext deleteObject:obj];
                 break;
             }
@@ -488,12 +491,12 @@
         
         if(![_managedObjectContext save:&error])
         {
-            NSLog(@"Could NOt Save changes : %@ , %@",[error description],[error userInfo]);
+            DLog(@"Could NOt Save changes : %@ , %@",[error description],[error userInfo]);
         }
     }
     else
     {
-        NSLog(@"error : %@  and %@",[error description],[error userInfo]); 
+        DLog(@"error : %@  and %@",[error description],[error userInfo]); 
     }
 }
 
@@ -522,7 +525,7 @@
     }
     else
     {
-        NSLog(@"error : %@  and %@",[error description],[error userInfo]);  
+        DLog(@"error : %@  and %@",[error description],[error userInfo]);  
     }
 }
 - (void)viewDidUnload
@@ -582,7 +585,6 @@
         [cell setAccessoryView:accessoryButton];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;    
         accessoryButton.tag = indexPath.row;
-        NSLog(@"index :%@",[_cardDetails objectAtIndex:indexPath.row]);
         cell.textLabel.text = [_cardDetails objectAtIndex:indexPath.row];
         return cell;    
     }
@@ -606,7 +608,6 @@
 {
     if(tableView == _cardDescriptionTableView)
     {
-    NSLog(@"row selected are %d",indexPath.row);
         UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
         DetailDescriptionViewController *pushForDetail = [storyboard instantiateViewControllerWithIdentifier:@"detailDescriptor"]; 
         pushForDetail.detailViewHeading = [[_productNameFromSFCView objectAtIndex:_selectedProductRowNo]valueForKey:@"name"];

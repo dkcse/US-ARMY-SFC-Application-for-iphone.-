@@ -21,6 +21,7 @@
 @synthesize detailDescription = _detailDescription;
 @synthesize detailHeading = _detailHeading;
 
+
 -(void) viewWillAppear:(BOOL)animated
 {
     // navigation title

@@ -29,6 +29,13 @@
 @synthesize cellTextLabelArray = _cellTextLabelArray;
 @synthesize  cellTextDetailArray = _cellTextDetailArray;
 
+#ifdef DEBUG
+#   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#   define DLog(...)
+#endif
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -173,7 +180,6 @@
 {    
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        NSLog(@"deleting");
         [_cellTextLabelArray removeObjectAtIndex:indexPath.row];
         [_cellTextDetailArray removeObjectAtIndex:indexPath.row];
         [_contactDetailTableView reloadData];
@@ -184,7 +190,6 @@
     {
         [_cellTextLabelArray addObject:@"Frequency"];
         [_cellTextDetailArray addObject:@"0"];
-        NSLog(@"array : %@",_cellTextLabelArray);
         [_contactDetailTableView reloadData];
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
     }   
