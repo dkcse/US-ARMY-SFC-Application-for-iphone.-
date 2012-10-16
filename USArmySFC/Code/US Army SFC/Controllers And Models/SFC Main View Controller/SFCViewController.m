@@ -8,16 +8,20 @@
 
 #import "SFCViewController.h"
 
+
 @interface SFCViewController ()
 
 @property (nonatomic,strong) NSMutableArray *listOfCards;
 @property (nonatomic,strong) NSString *cardWithLanguage;
 @property (strong,nonatomic) TableViewCell *tableCell;
+@property (strong,nonatomic) SFCCustomCellForFavoritesTable *favoritesTableCell;
+
 @property (strong,nonatomic) UIButton *accessoryButton;
 @property (strong,nonatomic) NSMutableArray *storeFetchedName;
 @property (nonatomic) NSInteger indexRow;
 @property (nonatomic) NSInteger numberOfRows;
 @property (nonatomic) BOOL checkForTableViewHidden;
+@property (nonatomic) BOOL checkForFavoriteTableViewHidden;
 @property (nonatomic,strong) NSMutableArray *productNameUnique;
 @property (nonatomic) NSInteger expandedRowNumber;
 @property (nonatomic) BOOL needToChangeCollapseImage;
@@ -31,18 +35,22 @@
 @property (nonatomic,strong) NSMutableArray *cardNoWithDiffLang;
 
 //variable for detail view
+
 @property (nonatomic,strong) NSString *selectedCardName;
 @property (nonatomic,strong) NSString *selectedCardSubtitle;
 @property (nonatomic,strong) NSMutableArray *attributeArray;
 @property (nonatomic,strong) NSMutableArray *descriptionArray;
 @property (nonatomic,strong) Product *selectedProduct;
 @property (nonatomic) NSInteger selectedCellToExpand;
+@property (nonatomic) NSInteger selectedCellToExpandInFavoriteView;
 @property (nonatomic,strong) NSMutableArray *languageArray;
 @property (nonatomic) BOOL viewDidLoadFirst;
 @property (nonatomic,strong) NSMutableSet *indexWithPlusButton;
+@property (nonatomic,strong) NSMutableSet *indexWithPlusButtonForFavoriteView;
 @property (nonatomic,strong) NSMutableSet *indexWithExpandedSeperator;
 @property (nonatomic,strong) NSArray *fetchFavoriteName;
 @property (nonatomic) BOOL cellLabelColor;
+@property (nonatomic) BOOL cellLabelColorForFavoriteView;
 
 @end
 
@@ -61,7 +69,9 @@
 @synthesize indexRow = _indexRow;
 @synthesize numberOfRows = _numberOfRows;
 @synthesize checkForTableViewHidden = _checkForTableViewHidden;
+@synthesize checkForFavoriteTableViewHidden = _checkForFavoriteTableViewHidden;
 @synthesize tableCell = _tableCell;
+@synthesize favoritesTableCell = _favoritesTableCell;
 @synthesize accessoryButton = _accessoryButton;
 @synthesize moreNavigationButton = _moreNavigationButton;
 @synthesize managedObjectContext = _managedObjectContext;
@@ -77,6 +87,7 @@
 @synthesize expandedRowNumber = _expandedRowNumber;
 @synthesize needToChangeCollapseImage = _needToChangeCollapseImage;
 @synthesize expandedRowText = _expandedRowText;
+@synthesize editFavoriteSubview = _editFavoriteSubview;
 
 //for csv file
 
@@ -94,12 +105,15 @@
 @synthesize descriptionArray = _descriptionArray;
 @synthesize selectedProduct = _selectedProduct;
 @synthesize selectedCellToExpand = _selectedCellToExpand;
+@synthesize selectedCellToExpandInFavoriteView = _selectedCellToExpandInFavoriteView;
 @synthesize languageArray = _languageArray;
 @synthesize selectedRowNo = _selectedRowNo;
 @synthesize indexWithPlusButton = _indexWithPlusButton;
+@synthesize indexWithPlusButtonForFavoriteView = _indexWithPlusButtonForFavoriteView;
 @synthesize indexWithExpandedSeperator = _indexWithExpandedSeperator;
 @synthesize theMovie = _theMovie;
 @synthesize cellLabelColor = _cellLabelColor;
+@synthesize cellLabelColorForFavoriteView = _cellLabelColorForFavoriteView;
 @synthesize favoriteEditNavigationButton = _favoriteEditNavigationButton;
 @synthesize backgroundImageView = _backgroundImageView;
 @synthesize favoriteEditTableView = _favoriteEditTableView;
@@ -116,10 +130,9 @@
     [super viewDidLoad];
     self.needToChangeCollapseImage = YES;
     _favoritesEditView.hidden = YES;
-    _favoritesEditView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Bg2.png"]];
     
     @try 
-    {
+    {        
         NSBundle *Bundle = [NSBundle mainBundle];
         NSString *moviePath = [Bundle pathForResource:@"Splash2" ofType:@"mp4"];
         NSURL *videoURL = [NSURL fileURLWithPath:moviePath];
@@ -132,14 +145,21 @@
                                                  selector:@selector(playerPlaybackDidFinish:)
                                                      name:MPMoviePlayerPlaybackDidFinishNotification
                                                    object:_theMovie.moviePlayer];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(playerPlaybackDidStart:)
+                                                     name:MPMoviePlayerLoadStateDidChangeNotification
+                                                   object:_theMovie.moviePlayer];
+        
         //Present
         [self presentModalViewController:_theMovie animated:NO];
-        _theMovie.moviePlayer.controlStyle = MPMovieControlStyleEmbedded;
-        _theMovie.moviePlayer.scalingMode = MPMovieScalingModeAspectFill;
+        _theMovie.moviePlayer.controlStyle = MPMovieControlStyleNone;
+
+        _theMovie.moviePlayer.scalingMode = MPMovieScalingModeAspectFit; 
         
         // Play the movie!
         _theMovie.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
         [_theMovie.moviePlayer play];
+        
     }
     @catch (NSException *exception)
     {
@@ -158,6 +178,7 @@
     _cardName = [[NSMutableArray alloc]init];
     _cardNoWithDiffLang = [[NSMutableArray alloc]init] ;
     _indexWithPlusButton = [[NSMutableSet alloc]init];
+    _indexWithPlusButtonForFavoriteView = [[NSMutableSet alloc]init];
     id appDelegate = (id)[[UIApplication sharedApplication] delegate];
     self.managedObjectContext = [appDelegate managedObjectContext];
     
@@ -196,12 +217,18 @@
     [self.cardsTableView reloadData];
 }
 
+-(void) playerPlaybackDidStart:(NSNotification *) notification
+{
+    _theMovie.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+}
+
 
 - (void) playerPlaybackDidFinish:(NSNotification*)notification
 {
     //self.movieContainerView.hidden = YES;
+
     
-    // [_theMovie dismissModalViewControllerAnimated:NO];
+     [_theMovie dismissModalViewControllerAnimated:NO];
 }
 
 - (void) setStoreFetchedName:(NSMutableArray *)storeFetchedName
@@ -209,6 +236,8 @@
     if(_storeFetchedName != storeFetchedName)
     {
         _storeFetchedName = storeFetchedName;
+        NSLog(@"height are : %d",[_storeFetchedName count]);
+        _favoriteTableView.frame = CGRectMake(0,0,312,[_storeFetchedName count]*50);
         [self.favoriteTableView reloadData];
     }
 }
@@ -224,6 +253,11 @@
         _viewDidLoadFirst = NO;
     }
     [self fetchFromCoreData];
+    if ([_storeFetchedName count] == 0)
+    {
+         _favoriteTableView.frame = CGRectMake(0,0,312,[_storeFetchedName count]*50);
+        [_favoriteTableView reloadData];
+    }
     if(![_fetchFavoriteName count])
     {
         [self fetchFromCoreData];
@@ -263,11 +297,11 @@
 {
     _favoriteEditTableView.delegate = self;
     _favoriteEditTableView.dataSource = self;
-    _favoritesView.backgroundColor = [UIColor clearColor];
-    _favoriteTableView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
+    _favoritesView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
+    _favoriteTableView.backgroundColor = [UIColor clearColor];
     _favoriteTableView.separatorColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
-    _favoriteTableView.layer.cornerRadius = 8;
-    _favoriteTableView.layer.masksToBounds = YES;
+    _favoritesView.layer.cornerRadius = 8;
+    _favoritesView.layer.masksToBounds = YES;
     
 }
 
@@ -296,6 +330,7 @@
     self.navigationItem.title = @"All Field Cards";
     [self.navigationController.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:34.0/255.0 green:36.0/255.0 blue:24.0/255.0 alpha:1.0],UITextAttributeTextColor, nil]];
     _checkForTableViewHidden = YES;
+    _checkForFavoriteTableViewHidden = YES;
     self.moreNavigationButton.hidden = YES;
     self.favoriteEditNavigationButton.hidden = YES;
     
@@ -431,7 +466,16 @@
 {
     if (tableView == _favoriteEditTableView)
     {
-        return 50;
+        if(indexPath.row==_selectedCellToExpandInFavoriteView)
+        {
+            NSInteger heightForRow = 125;
+            if( _checkForFavoriteTableViewHidden == YES)
+            {
+                heightForRow = 50;
+            }
+            return heightForRow;
+        }
+
     }
     if(tableView == _favoriteTableView)
     {
@@ -476,66 +520,118 @@
 {
     if (tableView == _favoriteEditTableView)
     {
-        static NSString *cellIdCustom = @"customCell";
+        
+        [self fetchFromCoreData];
+        static NSString *cellIdCustom = @"customCellForFavoritesTable";
         static NSString *cellIdNormal = @"normalCell";
         UITableViewCell *cell = nil;
         
         if( [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"isRepeated"]isEqualToString:@"Repeated"])
         {
-            cell = [self.cardsTableView dequeueReusableCellWithIdentifier:cellIdCustom];
+//            [_indexWithPlusButton addObject:[NSNumber numberWithInteger:indexPath.row]];
+//
+//            cell = [self.cardsTableView dequeueReusableCellWithIdentifier:cellIdCustom];
+//            
+//            if (cell == nil)
+//            {
+//                cell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdCustom];
+//            }
+//            _tableCell = (TableViewCell *)cell;
+//            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+//            _tableCell.celldelegate = self;
+//            _tableCell.cellDataLabel.text = [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"name"] stringByRemoveLeadingAndTrailingQuotes];
+//            _tableCell.cellDataLabel.lineBreakMode = UILineBreakModeCharacterWrap;
+//            _tableCell.cellDataLabel.numberOfLines = 1;
+//            [[_tableCell cellDataLabel] sizeToFit];
+//            
+//            [_tableCell.insideTableView setTag:indexPath.row];
+//            _tableCell.index = indexPath.row;
+//            _tableCell.cardArrayForTableView = _listOfCards;
+//            if(_checkForTableViewHidden == YES)
+//            {
+//                UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
+//                [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
+//                [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonExpandTappedForEditTableview:) forControlEvents:UIControlEventTouchUpInside];
+//                [_tableCell.plusButton setTag:indexPath.row];
+//                
+//            }
+//            else 
+//            {
+//                if(indexPath.row==_selectedCellToExpand)
+//                {
+//                    UIImage *imageView = [UIImage imageNamed:@"icon_collapse.png"];
+//                    [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
+//                    [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonCollapseTappedForEditTableview:) forControlEvents:UIControlEventTouchUpInside];
+//                }
+//            }
+//            if (!_cellLabelColor)
+//            {
+//                _tableCell.cellDataLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+//            }
+//            if(_checkForTableViewHidden == NO &&indexPath.row==_selectedCellToExpand)
+//            {
+//                _tableCell.insideTableView.hidden = NO;
+//            }
+//            else
+//            {
+//                _tableCell.insideTableView.hidden = YES;
+//            }
+//            return _tableCell;
+            
+            
+            [_indexWithPlusButtonForFavoriteView addObject:[NSNumber numberWithInteger:indexPath.row]];
+            
+            cell = [self.favoriteEditTableView dequeueReusableCellWithIdentifier:cellIdCustom];
             
             if (cell == nil)
             {
-                cell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdCustom];
+                cell = [[SFCCustomCellForFavoritesTable alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdCustom];
             }
-            _tableCell = (TableViewCell *)cell;
+            _favoritesTableCell = (SFCCustomCellForFavoritesTable *)cell;
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-            _tableCell.celldelegate = self;
-            _tableCell.cellDataLabel.text = [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"name"] stringByRemoveLeadingAndTrailingQuotes];
+            _favoritesTableCell.celldelegate = self;
+            _favoritesTableCell.cellDataLabel.text = [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"name"] stringByRemoveLeadingAndTrailingQuotes];
+            _favoritesTableCell.cellDataLabel.lineBreakMode = UILineBreakModeCharacterWrap;
+            _favoritesTableCell.cellDataLabel.numberOfLines = 1;
+            [[_favoritesTableCell cellDataLabel] sizeToFit];
             
-            _tableCell.cellDataLabel.lineBreakMode = UILineBreakModeCharacterWrap;
-            _tableCell.cellDataLabel.numberOfLines = 1;
-            [[_tableCell cellDataLabel] sizeToFit];
-            
-            [_tableCell.insideTableView setTag:indexPath.row];
-            _tableCell.index = indexPath.row;
-            _tableCell.cardArrayForTableView = _listOfCards;
-            if(_checkForTableViewHidden == YES)
+            [_favoritesTableCell.insideTableView setTag:indexPath.row];
+            _favoritesTableCell.index = indexPath.row;
+            _favoritesTableCell.cardArrayForTableView = _listOfCards;
+            if(_checkForFavoriteTableViewHidden == YES)
             {
-                UIImage *imageView = [UIImage imageNamed:@"star_normal.png"];
-                [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-                [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonExpandTapped:) forControlEvents:UIControlEventTouchUpInside];
-                [_tableCell.plusButton setTag:indexPath.row];
+                UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
+                [_favoritesTableCell.plusButton setImage:imageView forState:UIControlStateNormal];
+                [_favoritesTableCell.plusButton addTarget:self action:@selector(accessoryButtonExpandTappedForEditTableview:) forControlEvents:UIControlEventTouchUpInside];
+                [_favoritesTableCell.plusButton setTag:indexPath.row];
                 
             }
             else 
             {
-                if(indexPath.row==_selectedCellToExpand)
+                if(indexPath.row==_selectedCellToExpandInFavoriteView)
                 {
-                    UIImage *imageView = [UIImage imageNamed:@"star_normal.png"];
+                    UIImage *imageView = [UIImage imageNamed:@"icon_collapse.png"];
                     [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-                    [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonCollapseTapped:) forControlEvents:UIControlEventTouchUpInside];
+                    [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonCollapseTappedForEditTableview:) forControlEvents:UIControlEventTouchUpInside];
                 }
             }
-            if (!_cellLabelColor)
+            if (!_cellLabelColorForFavoriteView)
             {
-                _tableCell.cellDataLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+               // _favoritesTableCell.cellDataLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
             }
-            
-            
-            if(_checkForTableViewHidden == NO &&indexPath.row==_selectedCellToExpand)
+            if(_checkForFavoriteTableViewHidden == NO &&indexPath.row==_selectedCellToExpandInFavoriteView)
             {
-                _tableCell.insideTableView.hidden = NO;
+                _favoritesTableCell.insideTableView.hidden = NO;
             }
             else
             {
-                _tableCell.insideTableView.hidden = YES;
+                _favoritesTableCell.insideTableView.hidden = YES;
             }
-            
-            return _tableCell;
+            return _favoritesTableCell;
         }
         else
         {
+
             cell = [self.cardsTableView dequeueReusableCellWithIdentifier:cellIdNormal];
             if (cell == nil)
             {
@@ -644,37 +740,7 @@
                     [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonCollapseTapped:) forControlEvents:UIControlEventTouchUpInside];
                 }
             }
-            
-            //            if(indexPath.row == self.expandedRowNumber)
-            //            {
-            //                 if(self.needToChangeCollapseImage)
-            //                 {
-            //                     UIImage *imageView = [UIImage imageNamed:@"icon_collapse.png"];
-            //                     [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-            //                     [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonCollapseTapped:) forControlEvents:UIControlEventTouchUpInside]; 
-            //                     self.needToChangeCollapseImage = NO;
-            //                 }
-            //                 else {
-            //                     UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
-            //                     [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-            //                     self.needToChangeCollapseImage = YES;
-            //                 }
-            ////                if(_tableCell.plusButton.imageView.image == [UIImage imageNamed:@"icon_expand.png"])
-            ////                {
-            ////                    imageView = [UIImage imageNamed:@"icon_collapse.png"];
-            ////                }
-            ////                else if(_tableCell.plusButton.imageView.image == [UIImage imageNamed:@"con_collapse.png"]) {
-            ////                    imageView = [UIImage imageNamed:@"icon_expand.png"];
-            ////                }
-            //                            }
-            //            else  {
-            //                UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
-            //                [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-            //                [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonExpandTapped:) forControlEvents:UIControlEventTouchUpInside];
-            //                [_tableCell.plusButton setTag:indexPath.row];
-            //
-            //            }
-            if (!_cellLabelColor)
+           if (!_cellLabelColor)
             {
                 _tableCell.cellDataLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
             }
@@ -711,43 +777,50 @@
         [cell setAccessoryView:_accessoryButton];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.textLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
-        
-        
-        //NSString *labelString = [_tableCell.cellDataLabel.text stringByRemoveLeadingAndTrailingQuotes];
-        
-        
-        //  NSLog(@"name are : %@ and expandedText : %@",labelString,_expandedRowText);
-        //        if([[NSString stringWithFormat:@"\"%@\"",_tableCell.cellDataLabel.text] isEqualToString:_expandedRowText])
-        //        {
-        //            if(_needToChangeCollapseImage)
-        //            {
-        //                UIImage *imageView = [UIImage imageNamed:@"icon_collapse.png"];
-        //                [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-        //               // [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonCollapseTapped:) forControlEvents:UIControlEventTouchUpInside]; 
-        //                self.needToChangeCollapseImage = NO;
-        //            }
-        //            else {
-        //                UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
-        //                [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-        //                self.needToChangeCollapseImage = YES;
-        //            }
-        //            
-        //        }
-        //        else {
-        //            
-        //            UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
-        //            [_tableCell.plusButton setImage:imageView forState:UIControlStateNormal];
-        //           // [_tableCell.plusButton addTarget:self action:@selector(accessoryButtonExpandTapped:) forControlEvents:UIControlEventTouchUpInside];
-        //           // [_tableCell.plusButton setTag:indexPath.row];
-        //            
-        //        }
-        
         return cell;
     }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (tableView == _favoriteEditTableView)
+    {
+        if( [[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"isRepeated"]isEqualToString:@"notRepeated"])  
+        {
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
+            [fetchRequest setEntity:entity];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@",[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"name"]];
+            [fetchRequest setPredicate:predicate];
+            NSError *error;    
+            NSArray *fetchedResults;
+            
+            if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
+            {
+                DLog(@"favorite details are :%@",fetchedResults);
+            }
+            else
+            {
+                DLog(@"error : %@  and %@",[error description],[error userInfo]);  
+            }
+            _selectedProduct = [fetchedResults objectAtIndex:0];
+            _selectedRowNo = indexPath.row;
+            _selectedCardSubtitle = _selectedProduct.productDetail.sfc_subtitle;
+            [self availableDescription];
+            [self performSegueWithIdentifier:@"Show Card Description Segue" sender:self];
+        }
+        else 
+        {
+            UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Wrong Click!"
+                                                              message:@"Click on Plus Button to see available Language."
+                                                             delegate:nil
+                                                    cancelButtonTitle:@"OK"
+                                                    otherButtonTitles:nil];
+            [message show];
+            DLog(@"plus pressed");
+        }
+    }
+    
     if(tableView == _favoriteTableView)
     {
         UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
@@ -954,12 +1027,46 @@
     }
 }
 
+
+-(void) accessoryButtonExpandTappedForEditTableview : (UIButton *)sender
+{
+//    NSArray *indexesForSeperator = [[NSArray alloc]init];
+//    indexesForSeperator = [_indexWithPlusButton allObjects];
+//    NSArray *indexes = [_indexWithPlusButton allObjects];
+//    for (int index = 0; index < [_indexWithPlusButton count]; index++)
+//    {
+//        TableViewCell *cell = (TableViewCell *)[self.cardsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[[indexes objectAtIndex:index]integerValue] inSection:0]];
+//        if ([[indexes objectAtIndex:index]integerValue] != sender.tag)
+//        {
+//            UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
+//            [cell.plusButton setImage:imageView forState:UIControlStateNormal]; 
+//            cell.divider.frame = CGRectMake(0, 49, 320, 1);
+//            cell.cellDataLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+//        }
+//        else
+//        {
+//            cell.cellDataLabel.textColor = [UIColor colorWithRed:141.0/255.0 green:255.0/255.0 blue:224.0/255.0 alpha:1.0];
+//            cell.divider.frame = CGRectMake(0, 132, 320, 1);
+//        }
+//    }
+    _checkForFavoriteTableViewHidden = NO;
+    _cellLabelColorForFavoriteView = YES;
+    _selectedCellToExpandInFavoriteView = sender.tag;
+    [_favoriteEditTableView reloadData];
+}
+
+-(void) accessoryButtonCollapseTappedForEditTableview : (UIButton *)sender
+{
+    SFCCustomCellForFavoritesTable *cell = (SFCCustomCellForFavoritesTable *)[self.favoriteEditTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
+   // cell.divider.frame = CGRectMake(0, 49, 320, 1);
+    cell.cellDataLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
+    _checkForFavoriteTableViewHidden = YES;
+    [_favoriteEditTableView reloadData];
+
+}
+
 - (void) accessoryButtonCollapseTapped : (UIButton *) sender
 {
-    //    if(self.expandedRowNumber == sender.tag)
-    //    {
-    //        self.needToChangeCollapseImage  = YES;
-    //    }
     TableViewCell *cell = (TableViewCell *)[self.cardsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
     cell.divider.frame = CGRectMake(0, 49, 320, 1);
     cell.cellDataLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
@@ -970,13 +1077,8 @@
 
 - (void) accessoryButtonExpandTapped:(UIButton *)sender
 {
-    //    NSLog(@"expanded row number : %d",_expandedRowNumber);
-    //    if (_expandedRowNumber)
-    //    {
-    
-    NSArray *indexesForSeperator = [[NSArray alloc]init];
-    indexesForSeperator = [_indexWithPlusButton allObjects];
     NSArray *indexes = [_indexWithPlusButton allObjects];
+    NSLog(@"indexes : %@",_indexWithPlusButton);
     for (int index = 0; index < [_indexWithPlusButton count]; index++)
     {
         TableViewCell *cell = (TableViewCell *)[self.cardsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[[indexes objectAtIndex:index]integerValue] inSection:0]];
@@ -993,38 +1095,13 @@
             cell.divider.frame = CGRectMake(0, 132, 320, 1);
         }
     }
-    //        NSLog(@"already selected");
-    //    }
-    //    self.expandedRowNumber = sender.tag; 
-    //    self.expandedRowText = [[_productNameUnique objectAtIndex:sender.tag]valueForKey:@"name"];
-    //    
-    //    NSLog(@"string : %@",_expandedRowText);
-    //    [_indexWithPlusButton addObject:[NSNumber numberWithInteger:sender.tag]];
-    //    NSLog(@"indexes are : %@",_indexWithPlusButton);
-    
-    //    NSArray* unsorted = [_indexWithPlusButton allObjects];
-    //    
-    //    NSIndexPath *path = [[NSIndexPath alloc]init];
-    //    NSMutableArray *pathArray = [[NSMutableArray alloc]initWithCapacity:3];
-    
-    //    for (int index = 0; index < [unsorted count]; index++)
-    //    {
-    //        if ([unsorted objectAtIndex:index] !=[NSNumber numberWithInteger:sender.tag])
-    //        {
-    //            path = [NSIndexPath indexPathWithIndex:index];
-    //            [pathArray addObject:path];
-    //            [_cardsTableView reloadRowsAtIndexPaths:pathArray withRowAnimation:UITableViewRowAnimationNone];
-    //        }
-    //    }
     _checkForTableViewHidden = NO;
     TableViewCell *cell = (TableViewCell *)[self.cardsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
     cell.productNameFromMainView = _productNameUnique;
     cell.selectedRow = sender.tag;
     _selectedCellToExpand = sender.tag;
-    //cell.divider.frame = CGRectMake(0, 132, 320, 1);
     _cellLabelColor = YES;
-//    cell.cellDataLabel.textColor = [UIColor colorWithRed:141.0/255.0 green:255.0/255.0 blue:224.0/255.0 alpha:1.0];
-    
+
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
     [fetchRequest setEntity:entity];
@@ -1054,7 +1131,6 @@
     //        self.cardsTableView.rowHeight = 125.0;
     //        [_cardsTableView reloadData];
     //    }];
-    
     [_cardsTableView reloadData];
 }
 
@@ -1115,6 +1191,8 @@
     self.moreView.hidden = YES;
     _viewDidLoadFirst = NO;
     [self fetchFromCoreData];
+    NSLog(@"height are : %d",[_storeFetchedName count]);
+    self.favoriteTableView.frame = CGRectMake(0,0,312,[_storeFetchedName count]*50);
     self.favoritesView.hidden = NO;
     [_favoriteTableView reloadData];
 }
@@ -1185,7 +1263,7 @@
     [_moreOutlet setBackgroundImage:[UIImage imageNamed:@"tab_more_normal.png"] forState:UIControlStateNormal];
     self.navigationItem.title = @"All Field Cards";
     [self.navigationController.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:48.0/255.0 green:49.0/255.0 blue:37.0/255.0 alpha:1.0],UITextAttributeTextColor, nil]];
-    
+    self.favoriteEditNavigationButton.hidden = YES;
     self.moreNavigationButton.hidden = YES;
     self.favoritesView.hidden = YES;
     self.moreView.hidden = YES;
@@ -1204,19 +1282,24 @@
 
 - (IBAction)editFavorites:(id)sender
 {
+    _editFavoriteSubview.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
     _favoriteEditTableView.backgroundColor = [UIColor clearColor];
+    _favoritesEditView.backgroundColor = [UIColor clearColor];
+    _editFavoriteSubview.layer.cornerRadius = 8;
+    _editFavoriteSubview.layer.masksToBounds = YES;
+
     self.backgroundImageView.frame = CGRectMake(0, 0, 320, 460);
     self.navigationController.navigationBarHidden = YES;
     _favoriteOutlet.hidden = YES;
     _moreOutlet.hidden = YES;
     _cardOutlet.hidden = YES;
     _favoritesView.hidden = YES;
-    _favoritesEditView.backgroundColor = [UIColor clearColor];
     _favoritesEditView.hidden = NO;
 }
 
 - (IBAction)cancelFavoriteView:(id)sender
 {
+    self.view.frame = CGRectMake(0, 64, 320, 416);
     _favoritesEditView.hidden = YES;
     _favoritesView.hidden = NO;
     _favoriteOutlet.hidden = NO;
@@ -1229,6 +1312,7 @@
 
 - (IBAction)doneFavoriteView:(id)sender
 {
+    self.view.frame = CGRectMake(0, 64, 320, 416);
     _favoritesEditView.hidden = YES;
     _favoritesView.hidden = NO;
     _favoriteOutlet.hidden = NO;

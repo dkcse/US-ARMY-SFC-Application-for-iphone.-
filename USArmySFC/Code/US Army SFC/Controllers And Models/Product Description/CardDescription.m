@@ -91,6 +91,7 @@
 {
     [super viewDidLoad];
     [self allocate];
+    NSLog(@"in view did load : %@",_cardName);
     _commonView.backgroundColor = [UIColor colorWithRed:16.0/255.0 green:23.0/255.0 blue:21.0/255.0 alpha:1.0];
     [_guidelineOutlet setBackgroundImage:[UIImage imageNamed:@"tab_btn_guidelines_pressed.png"] forState:UIControlStateNormal];
 
@@ -124,11 +125,12 @@
     _tapToAddIntoFavorites = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTapToAddIntoFavorites:)];
     [self.favoriteSelectionImage addGestureRecognizer:_tapToAddIntoFavorites];
     _cardNameLabel.text = [[_productNameFromSFCView objectAtIndex:_selectedProductRowNo]valueForKey:@"name"];
+    
     if([_cardName length] > 0)
     {
         _cardNameLabel.text = _cardName;
     }
-        _cardSubtitleLabel.text = _cardSubTitle;
+    _cardSubtitleLabel.text = _cardSubTitle;
     _cardSubtitleLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     _cardNameLabel.textColor = [UIColor colorWithRed:0.7/255.0 green:219.0/255.0 blue:137.0/255.0 alpha:1.0];
     _cardDescriptionTableView.backgroundColor = [UIColor clearColor];
@@ -208,10 +210,12 @@
 
 
 
--(void) viewDidAppear:(BOOL)animated
+-(void) viewWillAppear:(BOOL)animated
 {
+    _cardName = _cardNameLabel.text;
     _cardLogoImage.image = [UIImage imageNamed:@"icon.png"]; 
     
+    NSLog(@"card name : %@",_cardName);
     if([self searchForNameInCoreData : _cardName])
     {
         _favoriteSelectionImage.image = [UIImage imageNamed:@"star.png"];

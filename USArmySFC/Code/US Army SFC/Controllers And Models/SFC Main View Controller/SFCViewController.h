@@ -16,9 +16,10 @@
 #import "Description.h"
 #import "NSString+RemoveQuotes.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "SFCCustomCellForFavoritesTable.h"
 
 
-@interface SFCViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,customDelegate,NSXMLParserDelegate>
+@interface SFCViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,customDelegate,NSXMLParserDelegate,customFavoriteTableDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *favoritesView;
 @property (strong, nonatomic) IBOutlet UIView *moreView;
@@ -37,6 +38,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *cardOutlet;
 @property (strong, nonatomic) IBOutlet UIButton *moreOutlet;
 @property (strong,nonatomic) IBOutlet UITableView *favoriteEditTableView;
+@property (strong,nonatomic) IBOutlet UIView *editFavoriteSubview;
 
 @property (nonatomic,strong) NSMutableArray *cardNameFromCoreData;
 @property (nonatomic) BOOL test;
