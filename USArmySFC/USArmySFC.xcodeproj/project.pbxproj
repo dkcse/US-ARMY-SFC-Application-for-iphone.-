@@ -339,6 +339,7 @@
 				6A44318D162D883E00AA2E87 /* SFCCustomCellForFavoritesTable.m */,
 			);
 			name = FavoriteCustomCell;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		6ADE5E77160052F600D76A53 = {
@@ -404,7 +405,6 @@
 		6ADF8221161957E200E8FCA3 /* US Army SFC */ = {
 			isa = PBXGroup;
 			children = (
-				6A44318B162D87C900AA2E87 /* FavoriteCustomCell */,
 				6ADF833F16195B1200E8FCA3 /* Categories */,
 				6ADF8222161957E200E8FCA3 /* Controllers And Models */,
 			);
@@ -421,6 +421,7 @@
 				6ADF834F16195C4400E8FCA3 /* Product Detail Description */,
 				6ADF834B16195C1300E8FCA3 /* Contact Detail Description */,
 				6ADF835316195C8100E8FCA3 /* Custom Cell */,
+				6A44318B162D87C900AA2E87 /* FavoriteCustomCell */,
 				6ADF83691619732A00E8FCA3 /* Favorites.xcdatamodeld */,
 			);
 			path = "Controllers And Models";

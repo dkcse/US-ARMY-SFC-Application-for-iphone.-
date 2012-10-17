@@ -104,60 +104,108 @@
     cell.textLabel.textColor = [UIColor colorWithRed:141.0/255.0 green:255.0/255.0 blue:224.0/255.0 alpha:1.0];
     
     UIButton *accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)]; 
-    UIImage *imageView = [UIImage imageNamed:@"arrow.png"];
-    [accessoryButton setImage:imageView forState:UIControlStateNormal];
+    
+    if ([self searchForNameInCoreData:_cellDataLabel.text]) 
+    {
+        UIImage *imageView = [UIImage imageNamed:@"star.png"];
+        [accessoryButton setImage:imageView forState:UIControlStateNormal];
+    }
+    else
+    {
+        UIImage *imageView = [UIImage imageNamed:@"star_normal.png"];
+        [accessoryButton setImage:imageView forState:UIControlStateNormal];
+    }
     [accessoryButton addTarget:self action:@selector(accessoryButtonDisclosureTapped:) forControlEvents:UIControlEventTouchUpInside];
     [cell setAccessoryView:accessoryButton];
     accessoryButton.tag = indexPath.row;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
+- (BOOL) searchForNameInCoreData:(NSString *)name
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
+    [fetchRequest setEntity:entity];    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name==%@",name];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error;
+    NSArray *fetchedResults;
+    
+    if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
+    {
+        if(![_managedObjectContext save:&error])
+        {
+            DLog(@"Could NOt Save changes : %@ , %@",[error description],[error userInfo]);
+        }
+    }
+    else
+    {
+        DLog(@"error : %@  and %@",[error description],[error userInfo]); 
+    }
+    if([fetchedResults count]>0)
+        return YES;
+    else 
+    {
+        return NO;
+    }
+}
+
+
 
 -(void) accessoryButtonDisclosureTapped:(UIButton *)sender
 {
+    UITableViewCell *cell = [self.insideTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
+    UIButton *accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)]; 
+    UIImage *imageView = [UIImage imageNamed:@"star.png"];
+    [accessoryButton setImage:imageView forState:UIControlStateNormal];
+    [cell setAccessoryView:accessoryButton];
+    
+    Favorites *favoriteObject = (Favorites *)[NSEntityDescription insertNewObjectForEntityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
+    [favoriteObject setName:_cellDataLabel.text];
     DLog(@"accessory button pressed");
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
-    [fetchRequest setEntity:entity];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name=%@",[[_productNameFromMainView objectAtIndex:_selectedRow]valueForKey:@"name"]];
-    [fetchRequest setPredicate:predicate];
-    NSError *error;
-    NSArray *fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    
-    if(([fetchedResults count] > 0))
-    {
-        NSArray *fetchedName = [[NSArray alloc]init];
-        fetchedName = fetchedResults;
-        // NSMutableArray *productName = [[NSMutableArray alloc]init];
-        
-        for(Product *obj in fetchedResults)
-        {
-            NSString *language = [_languageArray objectAtIndex:indexPath.row];
-            if([[obj.productDetail.language stringByRemoveLeadingAndTrailingQuotes] isEqualToString:language])
-            {
-                _selectedProduct = obj;
-            }
-        }
-    }
-    else
-    {
-        DLog(@"error : %@  and %@",[error description],[error userInfo]);  
-    }
-    
-    UIStoryboard *story = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    CardDescription *pushForDescriptionCustom = [story instantiateViewControllerWithIdentifier:@"cardDescriptor"];
-    UINavigationController *referenceToNavController = [[UINavigationController alloc]init];
-    pushForDescriptionCustom.productNameFromSFCView = _productNameFromMainView;
-    pushForDescriptionCustom.selectedProductRowNo = _selectedRow;
-    _description = [_celldelegate sendAttributeAndDescription:_selectedProduct];
-    
-    pushForDescriptionCustom.cardDetails = [[_description allKeys].mutableCopy objectAtIndex:0];
-    pushForDescriptionCustom.detailDescription = [[_description allValues].mutableCopy objectAtIndex:0];
-    referenceToNavController = [_celldelegate sendNavigationControllerInstance];
-    [referenceToNavController pushViewController:pushForDescriptionCustom animated:YES];
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:_managedObjectContext];
+//    [fetchRequest setEntity:entity];
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name=%@",[[_productNameFromMainView objectAtIndex:_selectedRow]valueForKey:@"name"]];
+//    [fetchRequest setPredicate:predicate];
+//    NSError *error;
+//    NSArray *fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
+//    
+//    if(([fetchedResults count] > 0))
+//    {
+//        NSArray *fetchedName = [[NSArray alloc]init];
+//        fetchedName = fetchedResults;
+//        // NSMutableArray *productName = [[NSMutableArray alloc]init];
+//        
+//        for(Product *obj in fetchedResults)
+//        {
+//            NSString *language = [_languageArray objectAtIndex:indexPath.row];
+//            if([[obj.productDetail.language stringByRemoveLeadingAndTrailingQuotes] isEqualToString:language])
+//            {
+//                _selectedProduct = obj;
+//            }
+//        }
+//    }
+//    else
+//    {
+//        DLog(@"error : %@  and %@",[error description],[error userInfo]);  
+//    }
+//    
+//    UIStoryboard *story = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+//    CardDescription *pushForDescriptionCustom = [story instantiateViewControllerWithIdentifier:@"cardDescriptor"];
+//    UINavigationController *referenceToNavController = [[UINavigationController alloc]init];
+//    pushForDescriptionCustom.productNameFromSFCView = _productNameFromMainView;
+//    pushForDescriptionCustom.selectedProductRowNo = _selectedRow;
+//    _description = [_celldelegate sendAttributeAndDescription:_selectedProduct];
+//    
+//    pushForDescriptionCustom.cardDetails = [[_description allKeys].mutableCopy objectAtIndex:0];
+//    pushForDescriptionCustom.detailDescription = [[_description allValues].mutableCopy objectAtIndex:0];
+//    referenceToNavController = [_celldelegate sendNavigationControllerInstance];
+//    [referenceToNavController pushViewController:pushForDescriptionCustom animated:YES];
 }
 @end
