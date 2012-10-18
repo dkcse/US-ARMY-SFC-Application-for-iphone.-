@@ -239,7 +239,6 @@
     if(_storeFetchedName != storeFetchedName)
     {
         _storeFetchedName = storeFetchedName;
-        NSLog(@"height are : %d",[_storeFetchedName count]);
         _favoriteTableView.frame = CGRectMake(0,0,312,[_storeFetchedName count]*50);
         [self.favoriteTableView reloadData];
     }
@@ -521,10 +520,11 @@
 
 - (BOOL) searchForNameInCoreData:(NSString *)name
 {
+    NSLog(@"name to search : %@",name);
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
     [fetchRequest setEntity:entity];    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name CONTAINS %@",name];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name = %@",[name stringByRemoveLeadingAndTrailingQuotes]];
     [fetchRequest setPredicate:predicate];
     
     NSError *error;
@@ -541,7 +541,17 @@
     {
         DLog(@"error : %@  and %@",[error description],[error userInfo]); 
     }
-    if([fetchedResults count]>0)
+    NSFetchRequest *fetchRequestForFavorite = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityForFavorite = [NSEntityDescription entityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
+    [fetchRequestForFavorite setEntity:entityForFavorite];    
+    NSPredicate *predicateForFavorite = [NSPredicate predicateWithFormat:@"name  like %@",name];
+    [fetchRequestForFavorite setPredicate:predicateForFavorite];
+
+    NSArray *fetchedResultsForFavorite = [[NSArray alloc]init];
+    fetchedResultsForFavorite = [_managedObjectContext executeFetchRequest:fetchRequestForFavorite error:&error];
+    
+    DLog(@"fetched data are: %@",fetchedResultsForFavorite);
+    if([fetchedResults count]>0 || [fetchedResultsForFavorite count] > 0)
         return YES;
     else 
     {
@@ -644,6 +654,7 @@
         
         if ([self searchForNameInCoreData:[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"name"]]) 
         {
+            NSLog(@"name to search : %@",[[_productNameUnique objectAtIndex:indexPath.row]valueForKey:@"name"]);
             UIImage *imageView = [UIImage imageNamed:@"star.png"];
             [_accessoryButton setImage:imageView forState:UIControlStateNormal];
             cell.tag = 101;
@@ -798,7 +809,6 @@
     if(tableView == _favoriteTableView)
     {
         [self fetchFromCoreData];
-        NSLog(@"store fetched name : %@",_storeFetchedName);
         UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
         CardDescription *pushForDescription1 = [storyboard instantiateViewControllerWithIdentifier:@"cardDescriptor"];
         Favorites *favourite = [self.storeFetchedName objectAtIndex:indexPath.row]; 
@@ -881,14 +891,11 @@
 -(void) accessoryButtonExpandTappedForEditTableview : (UIButton *)sender
 {
     NSArray *indexes = [_indexWithPlusButton allObjects];
-    NSLog(@"indexes : %@",_indexWithPlusButton);
-    NSLog(@"sender : %i",sender.tag);
     for (int index = 0; index < [_indexWithPlusButton count]; index++)
     {
         SFCCustomCellForFavoritesTable *cell = (SFCCustomCellForFavoritesTable *)[self.favoriteEditTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[[indexes objectAtIndex:index]integerValue] inSection:0]];
         if ([[indexes objectAtIndex:index]integerValue] != sender.tag)
         {
-            NSLog(@"sender.tag :%i %d",[[indexes objectAtIndex:index]integerValue],cell.index);
             UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
             [cell.plusButton setImage:imageView forState:UIControlStateNormal]; 
             cell.divider.frame = CGRectMake(0, 49, 320, 1);
@@ -896,7 +903,6 @@
         }
         else
         {
-            NSLog(@"sender.tag next :%i",[[indexes objectAtIndex:index]integerValue]);
             UIImage *imageView = [UIImage imageNamed:@"icon_collapse.png"];
             [cell.plusButton setImage:imageView forState:UIControlStateNormal]; 
             cell.cellDataLabel.textColor = [UIColor colorWithRed:141.0/255.0 green:255.0/255.0 blue:224.0/255.0 alpha:1.0];
@@ -979,8 +985,6 @@
 - (void) accessoryButtonExpandTapped1:(UIButton *)sender
 {
     NSArray *indexes = [_indexWithPlusButton allObjects];
-    NSLog(@"indexes : %@",_indexWithPlusButton);
-    NSLog(@"sender : %i",sender.tag);
     for (int index = 0; index < [_indexWithPlusButton count]; index++)
     {
         
@@ -988,7 +992,6 @@
         TableViewCell *cell = (TableViewCell *)[self.cardsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[[indexes objectAtIndex:index]integerValue] inSection:0]];
         if ([[indexes objectAtIndex:index]integerValue] != sender.tag)
         {
-            NSLog(@"sender.tag :%i %d",[[indexes objectAtIndex:index]integerValue],cell.index);
             UIImage *imageView = [UIImage imageNamed:@"icon_expand.png"];
             [cell.plusButton setImage:imageView forState:UIControlStateNormal]; 
             cell.divider.frame = CGRectMake(0, 49, 320, 1);
@@ -996,7 +999,6 @@
         }
         else
         {
-            NSLog(@"sender.tag next :%i",[[indexes objectAtIndex:index]integerValue]);
             UIImage *imageView = [UIImage imageNamed:@"icon_collapse.png"];
             [cell.plusButton setImage:imageView forState:UIControlStateNormal]; 
             cell.cellDataLabel.textColor = [UIColor colorWithRed:141.0/255.0 green:255.0/255.0 blue:224.0/255.0 alpha:1.0];
@@ -1099,7 +1101,6 @@
     self.moreView.hidden = YES;
     _viewDidLoadFirst = NO;
     [self fetchFromCoreData];
-    NSLog(@"height are : %d",[_storeFetchedName count]);
     self.favoriteTableView.frame = CGRectMake(0,0,312,[_storeFetchedName count]*50);
     self.favoritesView.hidden = NO;
     [_favoriteTableView reloadData];
@@ -1240,13 +1241,29 @@
     DLog(@"accesory button pressed");
     UITableViewCell *cell = [self.favoriteEditTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
      UIButton *accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(280, 100, 28, 40)]; 
-    NSLog(@"tag = %d",cell.tag);
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
+    [fetchRequest setEntity:entity];
+    NSError *error;    
+    NSArray *fetchedResults;
+    
+    if((fetchedResults = [_managedObjectContext executeFetchRequest:fetchRequest error:&error]))
+    {
+        DLog(@"favorite details are :%@",fetchedResults);
+    }
+    else
+    {
+        DLog(@"error : %@  and %@",[error description],[error userInfo]);  
+    }
+
+    
     if(cell.tag == 100)
     {
         _pressCount++;
         UIImage *imageView = [UIImage imageNamed:@"star.png"];
         [accessoryButton setImage:imageView forState:UIControlStateNormal];
         [cell setAccessoryView:accessoryButton];
+        
         Favorites *favoriteObject = (Favorites *)[NSEntityDescription insertNewObjectForEntityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
         [favoriteObject setName:cell.textLabel.text];
         cell.tag = 101;
@@ -1257,7 +1274,6 @@
         UIImage *imageView = [UIImage imageNamed:@"star_normal.png"];
         [accessoryButton setImage:imageView forState:UIControlStateNormal];
         [cell setAccessoryView:accessoryButton];
-        NSLog(@"cell data : %@",cell.textLabel.text);
         [self deleteFromCoreData:cell.textLabel.text];
         cell.tag = 100;
     }

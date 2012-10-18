@@ -507,7 +507,8 @@
 - (void) addToCoreData
 {
     Favorites *favoriteObject = (Favorites *)[NSEntityDescription insertNewObjectForEntityForName:@"Favorite" inManagedObjectContext:_managedObjectContext];
-    [favoriteObject setName:_cardNameLabel.text];
+    [favoriteObject setName:[_cardNameLabel.text stringByRemoveLeadingAndTrailingQuotes]];
+    NSLog(@"name are :%@",[_cardNameLabel.text stringByRemoveLeadingAndTrailingQuotes]);
     [self fetchFromCoreData];
 }
 
