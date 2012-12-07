@@ -29,9 +29,10 @@
 @property (nonatomic,strong) NSMutableArray *contactDetailContactName;
 @property (nonatomic,strong) NSMutableArray *contactDetailsName;
 @property (nonatomic,strong) NSMutableArray *productNameFromContactDetail;
-@property (nonatomic) NSInteger productIndex;
+@property (nonatomic)        NSInteger productIndex;
 @property (nonatomic,strong) NSMutableArray *cellTextLabelArray;
 @property (nonatomic,strong) NSMutableArray *cellTextDetailArray;
+
 - (IBAction)goBack:(id)sender;
 - (IBAction)editTableCell:(id)sender;
 

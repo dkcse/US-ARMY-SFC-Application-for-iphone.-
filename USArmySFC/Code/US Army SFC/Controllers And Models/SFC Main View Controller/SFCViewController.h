@@ -24,27 +24,27 @@
 @property (strong, nonatomic) IBOutlet UIView *favoritesView;
 @property (strong, nonatomic) IBOutlet UIView *moreView;
 @property (strong, nonatomic) IBOutlet UIView *cardsView;
-@property(nonatomic,strong) IBOutlet UIImageView *backgroundImageView;
+@property(nonatomic,strong)   IBOutlet UIImageView *backgroundImageView;
 @property (strong, nonatomic) IBOutlet UIView *favoritesEditView;
 @property (strong, nonatomic) IBOutlet UITableView *cardsTableView;
 @property (strong, nonatomic) IBOutlet UITextView *moreTextView;
 @property (strong, nonatomic) IBOutlet UIScrollView *moreScrollView;
 @property (strong, nonatomic) IBOutlet UIButton *moreViewButton;
 @property (strong, nonatomic) IBOutlet UIButton *moreNavigationButton;
-@property (strong,nonatomic) IBOutlet UIButton *favoriteEditNavigationButton;
+@property (strong,nonatomic)  IBOutlet UIButton *favoriteEditNavigationButton;
 @property (strong, nonatomic) IBOutlet UITableView *favoriteTableView;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) IBOutlet UIButton *favoriteOutlet;
 @property (strong, nonatomic) IBOutlet UIButton *cardOutlet;
 @property (strong, nonatomic) IBOutlet UIButton *moreOutlet;
-@property (strong,nonatomic) IBOutlet UITableView *favoriteEditTableView;
-@property (strong,nonatomic) IBOutlet UIView *editFavoriteSubview;
+@property (strong,nonatomic)  IBOutlet UITableView *favoriteEditTableView;
+@property (strong,nonatomic)  IBOutlet UIView *editFavoriteSubview;
 
-@property (nonatomic,strong) NSMutableArray *cardNameFromCoreData;
-@property (nonatomic) BOOL test;
-@property (nonatomic) NSInteger selectedRowNo;
+@property (nonatomic,strong)  NSMutableArray *cardNameFromCoreData;
+@property (nonatomic)         BOOL test;
+@property (nonatomic)         NSInteger selectedRowNo;
 
-@property (strong,nonatomic) MPMoviePlayerViewController *theMovie;
+@property (strong,nonatomic)  MPMoviePlayerViewController *theMovie;
 
 - (IBAction)showFavoriteView:(id)sender;
 - (IBAction)showMoreOption:(id)sender;

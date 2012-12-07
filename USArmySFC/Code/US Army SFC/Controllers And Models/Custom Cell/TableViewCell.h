@@ -28,15 +28,15 @@
 @property (strong,nonatomic) IBOutlet UIImageView *divider;
 @property (retain,nonatomic) id <customDelegate> celldelegate;
 @property (strong,nonatomic) NSArray *languageArray;
-@property (nonatomic) NSInteger index;
+@property (nonatomic)        NSInteger index;
 @property (nonatomic,strong) NSMutableArray *cardArrayForTableView;
 @property (nonatomic,strong) NSMutableArray *productNameFromMainView;
 @property (nonatomic,strong) NSMutableArray *languageArrayFromMainView;
 @property (nonatomic,strong) NSMutableArray *attributeArray;
 @property (nonatomic,strong) NSMutableArray *descriptionArray;
-@property (nonatomic) NSInteger selectedRow;
-@property (nonatomic) NSDictionary *description;
+@property (nonatomic)        NSInteger selectedRow;
+@property (nonatomic)        NSDictionary *description;
 @property (nonatomic,strong) Product *selectedProduct;
-@property (nonatomic,strong)NSManagedObjectContext *managedObjectContext;
+@property (nonatomic,strong) NSManagedObjectContext *managedObjectContext;
 
 @end

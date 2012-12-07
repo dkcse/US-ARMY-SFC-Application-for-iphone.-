@@ -289,7 +289,7 @@
 		6ADF82BE161959F300E8FCA3 /* 2.7.2 Edit Points of Contact.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "2.7.2 Edit Points of Contact.jpg"; sourceTree = "<group>"; };
 		6ADF82BF161959F300E8FCA3 /* 2.8 Edit Notes.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "2.8 Edit Notes.jpg"; sourceTree = "<group>"; };
 		6ADF82C0161959F300E8FCA3 /* 2.9 Add Custom Entry.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "2.9 Add Custom Entry.jpg"; sourceTree = "<group>"; };
-		6ADF82C4161959F300E8FCA3 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
+		6ADF82C4161959F300E8FCA3 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		6ADF834016195B1200E8FCA3 /* NSString+RemoveQuotes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RemoveQuotes.h"; sourceTree = "<group>"; };
 		6ADF834116195B1200E8FCA3 /* NSString+RemoveQuotes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+RemoveQuotes.m"; sourceTree = "<group>"; };
 		6ADF834416195B8000E8FCA3 /* SFCAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFCAppDelegate.h; sourceTree = "<group>"; };
@@ -1047,6 +1047,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "USArmySFC/USArmySFC-Prefix.pch";
 				INFOPLIST_FILE = "USArmySFC/USArmySFC-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1062,6 +1063,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "USArmySFC/USArmySFC-Prefix.pch";
 				INFOPLIST_FILE = "USArmySFC/USArmySFC-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
